@@ -32,6 +32,25 @@ require 'requirelanguage.php';
 include_once "filtro/class/class.php";
 include_once "filtro/class_buscar.php";
 require_once("filtro/class/class.inputfilter.php");
+include_once('const/System.php');
+$userName = $_SESSION['user_name'];
+$userType = $_SESSION['user_type'];
+$currentUser = array();
+if ($userType == ADMIN) {
+    $query = $db->query("SELECT *	FROM manager_admin WHERE name = '$userName' AND estado = '1'");
+    $rowCount = $query->num_rows;
+    if($rowCount >= 1) {
+        while ($index = $query->fetch_assoc()) {
+            $currentUser = $index;
+        }
+    }
+}
+$companyInfor = array();
+$query = $db->query("SELECT * FROM company WHERE  id='1' ");
+while ($index = $query->fetch_assoc()) {
+    $companyInfor = $index;
+}
+
 $ifilter = new InputFilter();
 $_POST = $ifilter->process($_POST);
 
@@ -594,218 +613,242 @@ include("header.php");
 								<div class="row">
 
 										<!-- START Presonal information -->
-										<fieldset class="col-md-6">
-											<legend><?php echo $datosremite; ?></legend>
-											<!-- Name -->
-											<div class="row" >
-												<div class="col-sm-2 form-group">
-														<label  class="control-label"><i class="fa fa-user icon text-default-lter"></i>&nbsp;<?php echo $StaffRole; ?><span class="required-field">*</span></label>
-														<input type="text"  class="form-control" name="officename" id="officename" value="<?php echo $_SESSION['user_type'] ;?>"   readonly="true" />
-												</div>
-												<div class="col-sm-2 form-group">
-														<label  class="control-label"><i class="fa fa-user icon text-default-lter"></i>&nbsp;<?php echo $StaffUser; ?><span class="required-field">*</span></label>
-														<input type="text" class="form-control" name="user" id="user" value="<?php echo $_SESSION['user_name'] ;?>"   readonly="true" />
-												</div>
-												<div class="col-sm-8 form-group">
+                                        <fieldset class="col-md-6">
+                                        <legend><?php echo $datosremite; ?></legend>
+                                        <!-- Name -->
+                                        <div class="row" >
+                                            <div class="col-sm-2 form-group">
+                                                <label  class="control-label"><i class="fa fa-user icon text-default-lter"></i>&nbsp;<?php echo $StaffRole; ?><span class="required-field">*</span></label>
+                                                <input type="text"  class="form-control" name="officename" id="officename" value="<?php echo $_SESSION['user_type'] ;?>"   readonly="true" />
+                                            </div>
+                                            <div class="col-sm-2 form-group">
+                                                <label  class="control-label"><i class="fa fa-user icon text-default-lter"></i>&nbsp;<?php echo $StaffUser; ?><span class="required-field">*</span></label>
+                                                <input type="text" class="form-control" name="user" id="user" value="<?php echo $_SESSION['user_name'] ;?>"   readonly="true" />
+                                            </div>
+                                            <div class="col-sm-8 form-group">
 
-													<label class="control-label" ><?php echo $NOMBREREMITENTE; ?>&nbsp;<?php if ($v0==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-													 <input type="text" class="form-control" name="Shippername"  id="Shippername" autocomplete="on" list="customers"  value="<?php if (isset($_POST['Shippername'])) echo $_POST['Shippername']?>"/>
-													   <datalist id="customers">
-														<?php
-															$sql=mysql_query("SELECT * FROM tbl_clients");
-															while($row=mysql_fetch_array($sql)){
-																echo '<option data-value="'.$row['id'].'">'.utf8_encode($row['name']).'</option>';
-															}
-														?>
-													  </datalist>
-													<input type="hidden" name="Shippername-hidden" id="Shippername-hidden" />
-												</div>
-											</div>
-											<div class="row">
-												<div id="divRemi">
-													<div class="col-sm-3 form-group">
-														<label  class="control-label"><?php echo $DIRECCION; ?>&nbsp;<?php if ($v1==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-														<input type="text"  class="form-control" name="Shipperaddress" id="Shipperaddress" value="<?php if (isset($_POST['Shipperaddress'])) echo $_POST['Shipperaddress']?>" />
-													</div>
+                                                <label class="control-label" ><?php echo $NOMBREREMITENTE; ?>&nbsp;<?php if ($v0==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                <input type="text" class="form-control" name="Shippername"  id="Shippername" autocomplete="on" list="customers"  value="<?php if(isset($_POST['Shippername'])) {echo $_POST['Shippername'];} else {echo $currentUser['name_parson'];}?>"/>
+                                                <datalist id="customers">
+                                                    <?php
+                                                    $sql=mysql_query("SELECT * FROM tbl_clients");
+                                                    while($row=mysql_fetch_array($sql)){
+                                                        echo '<option data-value="'.$row['id'].'">'.utf8_encode($row['name']).'</option>';
+                                                    }
+                                                    ?>
+                                                </datalist>
+                                                <input type="hidden" name="Shippername-hidden" id="Shippername-hidden" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div id="divRemi">
+                                                <div class="col-sm-3 form-group">
+                                                    <label  class="control-label"><?php echo $DIRECCION; ?>&nbsp;<?php if ($v1==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="text"  class="form-control" name="Shipperaddress" id="Shipperaddress" value="<?php if (isset($_POST['Shipperaddress'])){echo $_POST['Shipperaddress'];} else {echo $companyInfor['caddress'];}?>" />
+                                                </div>
 
-													<div class="col-sm-3 form-group">
-														<label  class="control-label"><i class="fa fa-phone icon text-default-lter"></i>&nbsp;<?php echo $TELEFONO; ?><?php if ($v2==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-														<input type="tel" class="form-control" name="Shipperphone" id="Shipperphone" value="<?php if (isset($_POST['Shipperphone'])) echo $_POST['Shipperphone']?>" />
-													</div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label  class="control-label"><i class="fa fa-phone icon text-default-lter"></i>&nbsp;<?php echo $TELEFONO; ?><?php if ($v2==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="tel" class="form-control" name="Shipperphone" id="Shipperphone" value="<?php if (isset($_POST['Shipperphone'])) echo $_POST['Shipperphone']; else echo $companyInfor['cphone']; ?>" />
+                                                </div>
 
-													<div class="col-sm-3 form-group">
-														<label class="control-label"><?php echo $CEDULA; ?>&nbsp;<?php if ($v3==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-														<input type="text" class="form-control" name="Shippercc" id="Shippercc"  value="<?php if (isset($_POST['Shippercc'])) echo $_POST['Shippercc']?>" >
-													</div>
-													<div class="col-sm-3 form-group" >
-														<label class="control-label"><?php echo $L_['lockerid']; ?>&nbsp;<?php if ($v4==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-														<input type="text" class="form-control" name="Shipperlocker" id="Shipperlocker"  value="<?php if (isset($_POST['Shipperlocker'])) echo $_POST['Shipperlocker']?>">
-													</div>
-													<div class="col-sm-3 form-group">
-														<label class="control-label"><i class="fa fa-angle-double-right icon text-default-lter"></i>&nbsp;<strong><?php echo $PAISORIGEN; ?></strong>&nbsp;<?php if ($v5==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-															<input type="text" class="form-control" name="Pickuptime" id="Shippercountry" value="<?php if (isset($_POST['Pickuptime'])) echo $_POST['Pickuptime']?>">
-													</div>
-													<div class="col-sm-3 form-group">
-														<label class="control-label"><strong><?php echo $L_STATE; ?></strong>&nbsp;<?php if ($v6==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-															<input  type="text"  class="form-control" name="state"  id="Shipperstate"  value="<?php if (isset($_POST['state'])) echo $_POST['state']?>">
-													</div>
-													<div class="col-sm-3 form-group" >
-														<label class="control-label"><strong><?php echo $CODIGO; ?></strong>&nbsp;<?php if ($v7==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-															<input type="text" class="form-control" name="iso" id="Shipperiso" value="<?php if (isset($_POST['iso'])) echo $_POST['iso']?>" >
-													</div>
-													<div class="col-sm-3 form-group">
-														<label class="control-label"><strong><?php echo $CIUDAD; ?></strong>&nbsp;<?php if ($v8==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-															<input  type="text"   class="form-control" id="Shipperciudad" name="ciudad"  value="<?php if (isset($_POST['ciudad'])) echo $_POST['ciudad']?>" >
-													</div>
-													<div class="col-sm-3 form-group">
-														<label class="control-label"><strong><?php echo $CODIGOPOSTAL; ?></strong>&nbsp;<?php if ($v9==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-															<input  type="text" class="form-control" id="Shipperzipcode" name="zipcode"  value="<?php if (isset($_POST['zipcode'])) echo $_POST['zipcode']?>">
-													</div>
-													<div class="col-sm-9 form-group">
-														<label class="control-label"><?php echo $EMAIL; ?><font color="#FF6100"><?php echo $notaemail; ?></font>&nbsp;<?php if ($v10==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-															<input type="email" class="form-control" name="Shipperemail" id="idemail"  placeholder="demo@emo.com" autocomplete=" off" onKeyUp="javascript:validateeMail('idemail')" />
-														<strong><span id="mailOK"></span></strong>
-														<p class="error"></p>
-													</div>
-												</div>
-											</div>
-											<!-- Adress and Phone -->
+                                                <div class="col-sm-3 form-group">
+                                                    <label class="control-label"><?php echo $CEDULA; ?>&nbsp;<?php if ($v3==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="text" class="form-control" name="Shippercc" id="Shippercc"  value="<?php if (isset($_POST['Shippercc'])) echo $_POST['Shippercc']; else echo $companyInfor['nit'];?>" >
+                                                </div>
+                                                <div class="col-sm-3 form-group" >
+                                                    <label class="control-label"><?php echo $L_['lockerid']; ?>&nbsp;<?php if ($v4==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="text" class="form-control" name="Shipperlocker" id="Shipperlocker"  value="<?php if (isset($_POST['Shipperlocker'])) echo $_POST['Shipperlocker']; else echo $companyInfor['locker']?>">
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label class="control-label"><i class="fa fa-angle-double-right icon text-default-lter"></i>&nbsp;<strong><?php echo $PAISORIGEN; ?></strong>&nbsp;<?php if ($v5==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="text" class="form-control" name="Pickuptime" id="Shippercountry" value="<?php if (isset($_POST['Pickuptime'])) echo $_POST['Pickuptime']; else echo $companyInfor['country'];?>">
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label class="control-label"><strong><?php echo $L_STATE; ?></strong>&nbsp;<?php if ($v6==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input  type="text"  class="form-control" name="state"  id="Shipperstate"  value="<?php if (isset($_POST['state'])) echo $_POST['state']; else echo $companyInfor['city']?>">
+                                                </div>
+                                                <div class="col-sm-3 form-group" >
+                                                    <label class="control-label"><strong><?php echo $CODIGO; ?></strong>&nbsp;<?php if ($v7==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="text" class="form-control" name="iso" id="Shipperiso" value="<?php if (isset($_POST['iso'])) echo $_POST['iso']; else echo $companyInfor['country'];?>" >
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label class="control-label"><strong><?php echo $CIUDAD; ?></strong>&nbsp;<?php if ($v8==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input  type="text"   class="form-control" id="Shipperciudad" name="ciudad"  value="<?php if (isset($_POST['ciudad'])) echo $_POST['ciudad']; else echo $companyInfor['city']?>" >
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label class="control-label"><strong><?php echo $CODIGOPOSTAL; ?></strong>&nbsp;<?php if ($v9==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input  type="text" class="form-control" id="Shipperzipcode" name="zipcode"  value="<?php if (isset($_POST['zipcode'])) echo $_POST['zipcode']; else echo $companyInfor['zipcode']?>">
+                                                </div>
+                                                <div class="col-sm-9 form-group">
+                                                    <label class="control-label"><?php echo $EMAIL; ?><font color="#FF6100"><?php echo $notaemail; ?></font>&nbsp;<?php if ($v10==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                    <input type="email" class="form-control" name="Shipperemail" id="idemail"  placeholder="demo@emo.com" autocomplete=" off" onKeyUp="javascript:validateeMail('idemail')" value="<?php echo $currentUser['email']?>" />
+                                                    <strong><span id="mailOK"></span></strong>
+                                                    <p class="error"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Adress and Phone -->
 
-											<!-- START Shipment information -->
-											</br></br>
-											<legend><?php echo $Informaciondeenvio; ?></legend>
+                                        <!-- START Shipment information -->
+                                        </br></br>
+                                        <legend><?php echo $Informaciondeenvio; ?></legend>
 
-											<div class="row">
+                                        <div class="row">
 
-											<!-- Origin Office -->
+                                            <!-- Origin Office -->
 
-											   <div class="col-sm-3 form-group">
-												 <label for="zipcode" class="control-label"><i class="fa fa-angle-double-right icon text-default-lter"></i>&nbsp;<strong><?php echo $OFICINAORIGEN; ?></strong></label>
-													<select class="form-control" name="Invoiceno">
-														<?php
-														while($data = dbFetchAssoc($result)){
-														?>
-														<option value="<?php echo $data['off_name']; ?>"><?php echo $data['off_name']; ?></option>
-														<?php
-														}//while
-														?>
-												   </select>
-												</div>
-												<div class="col-sm-3 form-group">
-													<label for="ccv" class="control-label"><strong><?php echo $CantidadPaquetes; ?></strong>&nbsp;<?php if ($v11==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-													<input type="number" class="form-control" name="Qnty"  value="<?php if (isset($_POST['Qnty'])) echo $_POST['Qnty']?>" />
-												</div>
-													<!-- Text area -->
-												<div class="col-sm-6 form-group">
-													<label for="inputTextarea" class="control-label"><i class="fa fa-comments icon text-default-lter"></i>&nbsp;<?php echo $DetallesdelEnvio; ?>&nbsp;<?php if ($v14==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-													<textarea type="text" class="form-control" name="Comments" placeholder="<?php echo $placedetails; ?>" ></textarea>
-												</div>
-											</div>
+                                            <div class="col-sm-3 form-group">
+                                                <label for="zipcode" class="control-label"><i class="fa fa-angle-double-right icon text-default-lter"></i>&nbsp;<strong><?php echo $OFICINAORIGEN; ?></strong></label>
+                                                <select class="form-control" name="Invoiceno">
+                                                    <?php
+                                                    while($data = dbFetchAssoc($result)){
+                                                        ?>
+                                                        <option value="<?php echo $data['off_name']; ?>"><?php echo $data['off_name']; ?></option>
+                                                        <?php
+                                                    }//while
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label for="ccv" class="control-label"><strong><?php echo $CantidadPaquetes; ?></strong>&nbsp;<?php if ($v11==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                <input type="number" class="form-control qnty" name="Qnty" value="<?php if (isset($_POST['Qnty'])) echo $_POST['Qnty']?>" />
+                                            </div>
+                                            <!-- Text area -->
+                                            <div class="col-sm-6 form-group">
+                                                <label for="inputTextarea" class="control-label"><i class="fa fa-comments icon text-default-lter"></i>&nbsp;<?php echo $DetallesdelEnvio; ?>&nbsp;<?php if ($v14==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
+                                                <textarea type="text" class="form-control" name="Comments" placeholder="<?php echo $placedetails; ?>" ></textarea>
+                                            </div>
+                                        </div>
 
-											<div class="row">
-												<div class="col-sm-5 form-group">
-													<label class="control-label"><i class="fa fa-database icon text-default-lter"></i>&nbsp;<strong><?php echo $Pagos; ?></strong></label>
-													<select class="form-control" name="bookingmode">
-														<option selected="selected" value="Effective"><?php echo $Effective; ?></option>
-														<option value="Debit_card"><?php echo $Debitcard; ?></option>
-														<option value="Credit_card"><?php echo $Creditcard; ?></option>
-														<option value="Transfer"><?php echo $Transfer; ?></option>
-														<option value="Online"><?php echo $Payonline; ?></option>
-														<option value="Paypal"><?php echo $L_['type_paypal']; ?></option>
-													</select>
-												</div>
+                                        <div class="row">
+                                            <div class="col-sm-6"></div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="control-label"><strong><?php echo $L_TRACKING; ?></strong></label>
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="control-label"><strong><?php echo $L_WEIGHT; ?></strong></label>
+                                            </div>
+                                        </div>
 
-												<div class="col-sm-4 form-group">
-													<label class="control-label"><?php echo $TipodeProducto; ?></label>
-													<select  type="text" class="form-control" name="Shiptype"  >
-														<?php
-															$sql="SELECT name FROM type_shipments  GROUP BY name";
-																$query=$db->query($sql);
-																if($query->num_rows>0){
-																	while($row=$query->fetch_array()){
-																	echo '<option data-value="'.$row['name'].'">'.utf8_encode($row['name']).'</option>';
-																}
-															}
-														?>
-													</select>
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="control-label"><i class="fa fa-plane icon text-default-lter"></i>&nbsp;<?php echo $MododelServicio; ?></label>
-												  <select class="form-control" name="Mode">
-													<?php
-														$sql="SELECT name FROM mode_bookings  GROUP BY name";
-															$query=$db->query($sql);
-															if($query->num_rows>0){
-																while($row=$query->fetch_array()){
-																echo '<option data-value="'.$row['name'].'">'.utf8_encode($row['name']).'</option>';
-															}
-														}
-													?>
-												  </select>
-												</div>
-											</div>
+                                        <div class="row tracking">
+                                            <div class="col-sm-6 form-group" align="right">
+                                                <button class="btn btn-success" id="btn_add_tracking_number" type="button">Add</button>
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <input type="text" class="form-control" name="tracking_number[]" placeholder="<?php echo $L_TRACKING?>">
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <input type="number" class="form-control input_weight" name="weight[]" placeholder="<?php echo $L_WEIGHT?>">
+                                            </div>
+                                        </div>
 
-											 <!-- Payment Mode -->
-											 <div class="row">
-												<div class="col-sm-3 form-group" >
-													<label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorDeclarado; ?><strong></label>
-													<input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();" id="sum2"  name="Totaldeclarate"   value="0" />
-												</div>
-												<div class="col-sm-3 form-group" >
-													<label class="text-primary"><strong><?php echo $Declarado; ?><strong></label>
-													<input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();" id="sum5"  name="Totaldeclarado"  value="4" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label for="ccv" class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorRecogida; ?><strong></label>
-													<input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();"  id="sum3" name="Totalfreight" value="0" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $PrimerKilo; ?>&nbsp;<?php echo $_SESSION['ge_measure']; ?><strong></label>
-													<input type="text" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="suma();" id="sum1"    name="variable" value="3.25" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $_SESSION['ge_measure']; ?>&nbsp;<?php echo $KiloAdicional; ?><strong></label>
-													<input type="text" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="suma();" id="sum6" name="kiloadicional" value="3.25" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $PesoKg; ?>&nbsp;(<?php echo $_SESSION['ge_measure']; ?>)<strong></label>
-													<input type="number" class="form-control" required onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();"  id="sum4"   name="Weight" value="0" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $SubtotalEnvio; ?><strong></i></label>
-													<input  type="text" class="form-control" name="shipping_subtotal" id="resultado" value="0" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $PesoFisico; ?><strong></label>
-													<input type="number" class="form-control"  id="pesoreal" name="pesoreal" value="0" onblur="if(this.value == ''){this.value='0'}" >
-												</div>
-											</div>
+                                        <div class="add_tracking_number tracking"></div>
 
-											<legend><?php echo $pesovolumetrico; ?>:</legend>
+                                        <div class="row">
+                                            <div class="col-sm-5 form-group">
+                                                <label class="control-label"><i class="fa fa-database icon text-default-lter"></i>&nbsp;<strong><?php echo $Pagos; ?></strong></label>
+                                                <select class="form-control" name="bookingmode">
+                                                    <option selected="selected" value="Effective"><?php echo $Effective; ?></option>
+                                                    <option value="Debit_card"><?php echo $Debitcard; ?></option>
+                                                    <option value="Credit_card"><?php echo $Creditcard; ?></option>
+                                                    <option value="Transfer"><?php echo $Transfer; ?></option>
+                                                    <option value="Online"><?php echo $Payonline; ?></option>
+                                                    <option value="Paypal"><?php echo $L_['type_paypal']; ?></option>
+                                                </select>
+                                            </div>
 
-											<!-- Peso Volumetrico -->
+                                            <div class="col-sm-4 form-group">
+                                                <label class="control-label"><?php echo $TipodeProducto; ?></label>
+                                                <select  type="text" class="form-control" name="Shiptype"  >
+                                                    <?php
+                                                    $sql="SELECT name FROM type_shipments  GROUP BY name";
+                                                    $query=$db->query($sql);
+                                                    if($query->num_rows>0){
+                                                        while($row=$query->fetch_array()){
+                                                            echo '<option data-value="'.$row['name'].'">'.utf8_encode($row['name']).'</option>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="control-label"><i class="fa fa-plane icon text-default-lter"></i>&nbsp;<?php echo $MododelServicio; ?></label>
+                                                <select class="form-control" name="Mode">
+                                                    <?php
+                                                    $sql="SELECT name FROM mode_bookings  GROUP BY name";
+                                                    $query=$db->query($sql);
+                                                    if($query->num_rows>0){
+                                                        while($row=$query->fetch_array()){
+                                                            echo '<option data-value="'.$row['name'].'">'.utf8_encode($row['name']).'</option>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
 
-											<div class="row">
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $Altura; ?><strong></label>
-													<input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="volumetrico();" id="volume1"    name="altura" value="0" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $Ancho; ?><strong></label>
-													<input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="svolumetrico();" id="volume2"    name="ancho" value="0" />
-												</div>
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $Longitud; ?><strong></label>
-													<input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="volumetrico();" id="volume3"   name="longitud" value="0" />
-												</div>
+                                        <!-- Payment Mode -->
+                                        <div class="row">
+                                            <div class="col-sm-3 form-group" >
+                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorDeclarado; ?><strong></label>
+                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();" id="sum2"  name="Totaldeclarate"   value="0" />
+                                            </div>
+                                            <div class="col-sm-3 form-group" >
+                                                <label class="text-primary"><strong><?php echo $Declarado; ?><strong></label>
+                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();" id="sum5"  name="Totaldeclarado"  value="4" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label for="ccv" class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorRecogida; ?><strong></label>
+                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();"  id="sum3" name="Totalfreight" value="0" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $PrimerKilo; ?>&nbsp;<?php echo $_SESSION['ge_measure']; ?><strong></label>
+                                                <input type="text" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="suma();" id="sum1"    name="variable" value="3.25" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $_SESSION['ge_measure']; ?>&nbsp;<?php echo $KiloAdicional; ?><strong></label>
+                                                <input type="text" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="suma();" id="sum6" name="kiloadicional" value="3.25" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $PesoKg; ?>&nbsp;(<?php echo $_SESSION['ge_measure']; ?>)<strong></label>
+                                                <input type="number" class="form-control" required onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();"  id="sum4"   name="Weight" value="0" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $SubtotalEnvio; ?><strong></i></label>
+                                                <input  type="text" class="form-control" name="shipping_subtotal" id="resultado" value="0" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $PesoFisico; ?><strong></label>
+                                                <input type="number" class="form-control"  id="pesoreal" name="pesoreal" value="0" onblur="if(this.value == ''){this.value='0'}" >
+                                            </div>
+                                        </div>
 
-												<div class="col-sm-3 form-group">
-													<label class="text-primary"><strong><?php echo $TotalPesoVolumetrico; ?><strong></i></label>
-													<input  type="text" class="form-control" name="totalpeso" id="totalpeso" value="0" />
+                                        <legend><?php echo $pesovolumetrico; ?>:</legend>
 
-												</div>
-											</div>
-										</fieldset>
+                                        <!-- Peso Volumetrico -->
+
+                                        <div class="row">
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $Altura; ?><strong></label>
+                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="volumetrico();" id="volume1"    name="altura" value="0" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $Ancho; ?><strong></label>
+                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="svolumetrico();" id="volume2"    name="ancho" value="0" />
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $Longitud; ?><strong></label>
+                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="volumetrico();" id="volume3"   name="longitud" value="0" />
+                                            </div>
+
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $TotalPesoVolumetrico; ?><strong></i></label>
+                                                <input  type="text" class="form-control" name="totalpeso" id="totalpeso" value="0" />
+
+                                            </div>
+                                        </div>
+                                    </fieldset>
 
 										<!-- START Receiver info  -->
 										<fieldset class="col-md-6">
