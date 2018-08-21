@@ -79,7 +79,7 @@ $_POST = $ifilter->process($_POST);
 	}else{
 		header('Location:../404');
 	}
-//var_dump($_SESSION);die();
+
 	$sql = "SELECT DISTINCT(off_name)
 			FROM offices";
 	$result = dbQuery($sql);
@@ -114,7 +114,6 @@ $_POST = $ifilter->process($_POST);
 	$v22=false;
 	$v23=false;
 
-
 	if (isset($_POST['Shippername'])){
 		//Comprobamos que el nombre no este en blanco
 		if ($_POST['Shippername']=='') $v0=true;
@@ -124,7 +123,6 @@ $_POST = $ifilter->process($_POST);
 		if ($_POST['Shipperlocker']=='') $v4=true;
 		if ($_POST['Pickuptime']=='') $v5=true;
 		if ($_POST['state']=='') $v6=true;
-		if ($_POST['iso']=='') $v7=true;
 		if ($_POST['ciudad']=='') $v8=true;
 		if ($_POST['zipcode']=='') $v9=true;
 		if ($_POST['Shipperemail']=='') $v10=true;
@@ -142,7 +140,7 @@ $_POST = $ifilter->process($_POST);
 		if ($_POST['zipcode1']=='') $v22=true;
 		if ($_POST['Receiveremail']=='') $v23=true;
 
-		if ($v0==false && $v1==false && $v2==false && $v3==false && $v4==false && $v5==false && $v6==false && $v7==false && $v8==false && $v9==false && $v10==false && $v11==false
+		if ($v0==false && $v1==false && $v2==false && $v3==false && $v4==false && $v5==false && $v6==false && $v8==false && $v9==false && $v10==false && $v11==false
 			&& $v12==false && $v13==false && $v14==false && $v15==false && $v16==false && $v17==false && $v18==false && $v19==false && $v20==false && $v21==false && $v22==false
 			&& $v23==false){
 
@@ -184,7 +182,7 @@ $_POST = $ifilter->process($_POST);
 		$Packupdate 		= $_POST['Packupdate'];
 		$Schedule 			= $_POST['Schedule'];
 		$Pickuptime 		= $_POST['Pickuptime'];
-		$iso 				= $_POST['iso'];
+		$iso 				= '';
 		$state 				= $_POST['state'];
 		$ciudad 			= $_POST['ciudad'];
 		$zipcode 			= $_POST['zipcode'];
@@ -202,6 +200,8 @@ $_POST = $ifilter->process($_POST);
 		$status_delivered 	= $_POST['status_delivered'];
 		$payment 			= $_POST['payment'];
 		$paymode 			= $_POST['paymode'];
+		$trackingNumbers    = $_POST['tracking_number'];
+		$weights            = $_POST['weight'];
 
 
 		## Obtengo datos de la empresa
@@ -261,7 +261,15 @@ $_POST = $ifilter->process($_POST);
 				VALUES('$pre-$cons_no','$Shippername','$Shipperemail','$Shipperlocker','$bookingmode','$Comments','$shipping_subtotal','$status','$officename','$user',curdate() )";
 			//echo $sql;
 		dbQuery($sql_2);
-		
+
+		$sqlInsertTracking = "INSERT INTO tracking_number (tracking, cons_no, weight, update_date) VALUES ";
+
+        foreach($trackingNumbers as $key => $trackingNumber) {
+            $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . $weights[$key] . ", NOW())";
+        }
+
+        dbQuery($sqlInsertTracking . implode(",", $query_values));
+
 		$destinatario = "".$Receiveremail."";
 
 		## Obtengo datos de las facturas tracking
@@ -668,11 +676,11 @@ include("header.php");
                                                     <label class="control-label"><strong><?php echo $L_STATE; ?></strong>&nbsp;<?php if ($v6==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
                                                     <input  type="text"  class="form-control" name="state"  id="Shipperstate"  value="<?php if (isset($_POST['state'])) echo $_POST['state']; else echo $companyInfor['city']?>">
                                                 </div>
-                                                <div class="col-sm-3 form-group" >
-                                                    <label class="control-label"><strong><?php echo $CODIGO; ?></strong>&nbsp;<?php if ($v7==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-                                                    <input type="text" class="form-control" name="iso" id="Shipperiso" value="<?php if (isset($_POST['iso'])) echo $_POST['iso']; else echo $companyInfor['country'];?>" >
-                                                </div>
-                                                <div class="col-sm-3 form-group">
+<!--                                                <div class="col-sm-3 form-group" >-->
+<!--                                                    <label class="control-label"><strong>--><?php //echo $CODIGO; ?><!--</strong>&nbsp;--><?php //if ($v7==true){?><!--<span class="error"><em>--><?php //echo $L_['mandatory']; ?><!--</em></span>--><?php //}?><!--</label>-->
+<!--                                                    <input type="text" class="form-control" name="iso" id="Shipperiso" value="--><?php //if (isset($_POST['iso'])) echo $_POST['iso']; else echo $companyInfor['country'];?><!--" >-->
+<!--                                                </div>-->
+                                                <div class="col-sm-6 form-group">
                                                     <label class="control-label"><strong><?php echo $CIUDAD; ?></strong>&nbsp;<?php if ($v8==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
                                                     <input  type="text"   class="form-control" id="Shipperciudad" name="ciudad"  value="<?php if (isset($_POST['ciudad'])) echo $_POST['ciudad']; else echo $companyInfor['city']?>" >
                                                 </div>
@@ -736,14 +744,18 @@ include("header.php");
                                                 <button class="btn btn-success" id="btn_add_tracking_number" type="button">Add</button>
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                <input type="text" class="form-control" name="tracking_number[]" placeholder="<?php echo $L_TRACKING?>">
+                                                <input type="text" class="form-control" name="tracking_number[]" placeholder="<?php echo $L_TRACKING?>" required="required">
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                <input type="number" class="form-control input_weight" name="weight[]" placeholder="<?php echo $L_WEIGHT?>">
+                                                <input type="number" class="form-control input_weight" name="weight[]" placeholder="<?php echo $L_WEIGHT?>" required="required">
                                             </div>
                                         </div>
 
                                         <div class="add_tracking_number tracking"></div>
+                                        <div class="row sum">
+                                            <div class="col-sm-9 form-group" align="right">Tổng</div>
+                                            <div class="col-sm-3 form-group" id="sum_weight"></div>
+                                        </div>
 
                                         <div class="row">
                                             <div class="col-sm-5 form-group">

@@ -303,38 +303,58 @@
         var addTrackingNumber = $('.add_tracking_number');
         var tracking = $('.tracking');
         var qnty = $('.qnty');
+        var sumWeight = $('.sum #sum_weight');
 
         $('#btn_add_tracking_number').on('click', function () {
             addTrackingNumber.append('<div class="row tracking_number"><div class="col-sm-6 form-group" align="right">' +
                 '<button class="btn btn-danger delTrackingNumber" type="button">Del</button></div>\n'+
-                '<div class="col-sm-3 form-group"><input type="number" class="form-control" name="tracking_number[]" placeholder="Tracking number"></div>\n'+
-                '<div class="col-sm-3 form-group"><input type="number" class="form-control input_weight" name="weight[]" placeholder="Weight"></div></div>')
+                '<div class="col-sm-3 form-group"><input type="text" class="form-control" name="tracking_number[]" placeholder="Tracking number" required="required"></div>\n'+
+                '<div class="col-sm-3 form-group"><input type="number" class="form-control input_weight" name="weight[]" placeholder="Weight(kg)" required="required"></div></div>')
         });
 
         addTrackingNumber.on('click', '.delTrackingNumber', function () {
             $(this).parents('.tracking_number').remove();
             var inputWeight = $('.tracking input.input_weight');
             var count = 0;
+            var i = 0;
             inputWeight.each(function () {
                 var weight = $(this).val();
                 if (weight !== "NaN") {
+                    i++;
                     count += parseInt(weight) > 0 ? parseInt(weight) : 0;
                 }
             });
-            qnty.val(count);
+            sumWeight.html(count + ' kg');
+            qnty.val(i);
         });
 
         tracking.on('keyup blur', '.input_weight', function () {
             var inputWeight = $('.tracking input.input_weight');
             var count = 0;
+            var i = 0;
             inputWeight.each(function () {
                 var weight = $(this).val();
                 if (weight !== "NaN") {
+                    i++;
                     count += parseInt(weight) > 0 ? parseInt(weight) : 0;
                 }
             });
-            qnty.val(count);
-        })
+            sumWeight.html(count + ' kg');
+            qnty.val(i);
+        });
+
+        var inputWeight = $('.tracking input.input_weight');
+        var count = 0;
+        var i = 0;
+        inputWeight.each(function () {
+            var weight = $(this).val();
+            if (weight !== "NaN") {
+                i++;
+                count += parseInt(weight) > 0 ? parseInt(weight) : 0;
+            }
+        });
+        sumWeight.html(count + ' kg');
+        qnty.val(0);
 	});
 
 	function getClientByID(clientID) {

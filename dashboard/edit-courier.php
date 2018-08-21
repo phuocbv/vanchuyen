@@ -61,11 +61,21 @@ if ($_POST['cons']=="") {
 } else {	
 	$posted = $_POST['cons'];
 	$sql = "SELECT * FROM courier WHERE cons_no ='$posted'";
-}	
+}
 	$result = dbQuery($sql);
 	$count=mysql_num_rows($result );
 if ($count > 0){
-while($data = dbFetchAssoc($result)) {
+
+    while($data = dbFetchAssoc($result)) {
+    //get list tracking
+        $sqGetListTracking = "SELECT * FROM tracking_number WHERE cons_no ='" . $data['cons_no'] . "'";
+        $listTrackingQuery = dbQuery($sqGetListTracking);
+        $listTracking = array();
+
+        while ($row = mysql_fetch_array($listTrackingQuery)) {
+            array_push($listTracking, $row);
+        }
+
 	extract($data);
 ob_end_flush();
 ?>
@@ -213,8 +223,6 @@ include("header.php");
 																		<!-- Origin Office -->
 																		
 																			<div class="col-sm-3 form-group">
-																				
-																				
 																				<label><?php echo $CantidadPaquetes; ?></label>
 																				<input type="text" class="form-control" name="Qnty"  value="<?php echo $qty; ?>"  />
 																			</div>
@@ -229,9 +237,32 @@ include("header.php");
 																				<input name="Pickuptime" id="Pickuptime" class="form-control" value="<?php echo $pick_time; ?>">
 																														
 																			</div>		
-																		</div>	
-																		
-																		 <!-- Payment Mode -->
+																		</div>
+
+                                                                        <!-- List Tracking -->
+                                                                        <div class="row">
+                                                                            <div class="col-sm-3 form-group">
+                                                                                <label class="control-label"><?php echo $L_TRACKING; ?></label>
+                                                                            </div>
+                                                                            <div class="col-sm-3 form-group">
+                                                                                <label class="control-label"><?php echo $L_WEIGHT; ?></label>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <?php foreach ($listTracking as $tracking) { ?>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-3 form-group">
+                                                                                    <input type="text" class="form-control" name="tracking[]"  value="<?php echo $tracking['tracking']; ?>"  />
+                                                                                </div>
+                                                                                <div class="col-sm-3 form-group">
+                                                                                    <input type="text" class="form-control" name="weight[]"  value="<?php echo $tracking['weight']; ?>"  />
+                                                                                </div>
+                                                                            </div>
+                                                                        <?php } ?>
+                                                                        <!-- List Tracking -->
+
+                                                                        <!-- Payment Mode -->
 																		<div class="row">
 																			<div class="col-sm-3 form-group" >
 																				<label class="text-success"><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorDeclarado; ?></i></label>

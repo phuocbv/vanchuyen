@@ -142,11 +142,11 @@ if(isset($_POST["customer_id"]) && !empty($_POST["customer_id"])) {
 }
 
 if (isset($_POST['list_client_ID']) && !empty($_POST['list_client_ID'])) {
-    $query = $db->query("SELECT locker FROM tbl_clients");
+    $query = $db->query("SELECT cc FROM tbl_clients");
 	$rowCount = $query->num_rows;
 	$listClient = array();
     while ($client = $query->fetch_assoc()) {
-		array_push($listClient, $client['locker']);
+		array_push($listClient, $client['cc']);
 	}
     echo json_encode($listClient);
 }
@@ -155,7 +155,7 @@ if(isset($_POST["clientID"]) && !empty($_POST["clientID"])) {
     # obtengo los datos del cliente
     $query = $db->query("SELECT *
                          FROM tbl_clients 
-                        WHERE locker = ".$_POST['clientID']);
+                        WHERE cc like '%" . $_POST['clientID'] . "%'");
 
     # numero de registros
     $rowCount = $query->num_rows;

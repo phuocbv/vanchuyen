@@ -682,6 +682,6 @@ $french="Français / French";
 $hindi="हिंदी / Hindi";
 
 $L_TRACKING="Tracking number";
-$L_WEIGHT="Weight";
+$L_WEIGHT="Weight(kg)";
 
 ?>
