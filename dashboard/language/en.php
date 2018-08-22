@@ -683,5 +683,6 @@ $hindi="हिंदी / Hindi";
 
 $L_TRACKING="Tracking number";
 $L_WEIGHT="Weight(kg)";
+$L_SUM="Tổng";
 
 ?>

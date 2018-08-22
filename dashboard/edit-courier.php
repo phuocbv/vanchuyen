@@ -99,7 +99,7 @@ ob_end_flush();
   <link rel="stylesheet" href="css/app.css" type="text/css" />
 
   <!-- Required - Form style -->
-  <script type= "text/javascript" src="../process/countries.js"></script> 
+<!--  <script type= "text/javascript" src="../process/countries.js"></script> -->
 
 </head>
 <body>
@@ -249,17 +249,31 @@ include("header.php");
                                                                             </div>
                                                                         </div>
 
-
-                                                                        <?php foreach ($listTracking as $tracking) { ?>
+                                                                        <div class="tracking">
+                                                                        <?php
+                                                                        $sum = 0;
+                                                                        foreach ($listTracking as $tracking) {
+                                                                            $sum += $tracking['weight'];
+                                                                            ?>
                                                                             <div class="row">
                                                                                 <div class="col-sm-3 form-group">
                                                                                     <input type="text" class="form-control" name="tracking[]"  value="<?php echo $tracking['tracking']; ?>"  />
                                                                                 </div>
                                                                                 <div class="col-sm-3 form-group">
-                                                                                    <input type="text" class="form-control" name="weight[]"  value="<?php echo $tracking['weight']; ?>"  />
+                                                                                    <input type="number" class="form-control weight" name="weight[]"  value="<?php echo $tracking['weight']; ?>"  />
                                                                                 </div>
                                                                             </div>
                                                                         <?php } ?>
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                            <div class="col-sm-3 form-group" align="right">
+                                                                                <label class="control-label"><?php echo $L_SUM; ?></label>
+                                                                            </div>
+                                                                            <div class="col-sm-3 form-group">
+                                                                                <label class="control-label" id="sum_weight"><?php echo $sum . ' kg'; ?></label>
+                                                                            </div>
+                                                                        </div>
                                                                         <!-- List Tracking -->
 
                                                                         <!-- Payment Mode -->
@@ -507,6 +521,23 @@ include("footer.php");
 	$(document).ready(function() {
 		$('.custom-select').fancySelect(); // Custom select
 		$('[data-toggle="tooltip"]').tooltip() // Tooltip
+        var tracking = $('.tracking');
+		var sumWeight = $('#sum_weight');
+//keyup blur
+        tracking.on('click', '.weight', function () {
+            console.log('ok');
+            var inputWeight = $('.tracking .weight');
+            var count = 0;
+            var i = 0;
+            inputWeight.each(function () {
+                var weight = $(this).val();
+                if (weight !== "NaN") {
+                    i++;
+                    count += parseInt(weight) > 0 ? parseInt(weight) : 0;
+                }
+            });
+            sumWeight.html(count + ' kg');
+        });
 	});
 </script>
 <script language="javascript" type="text/javascript">

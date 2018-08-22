@@ -753,7 +753,7 @@ include("header.php");
 
                                         <div class="add_tracking_number tracking"></div>
                                         <div class="row sum">
-                                            <div class="col-sm-9 form-group" align="right">Tổng</div>
+                                            <div class="col-sm-9 form-group" align="right"><?php echo $L_SUM;?></div>
                                             <div class="col-sm-3 form-group" id="sum_weight"></div>
                                         </div>
 
