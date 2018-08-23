@@ -53,9 +53,11 @@ if($_SESSION['user_type']=='Administrator' or $_SESSION['user_type']=='Employee'
 }
 $v_cost = false;
 $v_content = false;
+$cost = null;
 
-if (isset($_POST['cost'])) {
-    $cost = $_POST['cost'];
+if (isset($_POST['cost_id'])) {
+    $id = decodificar($_POST['cost_id']);
+    $cost_name = $_POST['cost'];
     $content = $_POST['content'];
     $money = $_POST['money'];
     $user = $_SESSION['user_name'];
@@ -63,8 +65,21 @@ if (isset($_POST['cost'])) {
     $date = date_create( $_POST['date']);
     $date = date_format($date,"Y/m/d");
 
-    $sqlAddCost = "INSERT INTO cost (date, content, cost, money, user, role, create_date) VALUES ('$date' , '$content', '$cost', '$money', '$user', '$role', NOW())";
-    dbQuery($sqlAddCost);
+    $sqlUpdateCost = "UPDATE cost SET date = '$date', content = '$content', cost = '$cost_name', money = '$money' WHERE id = '$id'";
+    dbQuery($sqlUpdateCost);
+}
+
+if (isset($_GET['id'])) {
+    $cost_id = decodificar($_GET['id']);
+    $sqlSelectCost = "SELECT * FROM cost WHERE id='$cost_id'";
+    $result = dbQuery($sqlSelectCost);
+    $count = mysql_num_rows($result);
+
+    if ($count > 0) {
+        while ($data = dbFetchAssoc($result)) {
+            $cost = $data;
+        }
+    }
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -129,42 +144,43 @@ include("header.php");
                     <div class="blog-post">
                         <div class="panel">
                             <div class="wrapper-lg">
-                                <h3 class="classic-title"><span><strong><i class="fa fa-truck icon text-default-lter"></i>&nbsp;&nbsp;Add Cost</strong></h3>
+                                <h3 class="classic-title"><span><strong><i class="fa fa-truck icon text-default-lter"></i>&nbsp;&nbsp;Edit Cost</strong></h3>
 
                                 <!-- START Checkout form -->
-                                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" id="formulario1" >
+                                <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $_GET['id'] ?>" method="post" id="formulario1" >
                                     <table border="0" align="center" width="100%" >
                                         <div class="row">
                                             <!-- START Cost information -->
                                             <fieldset class="col-md-6">
                                                 <legend>Cost Data</legend>
+                                                <input hidden name="cost_id" value="<?php echo codificar($cost['id']) ?>"/>
                                                 <!-- Name -->
                                                 <div class="row" >
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">&nbsp;Cost Name<span class="required-field">*</span></label>
-                                                        <input type="text" class="form-control" name="cost" required/>
+                                                        <input type="text" class="form-control" name="cost" required value="<?php echo $cost['cost'] ?>"/>
                                                     </div>
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label"><i class="fa fa-calendar icon text-default-lter"></i>Date<span class="required-field">*</span></label>
                                                         <div class="demo-section k-content">
-                                                            <input type="date" class="form-control" name="date" id="datestimepicker" title="datestimepicker" required>
+                                                            <input type="date" class="form-control" name="date" id="datestimepicker" title="datestimepicker" required value="<?php echo $cost['date']?>">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">Content&nbsp;<?php if (true==true){?><span class="error"></span><?php }?></label>
-                                                        <input type="text"  class="form-control" name="content" required="required" id="Shipperaddress" value=""/>
+                                                        <input type="text"  class="form-control" name="content" required="required" id="Shipperaddress" value="<?php echo $cost['content']?>"/>
                                                     </div>
 
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">&nbspMoney<?php if ($v2==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-                                                        <input type="number" class="form-control" name="money" id="money" required="required"/>
+                                                        <input type="number" class="form-control" name="money" id="money" required="required" value="<?php echo $cost['money']?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <button type="submit" class="btn btn-large btn-success col-sm-12">Add Cost</button>
+                                                        <button type="submit" class="btn btn-large btn-success col-sm-12">Edit Cost</button>
                                                     </div>
                                                 </div>
                                                 <!-- Adress and Phone -->
@@ -203,7 +219,7 @@ include("header.php");
 <script src="js/jquery.core.js"></script>
 <script src="js/jquery.app.js"></script>
 
-<script src="js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
 <!-- auto complate -->
 <script src="js/jquery.auto-complete.min.js"></script>
 <script>

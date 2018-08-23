@@ -53,38 +53,6 @@ if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Empl
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
-$styling = mysql_fetch_array(mysql_query("SELECT * FROM styles"));
-
-$meses = array('', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sept', 'Oct', 'Nov', 'Dic');
-for ($x = 1; $x <= 12; $x = $x + 1) {
-    $dinero[$x] = 0;
-}
-
-$anno = date('Y');
-
-$sql = mysql_query("SELECT * FROM courier");
-while ($row = mysql_fetch_array($sql)) {
-    $y = date("Y", strtotime($row['book_date']));
-
-    $mes = (int)date("m", strtotime($row['book_date']));
-
-    if ($y == $anno) {
-        $dinero[$mes] = $dinero[$mes] + $row['shipping_subtotal'];
-    }
-}
-for ($x = 1; $x <= 12; $x = $x + 1) {
-    $dineros[$x] = 0;
-}
-$sql_1 = mysql_query("SELECT * FROM courier_online");
-while ($row = mysql_fetch_array($sql_1)) {
-    $y = date("Y", strtotime($row['date']));
-
-    $mes = (int)date("m", strtotime($row['date']));
-
-    if ($y == $anno) {
-        $dineros[$mes] = $dineros[$mes] + $row['shipping_subtotal'];
-    }
-}
 ob_end_flush();
 ?>
 <!DOCTYPE html>
@@ -98,13 +66,11 @@ ob_end_flush();
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
     <link rel="shortcut icon" type="image/png" href="logo-image/image_logo.php?id=2"/>
-
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" type="text/css"/>
     <link rel="stylesheet" href="../bower_components/animate.css/animate.css" type="text/css"/>
     <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css" type="text/css"/>
     <link rel="stylesheet" href="../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css"/>
     <link href="assets/plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet">
-
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <link rel="stylesheet" href="css/font.css" type="text/css"/>
     <link rel="stylesheet" href="css/app.css" type="text/css"/>
@@ -120,10 +86,7 @@ ob_end_flush();
     <style><?php echo $styling['style']; ?></style>
 </head>
 <body>
-
 <?php include("header.php"); ?>
-
-
 <!-- content -->
 <div id="content" class="app-content" role="main">
     <div class="app-content-body ">
@@ -139,6 +102,27 @@ ob_end_flush();
                     <div class="col wrapper">
                         <i class="fa fa-circle-o text-info m-r-sm pull-right"></i>
                         <h4><i class="icon-plane"></i>COST LIST</a></h4>
+                        <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
+                            <?php
+                            $from = $_GET['from'];
+                            $to = $_GET['to'];
+                            $sqlSearch = "SELECT * FROM cost";
+                            $date_form = date_create($from);
+                            $date_form = date_format($date_form,"Y/m/d");
+                            $date_to = date_create($to);
+                            $date_to = date_format($date_to,"Y/m/d");
+                            ?>
+                            <table border="0" align="center">
+                                <tr>
+                                    <td>From&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input type="date" class="gentxt1" name="from" id="from_date"/></td>
+                                    <td>&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input type="date"  class="gentxt1" name="to" id="to_date"/></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-success" type="submit">Search</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                         <br>
                         <div class="table-responsive">
                             <table ui-jq="dataTable" class="table table-striped b-t b-b">
@@ -150,7 +134,7 @@ ob_end_flush();
                                         <th>&nbsp;</th>
                                     <?php } ?>
                                     <th>&nbsp;</th>
-                                    <th>Cost</th>
+                                    <th>Cost Name</th>
                                     <th>Date</th>
                                     <th>Content</th>
                                     <th>Money</th>
@@ -162,38 +146,39 @@ ob_end_flush();
                                 <tbody>
                                 <tr>
                                     <?php
-                                    $result3 = mysql_query("SELECT * FROM cost");
-                                    $sum_cost = 0;
+                                    if (isset($from) && isset($to)) {
+                                        $sqlSearch .= " WHERE date BETWEEN '$date_form' AND '$date_to' ";
+                                    }
+                                    $result3 = mysql_query($sqlSearch);
                                     $sum_money = 0;
                                     while ($row = mysql_fetch_array($result3)) {
-                                        $sum_cost += $row['cost'];
-                                        $sum_money += $row['money'];
+                                    $sum_money += $row['money'];
                                     ?>
                                     <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
                                         <td align="center">
                                             <a href="#" alt="Borrar Registro" onclick="del_list_admin(<?php echo $row['id']; ?>);">
                                                 <img src="img/delete.png" height="20" width="18"></a></td>
                                     <?php } ?>
-                                    <td align="center"><a href="edit-courier.php?cid=<?php echo codificar($row['id']); ?>">
+                                    <td align="center"><a href="edit-cost.php?id=<?php echo codificar($row['id']); ?>">
                                             <img src="img/edit.png" height="20" width="18"></a></td>
-                                    <td><strong><?php echo $_SESSION['ge_curr'] . formato($row['cost']); ?></strong></td>
+                                    <td><strong><?php echo $row['cost']; ?></strong></td>
                                     <td><?php echo $row['date']; ?></td>
                                     <td><?php echo $row['content']; ?></td>
-                                    <td><?php echo $row['money']; ?></td>
+                                    <td><?php echo $_SESSION['ge_curr'] . formato($row['money']); ?></td>
                                     <td><?php echo $row['user']; ?></td>
                                     <td><?php echo $row['role']; ?></td>
                                 </tr>
                                 <?php } ?>
                                 </tbody>
                                 <tfoot>
-                                    <th>&nbsp;</th>
-                                    <th>&nbsp;</th>
-                                    <th>Sum: <?php echo $_SESSION['ge_curr'] . formato($sum_cost)?></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th><?php echo $sum_money?></th>
-                                    <th></th>
-                                    <th></th>
+                                <th>&nbsp;</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Total&nbsp<?php echo $_SESSION['ge_curr'] . ' ' . formato($sum_money) ?></th>
+                                <th></th>
+                                <th></th>
                                 </tfoot>
                             </table>
                         </div>
@@ -206,9 +191,7 @@ ob_end_flush();
     <?php
     include("footer.php");
     ?>
-
 </div>
-
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="js/ui-load.js"></script>
@@ -218,14 +201,23 @@ ob_end_flush();
 <script src="js/ui-toggle.js"></script>
 <script src="js/delivery.js"></script>
 <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.js"></script>
+<script src="js/kendo.all.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#grid').DataTable();
+        // $('#from_date').kendoDateTimePicker({
+        //     value: new Date(),
+        //     dateInput: true
+        // });
+        // $('#to_date').kendoDateTimePicker({
+        //     value: new Date(),
+        //     dateInput: true
+        // });
     });
 
     function del_list_admin(id) {
         if (window.confirm('<?php echo $DELETEADMIN; ?>')) {
-            window.location = "deletes/delete_list_cost.php?action=del&id="+id;
+            window.location = "deletes/delete_list_cost.php?action=del&id=" + id;
         }
     }
 </script>
