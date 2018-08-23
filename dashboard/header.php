@@ -1,4 +1,4 @@
-<?php 
+<?php
 // *************************************************************************
 // *                                                                       *
 // * DEPRIXA -  Integrated Web system                                      *
@@ -28,31 +28,31 @@ require 'requirelanguage.php';
 require 'requirelanguage_image.php';
 
 if($_SESSION['user_type']=='Administrator' or $_SESSION['user_type']=='Employee'){
-		
+
 	if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 		} else {
 		   echo "<script type=\"text/javascript\">
 					alert(\"This page is for registered users only.\");
 					window.location = \"../signup\"
-				</script>";	
+				</script>";
 		exit;
 		}
-		
+
 		$now = time();
 		if($now > $_SESSION['expire']) {
 		session_destroy();
-		
+
 		 echo "<script type=\"text/javascript\">
 					alert(\"Your session has ended.\");
 					window.location = \"../login\"
-				</script>";	
+				</script>";
 		exit;
 	}
-	
+
 }else{
 	header('Location: ../404');
 }
-ob_end_flush();											 
+ob_end_flush();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,9 +61,9 @@ ob_end_flush();
   <title><?php echo $_SESSION['ge_cname']; ?> | <?php echo $Paneladministracion; ?></title>
   <meta name="description" content="<?php echo $_SESSION['ge_description']; ?>"/>
   <meta name="keywords" content="<?php echo $_SESSION['ge_keywords']; ?>" />
-  <meta name="author" content="Jaomweb">	
+  <meta name="author" content="Jaomweb">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  
+
   <link rel="shortcut icon" type="image/png" href="logo-image/image_logo.php?id=2"/>
 
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" />
@@ -72,12 +72,12 @@ ob_end_flush();
   <link rel="stylesheet" href="../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="css/font.css" type="text/css" />
   <link rel="stylesheet" href="css/app.css" type="text/css" />
-  
+
 
 </head>
 <body>
 <div class="app app-header-fixed ">
-  
+
   <!-- header -->
   <header id="header" class="app-header navbar" role="menu">
           <!-- navbar header -->
@@ -114,29 +114,29 @@ ob_end_flush();
         <form class="navbar-form navbar-form-sm navbar-left shift" ui-shift="prependTo" data-target=".navbar-collapse" role="search" ng-controller="TypeaheadDemoCtrl">
           <div class="form-group">
             <div class="input-group">
-				<font SIZE=3 color="#000000"><span id=tick2></span>				
-				<?php 
+				<font SIZE=3 color="#000000"><span id=tick2></span>
+				<?php
 				//Establecemos zona horaria por defecto
 				date_default_timezone_set($_SESSION['ge_timezone']);
 				//preguntamos la zona horaria
 				date_default_timezone_set($_SESSION['ge_timezone']);
 				echo '' . $_SESSION['ge_timezone'];
 				?></font>&nbsp;&nbsp;<font SIZE=3 color="#2DB200">
-				<?php 						
-				echo date("l F d - Y"); 
+				<?php
+				echo date("l F d - Y");
 				?></font>
 
             </div>
           </div>
         </form>
         <!-- / search form -->
-		<?php				
+		<?php
 
 			$result0 = mysql_query("SELECT * FROM online_booking WHERE  status='Pending'");
-			$nobookings = dbNumRows($result0); 
+			$nobookings = dbNumRows($result0);
 		?>
         <!-- nabar right -->
-        <ul class="nav navbar-nav navbar-right">	 
+        <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a href="online-bookings.php">
               <i><img src="img/bel.png"></i>
@@ -149,16 +149,16 @@ ob_end_flush();
           <li class="dropdown">
 			<?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
             <a href="#" data-toggle="dropdown" class="dropdown-toggle clear" data-toggle="dropdown">
-			<?php  					
+			<?php
 				$result3 = mysql_query("SELECT * FROM manager_admin WHERE name='".$_SESSION["user_name"]."' ORDER BY cid DESC");
-				while($row = mysql_fetch_array($result3)) {					
-			?>			
-              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm"> 
+				while($row = mysql_fetch_array($result3)) {
+			?>
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                   <img src="logo-image/imagen.php?cid=<?php echo $row['cid']; ?>">               				
                 <i class="on md b-white bottom"></i>
               </span>
 			  <?php } ?>
-			  
+
 			  <?php
 				$t = date("H");
 
@@ -167,28 +167,28 @@ ob_end_flush();
 				}
 				else if($t < 18){
 				$mensaje = $L_['Goodafternoon'];
-				} 
+				}
 				else{
 				$mensaje = $L_['Goodnight'];
 				}
 			  ?>
-			  
+
               <span class="hidden-sm hidden-md"><?php echo $mensaje; ?>&nbsp;&nbsp;<strong><?php echo $_SESSION['user_name'] ;?></strong></span> <b class="caret"></b>
             </a>
 			<?php } ?>
 
 			<?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Employee') { ?>
             <a href="#" data-toggle="dropdown" class="dropdown-toggle clear" data-toggle="dropdown">
-			<?php  					
+			<?php
 				$result3 = mysql_query("SELECT * FROM manager_user WHERE name='".$_SESSION["user_name"]."' ORDER BY cid DESC");
-				while($row = mysql_fetch_array($result3)) {					
+				while($row = mysql_fetch_array($result3)) {
 			?>
-              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm"> 
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
                   <img src="logo-image/imagen-user.php?cid=<?php echo $row['cid']; ?>">               				
                 <i class="on md b-white bottom"></i>
               </span>
 			  <?php } ?>
-			  
+
 			  <?php
 				$t = date("H");
 
@@ -197,15 +197,15 @@ ob_end_flush();
 				}
 				else if($t < 18){
 				$mensaje = $L_['Goodafternoon'];
-				} 
+				}
 				else{
 				$mensaje = $L_['Goodnight'];
 				}
 			  ?>
               <span class="hidden-sm hidden-md"><?php echo $mensaje; ?>&nbsp;&nbsp;<strong><?php echo $_SESSION['user_name'] ;?></strong></span> <b class="caret"></b>
             </a>
-			<?php } ?>	
-			
+			<?php } ?>
+
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">
               <li>
@@ -213,28 +213,28 @@ ob_end_flush();
                   <span><?php echo $Configuracionsistema; ?></span>
                 </a>
               </li>
-			  <?php  					
+			  <?php
 				$result4 = mysql_query("SELECT * FROM manager_admin WHERE name='".$_SESSION["user_name"]."' ORDER BY cid DESC");
-				while($row = mysql_fetch_array($result4)) {					
-				?>	
+				while($row = mysql_fetch_array($result4)) {
+				?>
               <li>
-			    
+
                 <a href="edit-profile.php?cid=<?php echo codificar($row['cid']);?>"><i class="fa fa-users icon text-default-lter"></i>&nbsp;&nbsp;<?php echo $perfil; ?></a>
               </li>
-			  <?php 
-			  } 
-			  ?>	
+			  <?php
+			  }
+			  ?>
 
 			  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Employee') { ?>
-			  <?php  					
+			  <?php
 				$result90 = mysql_query("SELECT * FROM manager_user WHERE name='".$_SESSION["user_name"]."' ORDER BY cid DESC");
-				while($row = mysql_fetch_array($result90)) {					
-				?>	
+				while($row = mysql_fetch_array($result90)) {
+				?>
 			  <li>
                 <a href="edit-profile-user.php?cid=<?php echo codificar($row['cid']);?>"><i class="fa fa-users icon text-default-lter"></i>&nbsp;&nbsp;<?php echo $perfil; ?></a>
               </li>
 			  <?php }} ?>
-			   
+
               <li class="divider"></li>
               <li>
                 <a href="logout.php"><i class="fa fa-sign-out icon text-default-lter"></i>&nbsp;&nbsp;<?php echo $salir; ?></a>
@@ -257,10 +257,10 @@ ob_end_flush();
 		  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
           <div class="clearfix hidden-xs text-center hide" id="aside-user">
             <div class="dropdown wrapper">
-			  <?php  					
+			  <?php
 					$result3 = mysql_query("SELECT * FROM manager_admin WHERE name='".$_SESSION["user_name"]."' ORDER BY cid DESC");
-					while($row = mysql_fetch_array($result3)) {					
-				?> 
+					while($row = mysql_fetch_array($result3)) {
+				?>
 			  <a href="#">
                 <span class="thumb-lg w-auto-folded avatar m-t-sm">
                   <img src="logo-image/imagen.php?cid=<?php echo $row['cid']; ?>" class="img-full" alt="...">
@@ -270,7 +270,7 @@ ob_end_flush();
               <a href="#" data-toggle="dropdown" class="dropdown-toggle hidden-folded">
                 <span class="clear">
                   <span class="block m-t-sm">
-                    <strong class="font-bold text-lt"><?php echo $bienvenido; ?></strong> 
+                    <strong class="font-bold text-lt"><?php echo $bienvenido; ?></strong>
                     <b class="caret"></b>
                   </span>
                   <span class="text-muted text-xs block"><?php echo $_SESSION['user_name'] ;?></span>
@@ -284,10 +284,10 @@ ob_end_flush();
 		  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Employee') { ?>
           <div class="clearfix hidden-xs text-center hide" id="aside-user">
             <div class="dropdown wrapper">
-			  <?php  					
+			  <?php
 					$result3 = mysql_query("SELECT * FROM manager_user WHERE name='".$_SESSION["user_name"]."' ORDER BY cid DESC");
-					while($row = mysql_fetch_array($result3)) {					
-				?> 
+					while($row = mysql_fetch_array($result3)) {
+				?>
 			  <a href="#">
                 <span class="thumb-lg w-auto-folded avatar m-t-sm">
                   <img src="logo-image/imagen-user.php?cid=<?php echo $row['cid']; ?>" class="img-full" alt="...">
@@ -315,7 +315,7 @@ ob_end_flush();
               <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
               </li>
               <li class="active">
-                <a href class="auto">      
+                <a href class="auto">
                   <span class="pull-right text-muted">
                     <i class="fa fa-fw fa-angle-right text"></i>
                     <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -349,17 +349,31 @@ ob_end_flush();
                       <span><?php echo $consolidado; ?></span>
                     </a>
                   </li>
+                    <li>
+                        <a href="add-cost.php">
+                            <b class="label bg-success pull-right"></b>
+                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                            <span><?php echo $L_ADD_COST; ?></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cost.php">
+                            <b class="label bg-success pull-right"></b>
+                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                            <span>List Cost</span>
+                        </a>
+                    </li>
                 </ul>
               </li>
-			  <?php				
+			  <?php
 
 				$result0 = mysql_query("SELECT * FROM online_booking WHERE  status='Pending'");
-					$nobookings = dbNumRows($result0); 
+					$nobookings = dbNumRows($result0);
 				?>
-				<?php				
+				<?php
 
 				$result00 = mysql_query("SELECT * FROM upload_image_bank");
-					$transfer = dbNumRows($result00); 
+					$transfer = dbNumRows($result00);
 				?>
               <li>
                 <a href="online-bookings.php">
@@ -377,13 +391,13 @@ ob_end_flush();
               </li>
 			  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
 			  <li>
-                <a href="accounting.php">                  
+                <a href="accounting.php">
                   <i class="glyphicon glyphicon-usd icon text-primary-lter"></i>
                   <span class="font-bold"><?php echo $L_['accounting']; ?></span>
                 </a>
               </li>
 			  <li>
-                <a href class="auto">      
+                <a href class="auto">
                   <span class="pull-right text-muted">
                     <i class="fa fa-fw fa-angle-right text"></i>
                     <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -396,7 +410,7 @@ ob_end_flush();
                     <a href>
                       <span><?php echo $reportes; ?></span>
                     </a>
-                  </li>                 
+                  </li>
 				  <li>
                     <a href="shipping-list.php">
                       <span><?php echo $todoslosenvios; ?></span>
@@ -435,7 +449,7 @@ ob_end_flush();
                 </ul>
               </li>
 			  <?php } ?>
-              <li class="line dk"></li>   
+              <li class="line dk"></li>
 
               <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
 			  <i class="fa fa-cog fa-2x fa-fw text-warning-lter"></i>
@@ -444,17 +458,17 @@ ob_end_flush();
               </li>
 			  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
               <li>
-                <a href="add-office.php">      
+                <a href="add-office.php">
                   <span class="pull-right text-muted">
                   </span>
-				  <?php 
-					 require_once('database.php');					
+				  <?php
+					 require_once('database.php');
 					$sql_2 = "SELECT * FROM offices";
 					$result2 = dbQuery($sql_2);
 					$row2 = mysql_num_rows($result2);
 					$sql_3 = "SELECT * FROM tbl_clients";
 					$result3 = dbQuery($sql_3);
-					$row3 = mysql_num_rows($result3);					
+					$row3 = mysql_num_rows($result3);
 					$sql_5 = "SELECT * FROM manager_admin";
 					$result5 = dbQuery($sql_5);
 					$row5 = mysql_num_rows($result5);
@@ -466,14 +480,14 @@ ob_end_flush();
                   <i class="glyphicon glyphicon-map-marker"></i>
                   <span><?php echo $OFICINAS; ?></span>
                 </a>
-                                    
-              </li>			               		   
+
+              </li>
 			  <li>
                 <a href="add-new-users-admin.php">
                   <span class="pull-right text-muted">
                     <i class="fa fa-fw fa-angle-right text"></i>
                     <i class="fa fa-fw fa-angle-down text-active"></i>
-                  </span>				  
+                  </span>
 				  <i class="fa fa-user icon text-default-lter"></i>
                   <span><?php echo $ADMINISTRADOR; ?></span>
                 </a>
@@ -482,7 +496,7 @@ ob_end_flush();
                     <a href>
                       <span><?php echo $Usuario; ?></span>
                     </a>
-                  </li>                 
+                  </li>
 				  <li>
                     <a href="add-new-users-admin.php">
                       <b class="label bg-success pull-right"></b>
@@ -498,8 +512,8 @@ ob_end_flush();
 					  </span>
 					  <b class="badge bg-primary pull-right"><?php echo $row6; ?></b>
 					  <span><?php echo $EMPLEADOS; ?></span>
-					</a>                
-				  </li>	
+					</a>
+				  </li>
                 </ul>
               </li>
 			  <?php } ?>
@@ -510,39 +524,39 @@ ob_end_flush();
 				  <b class="badge bg-info pull-right"><?php echo $row3; ?></b>
 				  <i class="fa fa-users icon text-default-lter"></i>
                   <span><?php echo $CLIENTES; ?></span>
-                </a>                
-              </li>			   
+                </a>
+              </li>
               <li>
                 <a href="typeshipments.php">
                   <i class="glyphicon glyphicon-gift"></i>
                   <span><?php echo $tiposproductos; ?></span>
-                </a>   
+                </a>
               </li>
               <li>
                 <a href="modebookings.php">
                   <i class="fa fa-truck icon text-default-lter"></i>
                   <span><?php echo $tiposenvios; ?></span>
                 </a>
-              </li>	
+              </li>
 			  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
 			  <li>
                 <a href="styles.php">
                   <i class="fa fa-magic icon text-default-lter"></i>
                   <span><?php echo $STYLES; ?></span>
                 </a>
-              </li>	
+              </li>
 				<li>
                 <a href="shipping-charge.php">
                   <i class="glyphicon glyphicon-plane icon text-warning-lter"></i>
                   <span><?php echo $calculoenvios; ?></span>
                 </a>
-              </li>	
+              </li>
 
-              <li class="line dk hidden-folded"></li>  
-							 
-              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">          
+              <li class="line dk hidden-folded"></li>
+
+              <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
                 <span><?php echo $configuracionsistema; ?></span>
-              </li>  
+              </li>
               <li>
                 <a href="preferences.php">
                   <i class="icon-wrench icon text-warning-lter"></i>
@@ -566,11 +580,11 @@ ob_end_flush();
 				  <span class="pull-right text-muted">
 					<i class="fa fa-fw fa-angle-right text"></i>
 					<i class="fa fa-fw fa-angle-down text-active"></i>
-				  </span>				  
+				  </span>
 				  <i class="glyphicon glyphicon-link icon text-info-lter"></i>
 				  <span>WEBSITE CMS</span>
 				</a>
-				<ul class="nav nav-sub dk">                
+				<ul class="nav nav-sub dk">
 				  <li>
 					<a href="d_menu.php">
 					  <b class="label bg-success pull-right"></b>
@@ -586,8 +600,8 @@ ob_end_flush();
 					  </span>
 					  <b class="badge bg-primary pull-right"></b>
 					  <span>All Website</span>
-					</a>                
-				  </li>				  
+					</a>
+				  </li>
 				</ul>
 			</li>
 
@@ -600,12 +614,12 @@ ob_end_flush();
               </li>
             </ul>
           </nav>
-          <!-- nav -->     
+          <!-- nav -->
         </div>
       </div>
   </aside>
   <!-- / aside -->
- 
+
   <script type="text/javascript">
 	var ckeditor_ID=1;
 	var timer;
@@ -647,4 +661,4 @@ ob_end_flush();
 		}
 		window.onload=show2
 		//-->
-</script> 
+</script>

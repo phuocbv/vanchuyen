@@ -59,36 +59,15 @@ if (isset($_POST['cost'])) {
     $content = $_POST['content'];
     $money = $_POST['money'];
     $user = $_SESSION['user_name'];
+    $role = $_SESSION['user_type'];
     $date = date_create( $_POST['date']);
     $date = date_format($date,"Y/m/d");
 
-    $sqlAddCost = "INSERT INTO cost (date, content, cost, money, user, create_date) VALUES ('$date' , '$content', '$cost', '$money', '$user', NOW())";
+    $sqlAddCost = "INSERT INTO cost (date, content, cost, money, user, role, create_date) VALUES ('$date' , '$content', '$cost', '$money', '$user', '$role', NOW())";
     dbQuery($sqlAddCost);
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
-
-if ($_POST['cons']=="") {
-    $cid = $_GET['cid'];
-    $cid = decodificar($cid);
-    $sql = "SELECT * FROM courier WHERE cid ='$cid'";
-} else {
-    $posted = $_POST['cons'];
-    $sql = "SELECT * FROM courier WHERE cons_no ='$posted'";
-}
-$result = dbQuery($sql);
-$count=mysql_num_rows($result );
-//if ($count > 0){
-//
-//while($data = dbFetchAssoc($result)) {
-////get list tracking
-//$sqGetListTracking = "SELECT * FROM tracking_number WHERE cons_no ='" . $data['cons_no'] . "'";
-//$listTrackingQuery = dbQuery($sqGetListTracking);
-//$listTracking = array();
-//
-//while ($row = mysql_fetch_array($listTrackingQuery)) {
-//    array_push($listTracking, $row);
-//}
 
 ob_end_flush();
 ?>
@@ -163,7 +142,7 @@ include("header.php");
                                                 <div class="row" >
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">&nbsp;Cost<span class="required-field">*</span></label>
-                                                        <input type="text" class="form-control" name="cost" value="<?php if (isset($_POST['cost'])) echo $_POST['cost']?>" required/>
+                                                        <input type="number" class="form-control" name="cost" required/>
                                                     </div>
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label"><i class="fa fa-calendar icon text-default-lter"></i>Date<span class="required-field">*</span></label>
@@ -180,7 +159,7 @@ include("header.php");
 
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">&nbspMoney<?php if ($v2==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-                                                        <input type="tel" class="form-control" name="money" id="money" required="required" value="<?php if (isset($_POST['Shipperphone'])) echo $_POST['Shipperphone']; else echo $companyInfor['cphone']; ?>" />
+                                                        <input type="number" class="form-control" name="money" id="money" required="required"/>
                                                     </div>
                                                 </div>
                                                 <div class="row">
