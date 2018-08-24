@@ -195,8 +195,7 @@ include("header.php");
                                             <td><strong>
                                                     <center><?php echo $L_['name_date']; ?></center>
                                                 </strong></td>
-                                            <td><strong>
-                                                    <center><?php echo $L_['name_value']; ?></center>
+                                            <td><strong><?php echo $L_['name_value']; ?>
                                                 </strong></td>
                                             <td><strong>
                                                     <center><?php echo $L_['name_employ']; ?></center>
@@ -231,9 +230,11 @@ include("header.php");
                                                     <center><?php echo $row['book_date']; ?></center>
                                                 </td>
                                                 <td class="sum" value="<?php echo (int)$row['shipping_subtotal'] ?>">
-                                                    <center><?php echo $s . ' ' . formato($row['shipping_subtotal']); ?></center>
+                                                    <?php echo $s . ' ' . formato($row['shipping_subtotal']); ?>
                                                 </td>
-                                                <td><center><?php echo $row['office']; ?></center></td>
+                                                <td>
+                                                    <center><?php echo $row['office']; ?></center>
+                                                </td>
                                             </tr>
                                         <?php } ?>
                                         </tbody>
@@ -243,8 +244,9 @@ include("header.php");
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
-                                            <td style="text-align: center;" rowspan="1" colspan="1">
-                                                <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span id="display_sum"></span></b>
+                                            <td>
+                                                <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span
+                                                            id="display_sum"></span></b>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -273,13 +275,13 @@ include("header.php");
                                             <tr>
                                                 <td><?php echo $row['id'] ?></td>
                                                 <td><?php echo $row['cost']; ?></td>
-                                                <td><?php echo $row['content']?></td>
-                                                <td><?php echo $row['date']?></td>
+                                                <td><?php echo $row['content'] ?></td>
+                                                <td><?php echo $row['date'] ?></td>
                                                 <td class="sum" value="<?php echo (int)$row['money'] ?>">
-                                                    <center><?php echo formato($row['money']); ?></center>
+                                                    <?php echo formato($row['money']); ?>
                                                 </td>
-                                                <td><?php echo $row['user']?></td>
-                                                <td><?php echo $row['role']?></td>
+                                                <td><?php echo $row['user'] ?></td>
+                                                <td><?php echo $row['role'] ?></td>
                                             </tr>
                                         <?php } ?>
                                         </tbody>
@@ -289,9 +291,11 @@ include("header.php");
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
-                                            <td style="text-align: center;" rowspan="1" colspan="1">
-                                                <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span id="display_sum_cost"></span></b>
-                                            </td>
+                                            <!--                                            <td style="text-align: center;" rowspan="1" colspan="1">-->
+                                            <!--                                                <b>-->
+                                            <?php //echo $_SESSION['ge_curr']; ?><!--&nbsp;<span id="display_sum_cost"></span></b>-->
+                                            <!--                                            </td>-->
+                                            <td></td>
                                             <td></td>
                                         </tr>
                                         </tfoot>
@@ -332,18 +336,17 @@ include("footer.php");
     var year = $('#year');
     var day = $('#day');
     $(function () {
-        $('#tableRevenue').DataTable({
-            drawCallback: function () {
-                var sum = 0;
-                $('#tableRevenue tr td.sum').each(function () {
-                    var current = $(this);
-                    sum += parseInt(current.attr('value'));
-                });
-                $('#display_sum').html((sum).formatMoney(2, '.', ','));
+        var tableRevenue = $('#tableRevenue').DataTable();
+        tableRevenue.on('search.dt', function () {
+            var data = tableRevenue.rows({filter: 'applied'}).data();
+            var sum = 0;
+            for (var i = 0; i < data.length; i++) {
+                sum += parseFloat(data[i][4].replaceAll(",", ""));
             }
+            $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
 
-        $('#tableCost').DataTable({
+        var tableCost = $('#tableCost').DataTable({
             drawCallback: function () {
                 var sum = 0;
                 $('#tableCost tr td.sum').each(function () {
@@ -353,6 +356,14 @@ include("footer.php");
                 $('#display_sum_cost').html((sum).formatMoney(2, '.', ','));
             }
         });
+        tableCost.on('search.dt', function () {
+            var data = tableRevenue.rows({filter: 'applied'}).data();
+            var sum = 0;
+            for (var i = 0; i < data.length; i++) {
+                sum += parseFloat(data[i][4].replaceAll(",", ""));
+            }
+            $('#display_sum').html((sum).formatMoney(2, '.', ','));
+        })
 
         year.on('change', function () {
             var current = $(this);
@@ -406,6 +417,11 @@ include("footer.php");
             i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
             j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
     };
 </script>
 </body>
