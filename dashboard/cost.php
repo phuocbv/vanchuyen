@@ -125,7 +125,7 @@ ob_end_flush();
                         </form>
                         <br>
                         <div class="table-responsive">
-                            <table ui-jq="dataTable" class="table table-striped b-t b-b">
+                            <table class="table table-striped b-t b-b" id="table">
                                 <thead>
                                 <tr>
                                     <?php
@@ -164,19 +164,23 @@ ob_end_flush();
                                     <td><strong><?php echo $row['cost']; ?></strong></td>
                                     <td><?php echo $row['date']; ?></td>
                                     <td><?php echo $row['content']; ?></td>
-                                    <td><?php echo $_SESSION['ge_curr'] . formato($row['money']); ?></td>
+                                    <td class="sum" value="<?php echo $row['money']?>"><?php echo $_SESSION['ge_curr']; ?><?php echo formato($row['money']); ?></td>
                                     <td><?php echo $row['user']; ?></td>
                                     <td><?php echo $row['role']; ?></td>
                                 </tr>
                                 <?php } ?>
                                 </tbody>
                                 <tfoot>
-                                <th>&nbsp;</th>
+                                <?php
+                                if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') {
+                                    ?>
+                                    <th>&nbsp;</th>
+                                <?php } ?>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th>Total&nbsp<?php echo $_SESSION['ge_curr'] . ' ' . formato($sum_money) ?></th>
+                                <th>Total&nbsp<?php echo $_SESSION['ge_curr']; ?>&nbsp<span id="display_sum"></span></th>
                                 <th></th>
                                 <th></th>
                                 </tfoot>
@@ -204,7 +208,16 @@ ob_end_flush();
 <script src="js/kendo.all.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#grid').DataTable();
+        var table = $('#table').DataTable({
+            drawCallback: function () {
+                var sum = 0;
+                $('#table tr td.sum').each(function () {
+                    var current = $(this);
+                    sum += parseInt(current.attr('value'));
+                });
+                $('#display_sum').html((sum).formatMoney(2, '.', ','));
+            }
+        });
         // $('#from_date').kendoDateTimePicker({
         //     value: new Date(),
         //     dateInput: true
@@ -214,6 +227,17 @@ ob_end_flush();
         //     dateInput: true
         // });
     });
+
+    Number.prototype.formatMoney = function(c, d, t){
+        var n = this,
+            c = isNaN(c = Math.abs(c)) ? 2 : c,
+            d = d == undefined ? "." : d,
+            t = t == undefined ? "," : t,
+            s = n < 0 ? "-" : "",
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+            j = (j = i.length) > 3 ? j % 3 : 0;
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
 
     function del_list_admin(id) {
         if (window.confirm('<?php echo $DELETEADMIN; ?>')) {

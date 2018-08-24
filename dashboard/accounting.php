@@ -53,7 +53,7 @@ if($_SESSION['user_type']=='Administrator' or $_SESSION['user_type']=='Employee'
 }
 
 $company=mysql_fetch_array(mysql_query("SELECT * FROM company"));
-$styling=mysql_fetch_array(mysql_query("SELECT * FROM styles")); 
+$styling=mysql_fetch_array(mysql_query("SELECT * FROM styles"));
 date_default_timezone_set($_SESSION['ge_timezone']);
 	
 $user=$_SESSION['cod_name'];
@@ -77,7 +77,7 @@ $user=$_SESSION['cod_name'];
   <link rel="stylesheet" href="../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="css/font.css" type="text/css" />
   <link rel="stylesheet" href="css/app.css" type="text/css" />
-  
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
   <!-- Style Status -->
   <style><?php echo $styling['style']; ?></style>
 
@@ -90,10 +90,7 @@ include("header.php");
 <!-- content -->
 <div id="content" class="app-content" role="main">
 	<div class="app-content-body ">      
-		<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="
-		app.settings.asideFolded = false; 
-		app.settings.asideDock = false;
-		">
+		<div class="hbox hbox-auto-xs hbox-auto-sm">
 		  <!-- main -->
 		  <div class="col">
 			<!-- main header -->
@@ -280,7 +277,7 @@ include("header.php");
 												</div>
 											</div>
 											</br></br>
-											<table ui-jq="dataTable" class="table table-striped b-t b-b">
+											<table id="table" class="table table-striped b-t b-b">
 												<thead>
 													<tr>
 														<td><strong>ID</strong></td>
@@ -318,7 +315,7 @@ include("header.php");
 													<td><?php echo $row['ship_name']; ?></td>
 													<td><center><?php echo $book_mode; ?>&nbsp;&nbsp;<span class="label <?php echo $row['payment']; ?> label-large"><?php echo $row['payment']; ?></span>&nbsp;&nbsp;<span class="label <?php echo $row['paymode']; ?> label-large"><?php echo $row['paymode']; ?></span></center></td>
 													<td><center><?php echo $row['book_date']; ?></center></td>
-													<td><center><?php echo $s.' '.formato($row['shipping_subtotal']); ?></center></td>
+													<td class="sum" value="<?php echo $row['shipping_subtotal']?>"><center><?php echo $s.' '.formato($row['shipping_subtotal']); ?></center></td>
 													<td><center><?php echo $row['office']; ?></center></td>
 												</tr>
 												<?php } ?>
@@ -329,7 +326,7 @@ include("header.php");
 															<b><?php echo $L_['name_sales']; ?></b>
 														</td>
 														<td style="text-align: center;" rowspan="1" colspan="1">
-															<b><?php echo $_SESSION['ge_curr']; ?> <?php echo $initial; ?></b>
+                                                            <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span id="display_sum"><?php echo $initial; ?></span></b>
 														</td>
 													</tr>
 												</tfoot>
@@ -365,7 +362,33 @@ include("footer.php");
 <script src="js/ui-nav.js"></script>
 <script src="js/ui-toggle.js"></script>
 <script src="js/delivery.js"></script>
+<script type="text/javascript" charset="utf8" src="js/jquery.dataTables.js"></script>
+<script>
+    $(function () {
+        $('#table').DataTable({
+            drawCallback: function () {
+                var sum = 0;
+                $('#table tr td.sum').each(function () {
+                    var current = $(this);
+                    sum += parseInt(current.attr('value'));
+                });
+                $('#display_sum').html((sum).formatMoney(2, '.', ','));
+            }
+        });
+    });
 
+    Number.prototype.formatMoney = function(c, d, t){
+        var n = this,
+            c = isNaN(c = Math.abs(c)) ? 2 : c,
+            d = d == undefined ? "." : d,
+            t = t == undefined ? "," : t,
+            s = n < 0 ? "-" : "",
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+            j = (j = i.length) > 3 ? j % 3 : 0;
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+
+</script>
 
 </body>
 </html>
