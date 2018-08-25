@@ -57,6 +57,7 @@ $month = $_GET['month'];
 $year = $_GET['year'];
 $sqlRevenue = "SELECT * FROM accounting ";
 $sqlCost = "SELECT * FROM cost  ";
+$dateFull = '';
 
 if ($year != null && $year != '') {
     if ($month != null && $month != '') {
@@ -65,12 +66,14 @@ if ($year != null && $year != '') {
             $dateExactly = date_format($dateExactly, "Y/m/d");
             $sqlRevenue .= "WHERE book_date = '$dateExactly'";
             $sqlCost .= "WHERE date = '$dateExactly'";
+            $dateFull = $year . '/' . ($month + 1) . '/' .$day;
         } else {
             $date_form = date_create($year . '/' . ($month + 1) . '/01');
             $date_form = date_format($date_form, "Y/m/d");
             $date_to = date("Y/m/t", strtotime($year . '-' . ($month + 1) . '-01'));
             $sqlRevenue .= "WHERE book_date BETWEEN '$date_form' AND '$date_to'";
             $sqlCost .= "WHERE date BETWEEN '$date_form' AND '$date_to'";
+            $dateFull = $year . '/' . ($month + 1);
         }
     } else {
         $date_form = date_create($year . '/01/01');
@@ -79,6 +82,7 @@ if ($year != null && $year != '') {
         $date_to = date_format($date_to, "Y/m/d");
         $sqlRevenue .= "WHERE book_date BETWEEN '$date_form' AND '$date_to'";
         $sqlCost .= "WHERE date BETWEEN '$date_form' AND '$date_to'";
+        $dateFull = $year;
     }
 }
 
@@ -106,7 +110,14 @@ ob_end_flush();
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
     <!-- Style Status -->
     <style><?php echo $styling['style']; ?></style>
-
+    <style>
+        .OK {
+            background: #00D96D;
+        }
+        .Bank {
+            background: #999;
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -130,7 +141,7 @@ include("header.php");
 
                         <div class="col-md-12">
                             <i class="fa fa-circle-o text-info m-r-sm pull-right"></i>
-                            <h4><i class="icon-plane"></i>REVENUE</a></h4>
+                            <h4><i class="icon-plane"></i>SEARCH</a></h4>
                             <div class="card-box table-responsive">
                                 <div align="center">
                                     <table border="0" align="center">
@@ -204,7 +215,9 @@ include("header.php");
                                         </thead>
                                         <tbody>
                                         <?php
+                                        $sumPrice = 0;
                                         while ($row = mysql_fetch_array($listAccount)) {
+                                            $sumPrice += (float)$row['shipping_subtotal'];
                                             if ($row['book_mode'] == 'Effective') {
                                                 $book_mode = '<span class="label label-primary">' . $L_['type_effective'] . '</span>';
                                             } elseif ($row['book_mode'] == 'Debit_card') {
@@ -246,7 +259,7 @@ include("header.php");
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
                                             <td>
                                                 <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span
-                                                            id="display_sum"></span></b>
+                                                            id="display_sum"><?php echo formato($sumPrice) ?></span></b>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -270,7 +283,9 @@ include("header.php");
                                         </thead>
                                         <tbody>
                                         <?php
+                                        $sumMoney = 0;
                                         while ($row = mysql_fetch_array($listCost)) {
+                                            $sumMoney += (float)$row['money'];
                                             ?>
                                             <tr>
                                                 <td><?php echo $row['id'] ?></td>
@@ -291,14 +306,38 @@ include("header.php");
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
-                                            <!--                                            <td style="text-align: center;" rowspan="1" colspan="1">-->
-                                            <!--                                                <b>-->
-                                            <?php //echo $_SESSION['ge_curr']; ?><!--&nbsp;<span id="display_sum_cost"></span></b>-->
-                                            <!--                                            </td>-->
+                                            <td>
+                                                <b>
+                                                    <?php echo $_SESSION['ge_curr']; ?>&nbsp;
+                                                    <span id="display_sum_cost"><?php echo formato($sumMoney) ?></span>
+                                                </b>
+                                            </td>
                                             <td></td>
                                             <td></td>
                                         </tr>
                                         </tfoot>
+                                    </table>
+                                </div>
+                                <br><br>
+                                <div>
+                                    <h4><i class="icon-plane"></i>Profit</a></h4>
+                                    <table id="tableRevenue" class="table table-striped b-t b-b">
+                                        <thead>
+                                        <tr>
+                                            <td><strong>Date</strong></td>
+                                            <td><strong>Revenue</strong></td>
+                                            <td><strong>Cost</strong></td>
+                                            <td><strong>Profit</strong></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td><?php echo $dateFull?></td>
+                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formato($sumPrice) ?></b></td>
+                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formato($sumMoney) ?></b></td>
+                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formato($sumPrice - $sumMoney)?></b></td>
+                                        </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -342,28 +381,19 @@ include("footer.php");
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
                 sum += parseFloat(data[i][4].replaceAll(",", ""));
-            }
+            }console.log(sum);
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
 
-        var tableCost = $('#tableCost').DataTable({
-            drawCallback: function () {
-                var sum = 0;
-                $('#tableCost tr td.sum').each(function () {
-                    var current = $(this);
-                    sum += parseInt(current.attr('value'));
-                });
-                $('#display_sum_cost').html((sum).formatMoney(2, '.', ','));
-            }
-        });
+        var tableCost = $('#tableCost').DataTable();
         tableCost.on('search.dt', function () {
-            var data = tableRevenue.rows({filter: 'applied'}).data();
+            var data = tableCost.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
                 sum += parseFloat(data[i][4].replaceAll(",", ""));
             }
-            $('#display_sum').html((sum).formatMoney(2, '.', ','));
-        })
+            $('#display_sum_cost').html((sum).formatMoney(2, '.', ','));
+        });
 
         year.on('change', function () {
             var current = $(this);

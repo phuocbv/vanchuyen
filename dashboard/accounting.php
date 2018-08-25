@@ -310,12 +310,12 @@ include("header.php");
 														
 												?>
 												<tr>
-													<td><?php echo $row['cid'] ?></td>
+													<td><?php echo 'ID' . $row['cid'] ?></td>
 													<td><?php echo $row['tracking'] ?></td>
 													<td><?php echo $row['ship_name']; ?></td>
 													<td><center><?php echo $book_mode; ?>&nbsp;&nbsp;<span class="label <?php echo $row['payment']; ?> label-large"><?php echo $row['payment']; ?></span>&nbsp;&nbsp;<span class="label <?php echo $row['paymode']; ?> label-large"><?php echo $row['paymode']; ?></span></center></td>
 													<td><center><?php echo $row['book_date']; ?></center></td>
-													<td class="sum" value="<?php echo $row['shipping_subtotal']?>"><center><?php echo $s.' '.formato($row['shipping_subtotal']); ?></center></td>
+													<td><?php echo formato($row['shipping_subtotal']); ?></td>
 													<td><center><?php echo $row['office']; ?></center></td>
 												</tr>
 												<?php } ?>
@@ -325,9 +325,10 @@ include("header.php");
 														<td colspan="5" style="text-align: right;" rowspan="1">
 															<b><?php echo $L_['name_sales']; ?></b>
 														</td>
-														<td style="text-align: center;" rowspan="1" colspan="1">
-                                                            <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span id="display_sum"><?php echo $initial; ?></span></b>
+														<td rowspan="1" colspan="1">
+                                                            <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span id="display_sum"><?php echo formato($initial); ?></span></b>
 														</td>
+                                                        <td></td>
 													</tr>
 												</tfoot>
 											</table>
@@ -365,15 +366,14 @@ include("footer.php");
 <script type="text/javascript" charset="utf8" src="js/jquery.dataTables.js"></script>
 <script>
     $(function () {
-        $('#table').DataTable({
-            drawCallback: function () {
-                var sum = 0;
-                $('#table tr td.sum').each(function () {
-                    var current = $(this);
-                    sum += parseInt(current.attr('value'));
-                });
-                $('#display_sum').html((sum).formatMoney(2, '.', ','));
+        var table = $('#table').DataTable();
+        table.on('search.dt', function () {
+            var data = table.rows({filter: 'applied'}).data();
+            var sum = 0;
+            for (var i = 0; i < data.length; i++) {
+                sum += parseFloat(data[i][5].replaceAll(",", ""));
             }
+            $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
     });
 
@@ -386,6 +386,11 @@ include("footer.php");
             i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
             j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
     };
 
 </script>

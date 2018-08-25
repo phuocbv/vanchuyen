@@ -390,11 +390,35 @@ ob_end_flush();
                 </a>
               </li>
 			  <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Administrator') { ?>
-			  <li>
-                <a href="accounting.php">
-                  <i class="glyphicon glyphicon-usd icon text-primary-lter"></i>
-                  <span class="font-bold"><?php echo $L_['accounting']; ?></span>
-                </a>
+              <li class="active">
+                  <a href class="auto">
+                      <span class="pull-right text-muted">
+                        <i class="fa fa-fw fa-angle-right text"></i>
+                        <i class="fa fa-fw fa-angle-down text-active"></i>
+                      </span>
+                      <i class="glyphicon glyphicon-usd icon text-primary-lter"></i>
+                      <span class="font-bold"><?php echo $L_['accounting']; ?></span>
+                  </a>
+                  <ul class="nav nav-sub dk">
+                      <li class="nav-sub-header">
+                          <a href>
+                              <span><?php echo $dashboard; ?></span>
+                          </a>
+                      </li>
+                      <li class="active">
+                          <a href="accounting.php">
+                              <i class="fa fa-desktop icon text-default-lter"></i>
+                              <span><?php echo $L_['accounting']; ?></span>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="revenue.php">
+                              <b class="label bg-success pull-right"></b>
+                              <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                              <span>Profit</span>
+                          </a>
+                      </li>
+                  </ul>
               </li>
 			  <li>
                 <a href class="auto">

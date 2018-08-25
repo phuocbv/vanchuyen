@@ -164,7 +164,7 @@ ob_end_flush();
                                     <td><strong><?php echo $row['cost']; ?></strong></td>
                                     <td><?php echo $row['date']; ?></td>
                                     <td><?php echo $row['content']; ?></td>
-                                    <td class="sum" value="<?php echo $row['money']?>"><?php echo $_SESSION['ge_curr']; ?><?php echo formato($row['money']); ?></td>
+                                    <td class="sum"><?php echo formato($row['money']); ?></td>
                                     <td><?php echo $row['user']; ?></td>
                                     <td><?php echo $row['role']; ?></td>
                                 </tr>
@@ -179,8 +179,8 @@ ob_end_flush();
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
-                                <th>Total&nbsp<?php echo $_SESSION['ge_curr']; ?>&nbsp<span id="display_sum"></span></th>
+                                <th align="right">Total</th>
+                                <th><span id="display_sum"><?php echo $_SESSION['ge_curr'] . ' ' . formato($sum_money   )?></span></th>
                                 <th></th>
                                 <th></th>
                                 </tfoot>
@@ -208,24 +208,15 @@ ob_end_flush();
 <script src="js/kendo.all.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var table = $('#table').DataTable({
-            drawCallback: function () {
-                var sum = 0;
-                $('#table tr td.sum').each(function () {
-                    var current = $(this);
-                    sum += parseInt(current.attr('value'));
-                });
-                $('#display_sum').html((sum).formatMoney(2, '.', ','));
+        var table = $('#table').DataTable();
+        table.on('search.dt', function () {
+            var data = table.rows({filter: 'applied'}).data();
+            var sum = 0;
+            for (var i = 0; i < data.length; i++) {
+                sum += parseFloat(data[i][5].replaceAll(",", ""));
             }
+            $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
-        // $('#from_date').kendoDateTimePicker({
-        //     value: new Date(),
-        //     dateInput: true
-        // });
-        // $('#to_date').kendoDateTimePicker({
-        //     value: new Date(),
-        //     dateInput: true
-        // });
     });
 
     Number.prototype.formatMoney = function(c, d, t){
@@ -237,6 +228,11 @@ ob_end_flush();
             i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
             j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    };
+
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
     };
 
     function del_list_admin(id) {
