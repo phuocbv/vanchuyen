@@ -282,6 +282,7 @@ include("header.php");
 													<tr>
 														<td><strong>ID</strong></td>
 														<td><strong>TRACKING</strong></td>
+                                                        <td><strong>CLIENT ID</strong></td>
 														<td><strong><?php echo $L_['name_client']; ?></strong></td>
 														<td><strong><center><?php echo $L_['name_book_mode']; ?></center></strong></td>
 														<td><strong><center><?php echo $L_['name_date']; ?></center></strong></td>
@@ -310,8 +311,9 @@ include("header.php");
 														
 												?>
 												<tr>
-													<td><?php echo 'ID' . $row['cid'] ?></td>
+													<td><?php echo $row['cid'] ?></td>
 													<td><?php echo $row['tracking'] ?></td>
+													<td><?php echo $row['client_id'] ?></td>
 													<td><?php echo $row['ship_name']; ?></td>
 													<td><center><?php echo $book_mode; ?>&nbsp;&nbsp;<span class="label <?php echo $row['payment']; ?> label-large"><?php echo $row['payment']; ?></span>&nbsp;&nbsp;<span class="label <?php echo $row['paymode']; ?> label-large"><?php echo $row['paymode']; ?></span></center></td>
 													<td><center><?php echo $row['book_date']; ?></center></td>
@@ -322,7 +324,7 @@ include("header.php");
 												</tbody>
 												<tfoot>
 													<tr>
-														<td colspan="5" style="text-align: right;" rowspan="1">
+														<td colspan="6" style="text-align: right;" rowspan="1">
 															<b><?php echo $L_['name_sales']; ?></b>
 														</td>
 														<td rowspan="1" colspan="1">

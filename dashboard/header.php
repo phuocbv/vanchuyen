@@ -418,6 +418,13 @@ ob_end_flush();
                               <span>Profit</span>
                           </a>
                       </li>
+                      <li>
+                          <a href="debt.php">
+                              <b class="label bg-success pull-right"></b>
+                              <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                              <span>Debt</span>
+                          </a>
+                      </li>
                   </ul>
               </li>
 			  <li>
@@ -643,7 +650,6 @@ ob_end_flush();
       </div>
   </aside>
   <!-- / aside -->
-
   <script type="text/javascript">
 	var ckeditor_ID=1;
 	var timer;

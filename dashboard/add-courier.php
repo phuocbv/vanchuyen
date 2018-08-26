@@ -257,8 +257,8 @@ $_POST = $ifilter->process($_POST);
 			//echo $sql;
 		dbQuery($sql_1);
 
-		$sql_2 = "INSERT INTO accounting (tracking,ship_name,email,locker,book_mode,comments,shipping_subtotal,status,office,user, book_date)
-				VALUES('$pre-$cons_no','$Shippername','$Shipperemail','$Shipperlocker','$bookingmode','$Comments','$shipping_subtotal','$status','$officename','$user',curdate() )";
+		$sql_2 = "INSERT INTO accounting (tracking,client_id,ship_name,email,locker,book_mode,comments,shipping_subtotal,status,office,user, book_date)
+				VALUES('$pre-$cons_no','$Receivercc_r','$Shippername','$Shipperemail','$Shipperlocker','$bookingmode','$Comments','$shipping_subtotal','$status','$officename','$user',curdate() )";
 			//echo $sql;
 		dbQuery($sql_2);
 
@@ -870,7 +870,7 @@ include("header.php");
                                                 <div class="col-sm-6 form-group">
                                                     <label  class="control-label"><?php echo $ID_CLIENT; ?>&nbsp;<?php if ($v12==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
 <!--                                                    <input type="text" class="form-control" name="locker" id="locker" autocomplete="on" list="customers" value="--><?php //if (isset($_POST['Receivername'])) echo $_POST['Receivername']?><!--">-->
-                                                    <input id="clientID" autofocus type="text" class="form-control"  name="q">
+                                                    <input id="clientID" name="clientID" autofocus type="text" class="form-control"  name="q" required="required">
                                                 </div>
                                                 <div class="col-sm-6 form-group">
                                                     <label  class="control-label"><?php echo $NOMBREDESTINATARIO; ?>&nbsp;<?php if ($v12==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
