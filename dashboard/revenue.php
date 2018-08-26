@@ -284,21 +284,26 @@ include("header.php");
                                         <tbody>
                                         <?php
                                         $sumMoney = 0;
-                                        while ($row = mysql_fetch_array($listCost)) {
-                                            $sumMoney += (float)$row['money'];
-                                            ?>
-                                            <tr>
-                                                <td><?php echo $row['id'] ?></td>
-                                                <td><?php echo $row['cost']; ?></td>
-                                                <td><?php echo $row['content'] ?></td>
-                                                <td><?php echo $row['date'] ?></td>
-                                                <td class="sum" value="<?php echo (int)$row['money'] ?>">
-                                                    <?php echo formato($row['money']); ?>
-                                                </td>
-                                                <td><?php echo $row['user'] ?></td>
-                                                <td><?php echo $row['role'] ?></td>
-                                            </tr>
-                                        <?php } ?>
+                                        //var_dump($listCost);die();
+                                        if ($listCost) {
+                                            while ($row = mysql_fetch_array($listCost)) {
+                                                $sumMoney += (float)$row['money'];
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $row['id'] ?></td>
+                                                    <td><?php echo $row['cost']; ?></td>
+                                                    <td><?php echo $row['content'] ?></td>
+                                                    <td><?php echo $row['date'] ?></td>
+                                                    <td class="sum" value="<?php echo (int)$row['money'] ?>">
+                                                        <?php echo formato($row['money']); ?>
+                                                    </td>
+                                                    <td><?php echo $row['user'] ?></td>
+                                                    <td><?php echo $row['role'] ?></td>
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                         </tbody>
                                         <tfoot>
                                         <tr>

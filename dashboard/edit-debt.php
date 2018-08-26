@@ -26,7 +26,7 @@ require_once('library.php');
 require 'requirelanguage.php';
 require_once('funciones.php');
 
-if($_SESSION['user_type']=='Administrator' or $_SESSION['user_type']=='Employee'){
+if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Employee') {
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     } else {
@@ -38,7 +38,7 @@ if($_SESSION['user_type']=='Administrator' or $_SESSION['user_type']=='Employee'
     }
 
     $now = time();
-    if($now > $_SESSION['expire']) {
+    if ($now > $_SESSION['expire']) {
         session_destroy();
 
         echo "<script type=\"text/javascript\">
@@ -48,7 +48,7 @@ if($_SESSION['user_type']=='Administrator' or $_SESSION['user_type']=='Employee'
         exit;
     }
 
-}else{
+} else {
     header('Location: ../404');
 }
 
@@ -82,26 +82,26 @@ ob_end_flush();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title><?php echo $_SESSION['ge_cname']; ?> | <?php echo $ENVIOS; ?></title>
     <meta name="description" content="<?php echo $_SESSION['ge_description']; ?>"/>
-    <meta name="keywords" content="<?php echo $_SESSION['ge_keywords']; ?>" />
+    <meta name="keywords" content="<?php echo $_SESSION['ge_keywords']; ?>"/>
     <meta name="author" content="Jaomweb">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
     <link rel="shortcut icon" type="image/png" href="logo-image/image_logo.php?id=2"/>
 
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" />
-    <link rel="stylesheet" href="../bower_components/animate.css/animate.css" type="text/css" />
-    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css" type="text/css" />
-    <link rel="stylesheet" href="../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css" />
-    <link rel="stylesheet" href="css/font.css" type="text/css" />
-    <link rel="stylesheet" href="css/app.css" type="text/css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../bower_components/animate.css/animate.css" type="text/css"/>
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css"/>
+    <link rel="stylesheet" href="css/font.css" type="text/css"/>
+    <link rel="stylesheet" href="css/app.css" type="text/css"/>
     <link href="css/style.css" rel="stylesheet" media="all">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
 
     <!-- Switchery css -->
-    <link href="assets/plugins/switchery/switchery.min.css" rel="stylesheet" />
+    <link href="assets/plugins/switchery/switchery.min.css" rel="stylesheet"/>
 
 
     <!-- Plugins css -->
@@ -111,14 +111,14 @@ ob_end_flush();
     <link href="assets/plugins/clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet">
     <link href="assets/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.common-material.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.material.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.material.mobile.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.common-material.min.css"/>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.material.min.css"/>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.material.mobile.min.css"/>
     <link rel="stylesheet" href="css/jquery.auto-complete.css">
     <style>
         .error {
-            font-size:13px;
-            color:red;
+            font-size: 13px;
+            color: red;
         }
     </style>
 
@@ -137,46 +137,53 @@ include("header.php");
                     <div class="blog-post">
                         <div class="panel">
                             <div class="wrapper-lg">
-                                <h3 class="classic-title"><span><strong><i class="fa fa-truck icon text-default-lter"></i>&nbsp;&nbsp;Edit Debt</strong></h3>
+                                <h3 class="classic-title"><span><strong><i
+                                                    class="fa fa-truck icon text-default-lter"></i>&nbsp;&nbsp;Edit Debt</strong>
+                                </h3>
 
                                 <!-- START Checkout form -->
                                 <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $_GET['id'] ?>" method="post">
-                                    <table border="0" align="center" width="100%" >
+                                    <table border="0" align="center" width="100%">
                                         <div class="row">
                                             <!-- START Cost information -->
                                             <fieldset class="col-md-6">
                                                 <legend>Debt Data</legend>
-                                                <input hidden name="id" value="<?php echo codificar($accounting['cid']) ?>"/>
+                                                <input hidden name="id"
+                                                       value="<?php echo codificar($accounting['cid']) ?>"/>
                                                 <!-- Name -->
-                                                <div class="row" >
+                                                <div class="row">
                                                     <div class="col-sm-6 form-group">
-                                                        <label  class="control-label">&nbsp;Tracking: </label>
-                                                        <label  class="control-label">&nbsp;<?php echo $accounting['tracking']?></label>
+                                                        <label class="control-label">&nbsp;Tracking: </label>
+                                                        <label class="control-label">&nbsp;<?php echo $accounting['tracking'] ?></label>
                                                     </div>
                                                     <div class="col-sm-6 form-group">
-                                                        <label  class="control-label">&nbsp;Name Client:</label>
-                                                        <label  class="control-label">&nbsp;<?php echo $accounting['ship_name']?></label>
+                                                        <label class="control-label">&nbsp;Name Client:</label>
+                                                        <label class="control-label">&nbsp;<?php echo $accounting['ship_name'] ?></label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-6 form-group">
-                                                        <label  class="control-label">&nbsp;Date: </label>
-                                                        <label  class="control-label">&nbsp;<?php echo $accounting['book_date']?></label>
+                                                        <label class="control-label">&nbsp;Date: </label>
+                                                        <label class="control-label">&nbsp;<?php echo $accounting['book_date'] ?></label>
                                                     </div>
                                                     <div class="col-sm-6 form-group">
-                                                        <label  class="control-label">&nbsp;Revenue: </label>
-                                                        <label  class="control-label">&nbsp;<?php echo formato($accounting['shipping_subtotal']) ?></label>
+                                                        <label class="control-label">&nbsp;Revenue: </label>
+                                                        <label class="control-label">&nbsp;<?php echo formato($accounting['shipping_subtotal']) ?></label>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12 form-group">
                                                         <label class="control-label">Pay</label>
-                                                        <input type="number" class="form-control" name="debt" required="required" value="<?php echo ($accounting['pay']) ?>"/>
+                                                        <input type="number" class="form-control" name="debt"
+                                                               required="required"
+                                                               value="<?php echo($accounting['pay']) ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <button type="submit" class="btn btn-large btn-success col-sm-12">Edit Debt</button>
+                                                        <button type="submit"
+                                                                class="btn btn-large btn-success col-sm-12">Edit Debt
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <!-- Adress and Phone -->
@@ -190,8 +197,8 @@ include("header.php");
                 </div>
             </div>
         </div>
-</div>
-<!-- / content -->
+    </div>
+    <!-- / content -->
 </body>
 <?php include("footer.php"); ?>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
