@@ -83,6 +83,7 @@ ob_end_flush();
     <link rel="stylesheet" href="css/font.css" type="text/css"/>
     <link rel="stylesheet" href="css/app.css" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+    <link rel="stylesheet" href="css/jquery.auto-complete.css">
     <!-- Style Status -->
     <style><?php echo $styling['style']; ?></style>
 
@@ -146,7 +147,7 @@ include("header.php");
                                             $payment = 0;
                                             $debt = 0;
 
-                                            $result = mysql_query("SELECT * FROM accounting " . $where);
+                                            $result = mysql_query("SELECT * FROM pay_for_other " . $where);
                                             while ($row = mysql_fetch_array($result)) {
                                                 $initial += (float)$row['shipping_subtotal'];
                                                 $payment += (float)$row['pay'];
