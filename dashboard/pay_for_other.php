@@ -136,9 +136,6 @@ include("header.php");
                                                 <td><strong>Client ID</strong></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
                                                 <td><strong>Content</strong></td>
-<!--                                                <td><strong>Exchange Rate</strong></td>-->
-<!--                                                <td><strong>Currency</strong></td>-->
-<!--                                                <td><strong>Surcharge</strong></td>-->
                                                 <td><strong>Sum</strong></td>
                                                 <td>Pay</td>
                                                 <td>Debt</td>
@@ -155,9 +152,9 @@ include("header.php");
 
                                             while ($row = mysql_fetch_array($result)) {
                                                 $sum = (float) $row['exchange_rate'] * (float) $row['currency'] + (float) $row['surcharge'];
-                                                $initial += (float)$row['shipping_subtotal'];
+                                                $initial += $sum;
                                                 $payment += (float)$row['pay'];
-                                                $debt += (float)($row['shipping_subtotal'] - $row['pay']);
+                                                $debt += (float)($sum - $row['pay']);
                                                 ?>
                                                 <tr>
                                                     <td align="center"><a
@@ -167,9 +164,6 @@ include("header.php");
                                                     <td><?php echo $row['client_id'] ?></td>
                                                     <td><?php echo $row['date']; ?></td>
                                                     <td><?php echo $row['content']; ?></td>
-<!--                                                    <td>--><?php //echo formato($row['exchange_rate']); ?><!--</td>-->
-<!--                                                    <td>--><?php //echo formato($row['currency']) ?><!--</td>-->
-<!--                                                    <td>--><?php //echo formato($row['surcharge']) ?><!--</td>-->
                                                     <td><?php echo formato($sum) ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
                                                     <td><?php echo formato($sum - $row['pay']) ?></td>
@@ -196,6 +190,7 @@ include("header.php");
                                                         <span id="display_sum_debt"><?php echo formato($debt); ?></span></b>
 
                                                 </td>
+                                                <td></td>
                                             </tr>
                                             </tr>
                                             </tfoot>
@@ -240,9 +235,9 @@ include("footer.php");
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][5].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][6].replaceAll(",", ""));
+                sum += parseFloat(data[i][5].replaceAll(",", ""));
+                sum_pay += parseFloat(data[i][6].replaceAll(",", ""));
+                sum_debt += parseFloat(data[i][7].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
             $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));

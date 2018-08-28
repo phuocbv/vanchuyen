@@ -52,15 +52,28 @@ if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Empl
     header('Location: ../404');
 }
 $payForOther = null;
+$user = null;
 
 if (isset($_POST['id'])) {
     $id = decodificar($_POST['id']);
-    $debt = $_POST['debt'];
-    $sqlUpdateDebt = "UPDATE pay_for_other SET exchange_rate, currency, surcharge, pay = '$debt' WHERE cid = '$id'";
-    dbQuery($sqlUpdateDebt);
-    header('Location: debt.php');
+    $rate = $_POST['rate'];
+    $currency = $_POST['currency'];
+    $surcharge = $_POST['surcharge'];
+    $pay = $_POST['pay'];
+    if ($pay == '') {
+        $pay = 0;
+    }
+    $date = date_create( $_POST['date']);
+    $date = date_format($date,"Y/m/d");
+    $content = $_POST['content'];
+
+    $sqlUpdatePayForOther = "UPDATE pay_for_other SET date = '$date', exchange_rate = '$rate', 
+        currency = '$currency', surcharge = '$surcharge', content = '$content', pay = '$pay' WHERE id = '$id'";
+    dbQuery($sqlUpdatePayForOther);
+    header('Location: pay_for_other.php');
 }
 
+$date = '';
 if (isset($_GET['id'])) {
     $id = decodificar($_GET['id']);
     $sqlSelectCost = "SELECT * FROM pay_for_other WHERE id='$id'";
@@ -72,8 +85,18 @@ if (isset($_GET['id'])) {
             $payForOther = $data;
         }
     }
-}
 
+    $sqlSelectUser = "SELECT * FROM tbl_clients WHERE cc=" . $payForOther['client_id'];
+    $resultUser = dbQuery($sqlSelectUser);
+    $countUser = mysql_num_rows($resultUser);
+
+    if ($countUser > 0) {
+        while ($data = dbFetchAssoc($resultUser)) {
+            $user = $data;
+        }
+    }
+}
+$date = $payForOther['date'];
 date_default_timezone_set($_SESSION['ge_timezone']);
 
 ob_end_flush();
@@ -156,7 +179,8 @@ include("header.php");
                                                 </div>
                                                 <div class="col-sm-9 form-group">
                                                     <label class="control-label">Information Client</label>
-                                                    <input type="text" id="infor_client" class="form-control" disabled="disabled"/>
+                                                    <input type="text" id="infor_client" class="form-control" disabled="disabled"
+                                                           value="<?php echo $user['cc'] . ' | ' . $user['name'] . ' | ' .$user['email']?>"/>
                                                 </div>
                                                 <input type="hidden" value="" name="clientID" id="client_id">
                                             </div>
@@ -187,7 +211,7 @@ include("header.php");
                                             <div class="row">
                                                 <div class="col-sm-6 form-group">
                                                     <label class="control-label">Pay</label>
-                                                    <input type="number" class="form-control" name="pay" required="required" value="<?php echo $payForOther['pay']?>"/>
+                                                    <input type="number" class="form-control" name="pay" value="<?php echo $payForOther['pay']?>"/>
                                                 </div>
                                                 <div class="col-sm-6 form-group">
                                                     <label class="control-label">Content</label>
@@ -245,7 +269,7 @@ include("header.php");
         var clientID =  $('#clientID');
 
         $("#datestimepicker").kendoDateTimePicker({
-            value: new Date(),
+            value: new Date('<?php echo $date?>'),
             dateInput: true
         });
         var ajaxListClient = $.ajax({

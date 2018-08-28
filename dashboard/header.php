@@ -425,6 +425,20 @@ ob_end_flush();
                               <span>Debt</span>
                           </a>
                       </li>
+                      <li>
+                          <a href="add_pay_for_other.php">
+                              <b class="label bg-success pull-right"></b>
+                              <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                              <span>Add Pay other</span>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="pay_for_other.php">
+                              <b class="label bg-success pull-right"></b>
+                              <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                              <span>Pay for other</span>
+                          </a>
+                      </li>
                   </ul>
               </li>
 			  <li>
