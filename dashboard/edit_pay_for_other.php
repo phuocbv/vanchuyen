@@ -51,21 +51,27 @@ if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Empl
 } else {
     header('Location: ../404');
 }
+$payForOther = null;
 
-if (isset($_POST['clientID'])) {
-    $clientID = $_POST['clientID'];
-    $rate = $_POST['rate'];
-    $currency = $_POST['currency'];
-    $surcharge = $_POST['surcharge'];
-    $content = $_POST['content'];
-    $user = $_SESSION['user_name'];
-    $date = date_create($_POST['date']);
-    $date = date_format($date, "Y/m/d");
+if (isset($_POST['id'])) {
+    $id = decodificar($_POST['id']);
+    $debt = $_POST['debt'];
+    $sqlUpdateDebt = "UPDATE pay_for_other SET exchange_rate, currency, surcharge, pay = '$debt' WHERE cid = '$id'";
+    dbQuery($sqlUpdateDebt);
+    header('Location: debt.php');
+}
 
-    $sqlAddCost = "INSERT INTO pay_for_other (client_id, date, content, exchange_rate, currency, surcharge, user)
-        VALUES ('$clientID', '$date' , '$content', '$rate', '$currency', '$surcharge','$user')";
-    dbQuery($sqlAddCost);
-    header('Location: pay_for_other.php');
+if (isset($_GET['id'])) {
+    $id = decodificar($_GET['id']);
+    $sqlSelectCost = "SELECT * FROM pay_for_other WHERE id='$id'";
+    $result = dbQuery($sqlSelectCost);
+    $count = mysql_num_rows($result);
+
+    if ($count > 0) {
+        while ($data = dbFetchAssoc($result)) {
+            $payForOther = $data;
+        }
+    }
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -141,11 +147,12 @@ include("header.php");
                                             <!-- START Cost information -->
                                             <legend>Pay For Orther Data</legend>
                                             <!-- Name -->
+                                            <input type="hidden" value="<?php echo codificar($id); ?>" name="id">
                                             <div class="row">
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Client ID<span
                                                                 class="required-field">*</span></label>
-                                                    <input type="text" id="clientID" class="form-control" name="client_id" required autofocus/>
+                                                    <input type="text" id="clientID" class="form-control" name="client_id" required autofocus disabled value="<?php echo $payForOther['client_id']?>"/>
                                                 </div>
                                                 <div class="col-sm-9 form-group">
                                                     <label class="control-label">Information Client</label>
@@ -165,28 +172,32 @@ include("header.php");
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Rate</label>
-                                                    <input type="number" class="form-control" name="rate" required="required"/>
+                                                    <input type="number" class="form-control" name="rate" required="required" value="<?php echo $payForOther['exchange_rate']?>"/>
                                                 </div>
 
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Currency</label>
-                                                    <input type="number" class="form-control" name="currency" required="required"/>
+                                                    <input type="number" class="form-control" name="currency" required="required" value="<?php echo $payForOther['currency']?>"/>
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Surcharge</label>
-                                                    <input type="number" class="form-control" name="surcharge" required="required"/>
+                                                    <input type="number" class="form-control" name="surcharge" required="required" value="<?php echo $payForOther['surcharge']?>"/>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-sm-12 form-group">
+                                                <div class="col-sm-6 form-group">
+                                                    <label class="control-label">Pay</label>
+                                                    <input type="number" class="form-control" name="pay" required="required" value="<?php echo $payForOther['pay']?>"/>
+                                                </div>
+                                                <div class="col-sm-6 form-group">
                                                     <label class="control-label">Content</label>
-                                                    <input type="text" class="form-control" name="content" required="required"/>
+                                                    <input type="text" class="form-control" name="content" required="required" value="<?php echo $payForOther['content']?>"/>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <button type="submit" class="btn btn-large btn-success col-sm-12">
-                                                        Add Pay For Other
+                                                        Edit Pay For Other
                                                     </button>
                                                 </div>
                                             </div>

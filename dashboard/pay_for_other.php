@@ -58,7 +58,7 @@ $where = '';
 if ($date != '') {
     $dateExactly = date_create($date);
     $dateExactly = date_format($dateExactly, "Y/m/d");
-    $where .= " WHERE book_date = '$dateExactly'";
+    $where .= " WHERE date = '$dateExactly'";
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -134,11 +134,15 @@ include("header.php");
                                                 <td></td>
                                                 <td><strong>ID</strong></td>
                                                 <td><strong>Client ID</strong></td>
-                                                <td><strong><?php echo $L_['name_client']; ?></strong></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
-                                                <td><strong>Revenue</strong></td>
-                                                <td><strong>Payment</strong></td>
-                                                <td><strong>Debt</strong></td>
+                                                <td><strong>Content</strong></td>
+<!--                                                <td><strong>Exchange Rate</strong></td>-->
+<!--                                                <td><strong>Currency</strong></td>-->
+<!--                                                <td><strong>Surcharge</strong></td>-->
+                                                <td><strong>Sum</strong></td>
+                                                <td>Pay</td>
+                                                <td>Debt</td>
+                                                <td>User</td>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -148,22 +152,28 @@ include("header.php");
                                             $debt = 0;
 
                                             $result = mysql_query("SELECT * FROM pay_for_other " . $where);
+
                                             while ($row = mysql_fetch_array($result)) {
+                                                $sum = (float) $row['exchange_rate'] * (float) $row['currency'] + (float) $row['surcharge'];
                                                 $initial += (float)$row['shipping_subtotal'];
                                                 $payment += (float)$row['pay'];
                                                 $debt += (float)($row['shipping_subtotal'] - $row['pay']);
                                                 ?>
                                                 <tr>
                                                     <td align="center"><a
-                                                                href="edit-debt.php?id=<?php echo codificar($row['cid']); ?>">
+                                                                href="edit_pay_for_other.php?id=<?php echo codificar($row['id']); ?>">
                                                             <img src="img/edit.png" height="20" width="18"></a></td>
-                                                    <td><?php echo $row['cid'] ?></td>
+                                                    <td><?php echo $row['id'] ?></td>
                                                     <td><?php echo $row['client_id'] ?></td>
-                                                    <td><?php echo $row['ship_name']; ?></td>
-                                                    <td><?php echo $row['book_date']; ?></td>
-                                                    <td><?php echo formato($row['shipping_subtotal']); ?></td>
+                                                    <td><?php echo $row['date']; ?></td>
+                                                    <td><?php echo $row['content']; ?></td>
+<!--                                                    <td>--><?php //echo formato($row['exchange_rate']); ?><!--</td>-->
+<!--                                                    <td>--><?php //echo formato($row['currency']) ?><!--</td>-->
+<!--                                                    <td>--><?php //echo formato($row['surcharge']) ?><!--</td>-->
+                                                    <td><?php echo formato($sum) ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
-                                                    <td><?php echo formato($row['shipping_subtotal'] - $row['pay']) ?></td>
+                                                    <td><?php echo formato($sum - $row['pay']) ?></td>
+                                                    <td><?php echo $row['user'] ?></td>
                                                 </tr>
                                             <?php } ?>
                                             </tbody>
