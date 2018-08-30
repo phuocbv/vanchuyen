@@ -802,37 +802,33 @@ include("header.php");
 
                                         <!-- Payment Mode -->
                                         <div class="row">
-                                            <div class="col-sm-3 form-group" >
-                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorDeclarado; ?><strong></label>
-                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();" id="sum2"  name="Totaldeclarate"   value="0" />
-                                            </div>
-                                            <div class="col-sm-3 form-group" >
-                                                <label class="text-primary"><strong><?php echo $Declarado; ?><strong></label>
-                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();" id="sum5"  name="Totaldeclarado"  value="4" />
-                                            </div>
-                                            <div class="col-sm-3 form-group">
-                                                <label for="ccv" class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $ValorRecogida; ?><strong></label>
-                                                <input type="number" class="form-control" onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();"  id="sum3" name="Totalfreight" value="0" />
-                                            </div>
+                                            <input type="hidden" class="form-control" id="sum2"  name="Totaldeclarate"   value="0" />
+                                            <input type="hidden" class="form-control" id="sum5"  name="Totaldeclarado"  value="4" />
+                                            <input type="hidden" class="form-control" id="sum3" name="Totalfreight" value="0" />
+                                            <input type="hidden" class="form-control" id="sum6" name="kiloadicional" value="3.25" />
+                                            <input type="hidden" class="form-control" id="pesoreal" name="pesoreal" value="0">
+
                                             <div class="col-sm-3 form-group">
                                                 <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $PrimerKilo; ?>&nbsp;<?php echo $_SESSION['ge_measure']; ?><strong></label>
                                                 <input type="text" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="suma();" id="sum1"    name="variable" value="3.25" />
-                                            </div>
-                                            <div class="col-sm-3 form-group">
-                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $_SESSION['ge_measure']; ?>&nbsp;<?php echo $KiloAdicional; ?><strong></label>
-                                                <input type="text" class="form-control" onblur="if(this.value == ''){this.value='0'}"  onKeyUp="suma();" id="sum6" name="kiloadicional" value="3.25" />
                                             </div>
                                             <div class="col-sm-3 form-group">
                                                 <label class="text-primary"><strong><?php echo $PesoKg; ?>&nbsp;(<?php echo $_SESSION['ge_measure']; ?>)<strong></label>
                                                 <input type="number" class="form-control" required onblur="if(this.value == ''){this.value='0'}" onKeyUp="suma();"  id="sum4"   name="Weight" value="0" />
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                <label class="text-primary"><strong><?php echo $SubtotalEnvio; ?><strong></i></label>
-                                                <input  type="text" class="form-control" name="shipping_subtotal" id="resultado" value="0" />
+                                                <label class="text-primary"><strong>Phụ phí<strong></label>
+                                                <input type="text" class="form-control" value="0"/>
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $PesoFisico; ?><strong></label>
-                                                <input type="number" class="form-control"  id="pesoreal" name="pesoreal" value="0" onblur="if(this.value == ''){this.value='0'}" >
+                                                <label class="text-primary"><strong><?php echo $SubtotalEnvio; ?><strong></label>
+                                                <input  type="text" class="form-control" name="shipping_subtotal" id="resultado" value="0" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 form-group">
+                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr'] . ' ' . $PrimerKilo . ' m3'; ?><strong></label>
+                                                <input  type="text" class="form-control" name="shipping_subtotal" value="0" />
                                             </div>
                                         </div>
 
@@ -973,7 +969,7 @@ include("header.php");
 																$query=$db->query($sql);
 																if($query->num_rows>0){
 																	while($row=$query->fetch_array()){
-																	echo '<option data-value="'.$row['servicemode'].'">'.utf8_encode($row['servicemode']).'</option>';
+																	echo '<option data-value="'.$row['servicemode'].'">'. $row['servicemode'] .'</option>';
 
 																	}
 																}

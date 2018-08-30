@@ -86,7 +86,7 @@ if (isset($_GET['id'])) {
         }
     }
 
-    $sqlSelectUser = "SELECT * FROM tbl_clients WHERE cc=" . $payForOther['client_id'];
+    $sqlSelectUser = "SELECT * FROM tbl_clients WHERE cc='" . $payForOther['client_id'] . "'";
     $resultUser = dbQuery($sqlSelectUser);
     $countUser = mysql_num_rows($resultUser);
 
@@ -180,7 +180,7 @@ include("header.php");
                                                 <div class="col-sm-9 form-group">
                                                     <label class="control-label">Information Client</label>
                                                     <input type="text" id="infor_client" class="form-control" disabled="disabled"
-                                                           value="<?php echo $user['cc'] . ' | ' . $user['name'] . ' | ' .$user['email']?>"/>
+                                                           value="<?php echo $user['cc'] . ' | ' . $user['name'] . ' | ' . $user['email'] . ' | ' . $user['phone']?>"/>
                                                 </div>
                                                 <input type="hidden" value="" name="clientID" id="client_id">
                                             </div>

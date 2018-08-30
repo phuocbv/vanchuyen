@@ -6,3 +6,4 @@ Homestead.json
 .env
 .idea
 dashboard/config.php
+.idea/workspace.xml

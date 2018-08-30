@@ -28,7 +28,7 @@ require('config.php');
 
 $dbConn = mysql_connect ($db_host, $db_user, $db_password) or die ('MySQL connect failed. ' . mysql_error());
 mysql_select_db($db_name) or die('Cannot select database. ' . mysql_error());
-mysqli_set_charset($dbConn, 'UTF8');
+//mysqli_set_charset($dbConn, 'UTF8');
 
 function dbQuery($sql)
 {
