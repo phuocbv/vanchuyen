@@ -355,6 +355,176 @@
         });
         sumWeight.html(count + ' kg');
         qnty.val(0);
+
+        var sum1 = $('#sum1');//VND 1kg
+        var sum4 = $('#sum4');//weight kg
+        var sum7 = $('#sum7');//phu phi
+        var sum8 = $('#sum8');//subtotal 1
+        var volume4 = $('#volume4');//VND m3
+        var totalpeso = $('#totalpeso');//the tich
+        var volume5 = $('#volume5');//phu phi
+        var sum9 = $('#sum9');//subtotal 2
+        var volume1 = $('#volume1');//height
+        var volume2 = $('#volume2');//width
+        var volume3 = $('#volume3');//length
+        var subtotal_shipping = $('#resultado');//subtotal shipping
+        var total = $('#shipping_subtotal');//subtotal shipping
+
+        sum1.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() === "" || sum4.val() === "") {
+                if (sum7.val() !== "")  {
+                    sum = parseFloat(sum7.val());
+                }
+            } else {
+                sum = parseFloat(current.val()) * parseFloat(sum4.val());
+                if (sum7.val() !== "") {
+                    sum += parseFloat(sum7.val());
+                }
+            }
+            sum8.val(sum.toFixed(2));
+            subtotal_shipping.val((sum + parseFloat(sum9.val())).toFixed(2));
+            total.val((sum + parseFloat(sum9.val())).toFixed(2));
+        });
+
+        sum4.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() === "" || sum1.val() === "") {
+                if (sum7.val() !== "")  {
+                    sum = parseFloat(sum7.val());
+                }
+            } else {
+                sum = parseFloat(current.val()) * parseFloat(sum1.val());
+                if (sum7.val() !== "") {
+                    sum += parseFloat(sum7.val());
+                }
+            }
+            sum8.val(sum.toFixed(2));
+            subtotal_shipping.val((sum + parseFloat(sum9.val())).toFixed(2));
+            total.val((sum + parseFloat(sum9.val())).toFixed(2));
+        });
+
+        sum7.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (sum4.val() === "" || sum1.val() === "") {
+                if (current.val() !== "")  {
+                    sum = parseFloat(current.val());
+                }
+            } else {
+                sum = parseFloat(sum4.val()) * parseFloat(sum1.val());
+                if (current.val() !== "") {
+                    sum += parseFloat(current.val());
+                }
+            }
+            sum8.val(sum.toFixed(2));
+            subtotal_shipping.val((sum + parseFloat(sum9.val())).toFixed(2));
+            total.val((sum + parseFloat(sum9.val())).toFixed(2));
+        });
+
+        volume1.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() !== "" && volume2.val() !== "" && volume3.val() !== "") {
+                sum = parseInt(current.val()) * parseInt(volume2.val()) * parseInt(volume3.val());
+            }
+            var sum_1 = 0;
+            if (volume4.val() === "") {
+                if (volume5.val() !== "") {
+                    sum_1 = parseFloat(volume5.val());
+                }
+            } else {
+                sum_1 += sum * parseFloat(volume4.val());
+                if (volume5.val() !== "") {
+                    sum_1 += parseFloat(volume5.val());
+                }
+            }
+
+            totalpeso.val(sum);
+            sum9.val(sum_1.toFixed(2));
+            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+            total.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+        });
+
+        volume2.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() !== "" && volume1.val() !== "" && volume3.val() !== "") {
+                sum = parseInt(current.val()) * parseInt(volume1.val()) * parseInt(volume3.val());
+            }
+            var sum_1 = 0;
+            if (volume4.val() === "") {
+                if (volume5.val() !== "") {
+                    sum_1 = parseFloat(volume5.val());
+                }
+            } else {
+                sum_1 += sum * parseFloat(volume4.val());
+                if (volume5.val() !== "") {
+                    sum_1 += parseFloat(volume5.val());
+                }
+            }
+            totalpeso.val(sum);
+            sum9.val(sum_1.toFixed(2));
+            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+            total.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+        });
+
+        volume3.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() !== "" && volume2.val() !== "" && volume1.val() !== "") {
+                sum = parseInt(current.val()) * parseInt(volume2.val()) * parseInt(volume1.val());
+            }
+            var sum_1 = 0;
+            if (volume4.val() === "") {
+                if (volume5.val() !== "") {
+                    sum_1 = parseFloat(volume5.val());
+                }
+            } else {
+                sum_1 += sum * parseFloat(volume4.val());
+                if (volume5.val() !== "") {
+                    sum_1 += parseFloat(volume5.val());
+                }
+            }
+            totalpeso.val(sum);
+            sum9.val(sum_1.toFixed(2));
+            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+            total.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+        });
+
+        volume4.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() === "") {
+                if (volume5.val() !== "") {
+                    sum = parseFloat(volume5.val());
+                }
+            } else {
+                sum = parseFloat(current.val()) * parseInt(totalpeso.val());
+                if (volume5.val() !== "") {
+                    sum += parseFloat(volume5.val());
+                }
+            }
+            sum9.val(sum.toFixed(2));
+            subtotal_shipping.val((sum + parseFloat(sum8.val())).toFixed(2));
+            total.val((sum + parseFloat(sum8.val())).toFixed(2));
+        });
+
+        volume5.on('keyup blur', function () {
+            var current = $(this);
+            var sum = 0;
+            if (current.val() !== "") {
+                sum += parseFloat(current.val());
+            }
+            if (volume4.val() !== "") {
+                sum +=  parseFloat(volume4.val()) * parseInt(totalpeso.val());
+            }
+            sum9.val(sum.toFixed(2));
+            subtotal_shipping.val((sum + parseFloat(sum8.val())).toFixed(2));
+            total.val((sum + parseFloat(sum8.val())).toFixed(2));
+        });
 	});
 
 	function getClientByID(clientID) {
