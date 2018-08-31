@@ -192,7 +192,6 @@ include("header.php");
                                                 </td>
                                                 <td></td>
                                             </tr>
-                                            </tr>
                                             </tfoot>
                                         </table>
                                     </div>

@@ -505,8 +505,12 @@ $_POST = $ifilter->process($_POST);
 			$cabeceras .= 'From: '.$from.' || '.$to.'' . "\r\n";
 		}
 		
-		mail($para, $titulo, $mensaje, $cabeceras);
+//		mail($para, $titulo, $mensaje, $cabeceras);
 
+		require_once ('../email/sendMail.php');
+
+		$mail = new \email\Mail();
+		$mail->sendMail($destinatario, $titulo, $mensaje);
 
 		 echo "<script type=\"text/javascript\">
 			alert(\"$envioclienteok\");

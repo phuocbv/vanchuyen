@@ -7,3 +7,4 @@ Homestead.json
 .idea
 dashboard/config.php
 .idea/workspace.xml
+composer.lock
