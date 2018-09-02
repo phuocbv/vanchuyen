@@ -70,18 +70,18 @@ if(isset($_POST["customer_id"]) && !empty($_POST["customer_id"])) {
   //Display customer list
   if($rowCount > 0) {
     while($customer = $query->fetch_assoc()) {
-		$nombre=utf8_encode($customer['name']);
+		$nombre=($customer['name']);
 		$telephone=$customer['phone'];
 		$telefono=$customer['telefono'];
-		$addresses=utf8_encode($customer['address']);
+		$addresses=($customer['address']);
 		$identification=$customer['cc'];
 		$lockerid=$customer['locker'];
 		$country=$customer['country'];
-		$state1=utf8_encode($customer['department']);
+		$state1=($customer['department']);
 		$hiso=$customer['iso'];
-		$city=utf8_encode($customer['state']);		
-		$zip=utf8_encode($customer['zipcode']);
-		$mail = utf8_encode($customer['email']);
+		$city=($customer['state']);
+		$zip=($customer['zipcode']);
+		$mail = ($customer['email']);
 		$mail = ((!isset($mail) && empty($mail))?"":$mail);
 
 		if(!isset($nombre) && empty($nombre)) {
@@ -163,18 +163,18 @@ if(isset($_POST["clientID"]) && !empty($_POST["clientID"])) {
     //Display customer list
     if($rowCount > 0) {
         while($customer = $query->fetch_assoc()) {
-            $nombre=utf8_encode($customer['name']);
+            $nombre=$customer['name'];
             $telephone=$customer['phone'];
             $telefono=$customer['telefono'];
-            $addresses=utf8_encode($customer['address']);
+            $addresses=($customer['address']);
             $identification=$customer['cc'];
             $lockerid=$customer['locker'];
             $country=$customer['country'];
-            $state1=utf8_encode($customer['department']);
+            $state1=($customer['department']);
             $hiso=$customer['iso'];
-            $city=utf8_encode($customer['state']);
-            $zip=utf8_encode($customer['zipcode']);
-            $mail = utf8_encode($customer['email']);
+            $city=($customer['state']);
+            $zip=($customer['zipcode']);
+            $mail = ($customer['email']);
             $mail = ((!isset($mail) && empty($mail))?"":$mail);
 
             if(!isset($nombre) && empty($nombre)) {

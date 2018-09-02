@@ -652,7 +652,7 @@ include("header.php");
                                                             </div>
                                                             <div class="col-sm-8 form-group">
 
-                                                                <label class="control-label"><?php echo $NOMBREREMITENTE; ?>
+                                                                <label class="control-label">Company Name
                                                                     &nbsp;<?php if ($v0 == true) { ?><span
                                                                             class="error">
                                                                         <em><?php echo $L_['mandatory']; ?></em>
@@ -660,19 +660,7 @@ include("header.php");
                                                                 <input type="text" class="form-control"
                                                                        name="Shippername" id="Shippername"
                                                                        autocomplete="on" list="customers"
-                                                                       value="<?php if (isset($_POST['Shippername'])) {
-                                                                           echo $_POST['Shippername'];
-                                                                       } else {
-                                                                           echo $currentUser['name_parson'];
-                                                                       } ?>"/>
-                                                                <datalist id="customers">
-                                                                    <?php
-                                                                    $sql = mysql_query("SELECT * FROM tbl_clients");
-                                                                    while ($row = mysql_fetch_array($sql)) {
-                                                                        echo '<option data-value="' . $row['id'] . '">' . utf8_encode($row['name']) . '</option>';
-                                                                    }
-                                                                    ?>
-                                                                </datalist>
+                                                                       value="<?php echo $companyInfor['cname']?>"/>
                                                                 <input type="hidden" name="Shippername-hidden"
                                                                        id="Shippername-hidden"/>
                                                             </div>
@@ -829,9 +817,9 @@ include("header.php");
                                                                             class="error">
                                                                         <em><?php echo $L_['mandatory']; ?></em>
                                                                         </span><?php } ?></label>
-                                                                <textarea type="text" class="form-control"
+                                                                <input type="text" class="form-control"
                                                                           name="Comments"
-                                                                          placeholder="<?php echo $placedetails; ?>"></textarea>
+                                                                          placeholder="<?php echo $placedetails; ?>">
                                                             </div>
                                                         </div>
 
@@ -924,12 +912,6 @@ include("header.php");
                                                         <div class="row">
                                                             <input type="hidden" class="form-control" id="sum2"
                                                                    name="Totaldeclarate" value="0"/>
-                                                            <input type="hidden" class="form-control" id="sum5"
-                                                                   name="Totaldeclarado" value="4"/>
-                                                            <input type="hidden" class="form-control" id="sum3"
-                                                                   name="Totalfreight" value="0"/>
-                                                            <input type="hidden" class="form-control" id="sum6"
-                                                                   name="kiloadicional" value="3.25"/>
                                                             <input type="hidden" class="form-control" id="pesoreal"
                                                                    name="pesoreal" value="0">
 
@@ -950,12 +932,12 @@ include("header.php");
                                                             <div class="col-sm-3 form-group">
                                                                 <label class="text-primary"><strong>Phụ
                                                                         phí<strong></label>
-                                                                <input type="number" class="form-control" value="0" id="sum7"/>
+                                                                <input type="number" class="form-control" value="0" id="sum7" name="Totaldeclarado"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <label class="text-primary"><strong>Subtotal
                                                                         1<strong></label>
-                                                                <input type="text" name="" value="0.00" disabled id="sum8"
+                                                                <input type="text" name="" value="0" disabled id="sum8"
                                                                        class="form-control">
                                                             </div>
                                                         </div>
@@ -988,7 +970,7 @@ include("header.php");
                                                             <div class="col-sm-3 form-group">
                                                                 <label class="text-primary"><strong><?php echo $_SESSION['ge_curr'] . ' ' . $PrimerKilo . ' m3'; ?>
                                                                         <strong></label>
-                                                                <input type="number" class="form-control" value="0" id="volume4"/>
+                                                                <input type="number" class="form-control" value="0" id="volume4" name="Totalfreight"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <label class="text-primary"><strong><?php echo $TotalPesoVolumetrico; ?>
@@ -998,12 +980,12 @@ include("header.php");
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <label class="text-primary"><strong>Phụ phí<strong></label>
-                                                                <input type="number" class="form-control" value="0" id="volume5" />
+                                                                <input type="number" class="form-control" value="0" id="volume5" name="kiloadicional"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <label class="text-primary"><strong>Subtotal
                                                                         2</strong></label>
-                                                                <input type="text" class="form-control" value="0.00" disabled id="sum9"/>
+                                                                <input type="text" class="form-control" value="0" disabled id="sum9"/>
                                                             </div>
                                                         </div>
 
@@ -1013,8 +995,8 @@ include("header.php");
                                                                 <label class="text-primary"><strong>Subtotal Shipping</strong></label>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <input type="text" class="form-control" value="0.00" disabled id="resultado"/>
-                                                                <input type="text" class="form-control" value="0.00" name="shipping_subtotal" id="shipping_subtotal"/>
+                                                                <input type="text" class="form-control" value="0" disabled id="resultado"/>
+                                                                <input type="hidden" class="form-control" value="0" name="shipping_subtotal" id="shipping_subtotal"/>
                                                             </div>
                                                         </div>
                                                     </fieldset>
@@ -1207,7 +1189,7 @@ include("header.php");
                                                                 </label>
                                                                 <select class="form-control" name="status" id="status">
                                                                     <?php
-                                                                    $sql = "SELECT servicemode FROM service_mode  GROUP BY servicemode";
+                                                                    $sql = "SELECT servicemode FROM service_mode  ORDER BY servicemode";
                                                                     $query = $db->query($sql);
                                                                     if ($query->num_rows > 0) {
                                                                         while ($row = $query->fetch_array()) {

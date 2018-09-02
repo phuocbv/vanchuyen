@@ -34,7 +34,7 @@ function conexion(){
         $dblink = mysqli_connect($db_host,$db_user,$db_password);
         $selected = mysqli_select_db($dblink,$db_name);
         if (!$selected) { error($dblink); }
-        $dblink->query("SET NAMES 'utf8'");
+        $dblink->query("SET CHARACTER SET utf8");
     return $dblink;
 }
 ob_end_flush();	

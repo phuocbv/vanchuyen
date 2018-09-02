@@ -383,9 +383,9 @@
                     sum += parseFloat(sum7.val());
                 }
             }
-            sum8.val(sum.toFixed(2));
-            subtotal_shipping.val((sum + parseFloat(sum9.val())).toFixed(2));
-            total.val((sum + parseFloat(sum9.val())).toFixed(2));
+            sum8.val(sum);
+            subtotal_shipping.val((sum + parseFloat(sum9.val())));
+            total.val(sum + parseFloat(sum9.val()));
         });
 
         sum4.on('keyup blur', function () {
@@ -401,9 +401,9 @@
                     sum += parseFloat(sum7.val());
                 }
             }
-            sum8.val(sum.toFixed(2));
-            subtotal_shipping.val((sum + parseFloat(sum9.val())).toFixed(2));
-            total.val((sum + parseFloat(sum9.val())).toFixed(2));
+            sum8.val(sum);
+            subtotal_shipping.val((sum + parseFloat(sum9.val())));
+            total.val(sum + parseFloat(sum9.val()));
         });
 
         sum7.on('keyup blur', function () {
@@ -419,9 +419,9 @@
                     sum += parseFloat(current.val());
                 }
             }
-            sum8.val(sum.toFixed(2));
-            subtotal_shipping.val((sum + parseFloat(sum9.val())).toFixed(2));
-            total.val((sum + parseFloat(sum9.val())).toFixed(2));
+            sum8.val(sum);
+            subtotal_shipping.val((sum + parseFloat(sum9.val())));
+            total.val((sum + parseFloat(sum9.val())));
         });
 
         volume1.on('keyup blur', function () {
@@ -443,9 +443,9 @@
             }
 
             totalpeso.val(sum);
-            sum9.val(sum_1.toFixed(2));
-            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
-            total.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+            sum9.val(sum_1);
+            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())));
+            total.val((sum_1 + parseFloat(sum8.val())));
         });
 
         volume2.on('keyup blur', function () {
@@ -466,9 +466,9 @@
                 }
             }
             totalpeso.val(sum);
-            sum9.val(sum_1.toFixed(2));
-            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
-            total.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+            sum9.val(sum_1);
+            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())));
+            total.val((sum_1 + parseFloat(sum8.val())));
         });
 
         volume3.on('keyup blur', function () {
@@ -489,9 +489,9 @@
                 }
             }
             totalpeso.val(sum);
-            sum9.val(sum_1.toFixed(2));
-            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
-            total.val((sum_1 + parseFloat(sum8.val())).toFixed(2));
+            sum9.val(sum_1);
+            subtotal_shipping.val((sum_1 + parseFloat(sum8.val())));
+            total.val((sum_1 + parseFloat(sum8.val())));
         });
 
         volume4.on('keyup blur', function () {
@@ -507,9 +507,9 @@
                     sum += parseFloat(volume5.val());
                 }
             }
-            sum9.val(sum.toFixed(2));
-            subtotal_shipping.val((sum + parseFloat(sum8.val())).toFixed(2));
-            total.val((sum + parseFloat(sum8.val())).toFixed(2));
+            sum9.val(sum);
+            subtotal_shipping.val((sum + parseFloat(sum8.val())));
+            total.val((sum + parseFloat(sum8.val())));
         });
 
         volume5.on('keyup blur', function () {
@@ -521,9 +521,9 @@
             if (volume4.val() !== "") {
                 sum +=  parseFloat(volume4.val()) * parseInt(totalpeso.val());
             }
-            sum9.val(sum.toFixed(2));
-            subtotal_shipping.val((sum + parseFloat(sum8.val())).toFixed(2));
-            total.val((sum + parseFloat(sum8.val())).toFixed(2));
+            sum9.val(sum);
+            subtotal_shipping.val((sum + parseFloat(sum8.val())));
+            total.val((sum + parseFloat(sum8.val())));
         });
 	});
 
