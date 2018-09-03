@@ -372,6 +372,22 @@ ob_end_flush();
                                         <span>List Cost</span>
                                     </a>
                                 </li>
+                                <?php if ($_SESSION['user_type'] == 'Employee') { ?>
+                                    <li>
+                                        <a href="add_pay_for_other.php">
+                                            <b class="label bg-success pull-right"></b>
+                                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                                            <span>Add Pay Other</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="pay_for_other.php">
+                                            <b class="label bg-success pull-right"></b>
+                                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                                            <span>Pay Ror Other</span>
+                                        </a>
+                                    </li>
+                                <?php }?>
                             </ul>
                         </li>
                         <?php

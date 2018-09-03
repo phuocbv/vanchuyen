@@ -36,6 +36,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     exit;
 }
 
+
+
 $now = time();
 if ($now > $_SESSION['expire']) {
     session_destroy();
@@ -47,13 +49,20 @@ if ($now > $_SESSION['expire']) {
     exit;
 }
 
+$user_name = $_SESSION['user_name'];
+$dataClient = array();
+$sqlClient = mysql_query("SELECT * FROM tbl_clients WHERE email='$user_name'");
+while ($row = mysql_fetch_array($sqlClient)) {
+    $dataClient = $row;
+}
+
 $date = $_GET['date'] != '' ? $_GET['date'] : '';
-$where = '';
+$where = " WHERE client_id = '" . $dataClient['cc'] . "'";
 
 if ($date != '') {
     $dateExactly = date_create($date);
     $dateExactly = date_format($dateExactly, "Y/m/d");
-    $where .= " WHERE book_date = '$dateExactly'";
+    $where .= " AND book_date = '$dateExactly'";
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -126,8 +135,6 @@ include("header.php");
                                             <thead>
                                             <tr>
                                                 <td><strong>ID</strong></td>
-                                                <td><strong>Client ID</strong></td>
-                                                <td><strong><?php echo $L_['name_client']; ?></strong></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
                                                 <td><strong>Revenue</strong></td>
                                                 <td><strong>Payment</strong></td>
@@ -148,8 +155,6 @@ include("header.php");
                                                 ?>
                                                 <tr>
                                                     <td><?php echo $row['cid'] ?></td>
-                                                    <td><?php echo $row['client_id'] ?></td>
-                                                    <td><?php echo $row['ship_name']; ?></td>
                                                     <td><?php echo $row['book_date']; ?></td>
                                                     <td><?php echo formato($row['shipping_subtotal']); ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
@@ -159,7 +164,7 @@ include("header.php");
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="4" style="text-align: right;" rowspan="1">
+                                                <td colspan="2" style="text-align: right;" rowspan="1">
                                                     <b><?php echo $L_['name_sales']; ?></b>
                                                 </td>
                                                 <td rowspan="1" colspan="1">
@@ -220,9 +225,9 @@ include("../footer.php");
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][5].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][6].replaceAll(",", ""));
+                sum += parseFloat(data[i][2].replaceAll(",", ""));
+                sum_pay += parseFloat(data[i][3].replaceAll(",", ""));
+                sum_debt += parseFloat(data[i][4].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
             $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));
