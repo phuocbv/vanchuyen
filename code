@@ -1,0 +1,15 @@
+ $('#btnseach').click(function () {
+        var queryString = encodeURIComponent($("#searchQuery").val());
+        var searchType = $("#jelect").val();
+        var url = "";
+        if (searchType == 1) {
+            url = "https://world.taobao.com/search/search.htm?q=" + queryString + "&navigator=all&search_type=0&_input_charset=utf-8";
+        } else if (searchType == 2) {
+            url = "https://s.1688.com/selloffer/offer_search.htm?keywords=" + queryString + "&n=y";
+        } else if (searchType == 3) {
+            url = "https://list.tmall.com/search_product.htm?q=" + queryString + "&type=p&vmarket=";
+        } else if (searchType == 4) {
+            url = "http://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" + queryString;
+        }
+        window.open(url);
+    });

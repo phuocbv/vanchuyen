@@ -58,8 +58,9 @@ $where = '';
 if ($date != '') {
     $dateExactly = date_create($date);
     $dateExactly = date_format($dateExactly, "Y/m/d");
-    $where .= " WHERE book_date = '$dateExactly'";
+    $where .= " WHERE book_date = '$dateExactly' ";
 }
+$where .= " ORDER BY book_date DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
 ob_end_flush();

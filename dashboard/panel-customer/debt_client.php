@@ -64,6 +64,7 @@ if ($date != '') {
     $dateExactly = date_format($dateExactly, "Y/m/d");
     $where .= " AND book_date = '$dateExactly'";
 }
+$where .= " ORDER BY book_date DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
 ob_end_flush();
@@ -134,7 +135,7 @@ include("header.php");
                                         <table id="table" class="table table-striped b-t b-b">
                                             <thead>
                                             <tr>
-                                                <td><strong>ID</strong></td>
+                                                <td></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
                                                 <td><strong>Revenue</strong></td>
                                                 <td><strong>Payment</strong></td>
@@ -154,7 +155,7 @@ include("header.php");
                                                 $debt += (float)($row['shipping_subtotal'] - $row['pay']);
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $row['cid'] ?></td>
+                                                    <td></td>
                                                     <td><?php echo $row['book_date']; ?></td>
                                                     <td><?php echo formato($row['shipping_subtotal']); ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
@@ -164,7 +165,7 @@ include("header.php");
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="2" style="text-align: right;" rowspan="1">
+                                                <td colspan="1" style="text-align: right;" rowspan="1">
                                                     <b><?php echo $L_['name_sales']; ?></b>
                                                 </td>
                                                 <td rowspan="1" colspan="1">
@@ -181,7 +182,6 @@ include("header.php");
                                                         <span id="display_sum_debt"><?php echo formato($debt); ?></span></b>
 
                                                 </td>
-                                            </tr>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -225,9 +225,9 @@ include("../footer.php");
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][2].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][3].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][4].replaceAll(",", ""));
+                sum += parseFloat(data[i][1].replaceAll(",", ""));
+                sum_pay += parseFloat(data[i][2].replaceAll(",", ""));
+                sum_debt += parseFloat(data[i][3].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
             $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));

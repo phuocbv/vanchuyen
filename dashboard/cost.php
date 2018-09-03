@@ -149,6 +149,7 @@ ob_end_flush();
                                     if (isset($from) && isset($to)) {
                                         $sqlSearch .= " WHERE date BETWEEN '$date_form' AND '$date_to' ";
                                     }
+                                    $sqlSearch .= " ORDER BY date DESC";
                                     $result3 = mysql_query($sqlSearch);
                                     $sum_money = 0;
                                     while ($row = mysql_fetch_array($result3)) {

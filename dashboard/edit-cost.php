@@ -62,7 +62,7 @@ if (isset($_POST['cost_id'])) {
     $money = $_POST['money'];
     $user = $_SESSION['user_name'];
     $role = $_SESSION['user_type'];
-    $date = date_create( $_POST['date']);
+    $date = date_create($_POST['date']);
     $date = date_format($date,"Y/m/d");
 
     $sqlUpdateCost = "UPDATE cost SET date = '$date', content = '$content', cost = '$cost_name', money = '$money' WHERE id = '$id'";
@@ -226,7 +226,7 @@ include("header.php");
     $(document).ready(function () {
         // create DateTimePicker from input HTML element
         $("#datestimepicker").kendoDateTimePicker({
-            value: new Date(),
+            value: new Date('<?php echo date_format(date_create($cost['date']),FORMAT_DATE_1); ?>'),
             dateInput: true
         });
     });
