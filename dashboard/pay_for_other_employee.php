@@ -21,50 +21,46 @@
 ob_start();
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 session_start();
-require_once('../database.php');
-require_once('../library.php');
-require_once('../funciones.php');
-require '../requirelanguage.php';
+require_once('database.php');
+require_once('library.php');
+require_once('funciones.php');
+require 'requirelanguage.php';
 
+if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Employee') {
 
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-} else {
-    echo "<script type=\"text/javascript\">
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    } else {
+        echo "<script type=\"text/javascript\">
 					alert(\"This page is for registered users only.\");
 					window.location = \"../signup\"
 				</script>";
-    exit;
-}
+        exit;
+    }
 
+    $now = time();
+    if ($now > $_SESSION['expire']) {
+        session_destroy();
 
-
-$now = time();
-if ($now > $_SESSION['expire']) {
-    session_destroy();
-
-    echo "<script type=\"text/javascript\">
+        echo "<script type=\"text/javascript\">
 					alert(\"Your session has ended.\");
 					window.location = \"../login\"
 				</script>";
-    exit;
-}
+        exit;
+    }
 
-$user_name = $_SESSION['user_name'];
-$dataClient = array();
-$sqlClient = mysql_query("SELECT * FROM tbl_clients WHERE email='$user_name'");
-while ($row = mysql_fetch_array($sqlClient)) {
-    $dataClient = $row;
+} else {
+    header('Location: ../404');
 }
 
 $date = $_GET['date'] != '' ? $_GET['date'] : '';
-$where = " WHERE client_id = '" . $dataClient['cc'] . "'";
 
+$where = " WHERE user='" . $_SESSION['user_name'] . "' AND role='Employee' ";
 if ($date != '') {
     $dateExactly = date_create($date);
     $dateExactly = date_format($dateExactly, "Y/m/d");
-    $where .= " AND book_date = '$dateExactly'";
+    $where .= " AND date = '$dateExactly'";
 }
-$where .= " ORDER BY book_date DESC";
+$where .= " ORDER BY date DESC, id DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
 ob_end_flush();
@@ -79,15 +75,16 @@ ob_end_flush();
     <meta name="author" content="Jaomweb">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-    <link rel="shortcut icon" type="image/png" href="../logo-image/image_logo.php?id=2"/>
+    <link rel="shortcut icon" type="image/png" href="logo-image/image_logo.php?id=2"/>
 
-    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css" type="text/css"/>
-    <link rel="stylesheet" href="../../bower_components/animate.css/animate.css" type="text/css"/>
-    <link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css" type="text/css"/>
-    <link rel="stylesheet" href="../../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css"/>
-    <link rel="stylesheet" href="../css/font.css" type="text/css"/>
-    <link rel="stylesheet" href="../css/app.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="../bower_components/animate.css/animate.css" type="text/css"/>
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../bower_components/simple-line-icons/css/simple-line-icons.css" type="text/css"/>
+    <link rel="stylesheet" href="css/font.css" type="text/css"/>
+    <link rel="stylesheet" href="css/app.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+    <link rel="stylesheet" href="css/jquery.auto-complete.css">
     <!-- Style Status -->
     <style><?php echo $styling['style']; ?></style>
 
@@ -135,10 +132,15 @@ include("header.php");
                                         <table id="table" class="table table-striped b-t b-b">
                                             <thead>
                                             <tr>
+                                                <td></td>
+                                                <td><strong>ID</strong></td>
+                                                <td><strong>Client ID</strong></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
-                                                <td><strong>Revenue</strong></td>
-                                                <td><strong>Payment</strong></td>
-                                                <td><strong>Debt</strong></td>
+                                                <td><strong>Content</strong></td>
+                                                <td><strong>Sum</strong></td>
+                                                <td>Pay</td>
+                                                <td>Debt</td>
+                                                <td>User</td>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -147,23 +149,32 @@ include("header.php");
                                             $payment = 0;
                                             $debt = 0;
 
-                                            $result = mysql_query("SELECT * FROM accounting " . $where);
+                                            $result = mysql_query("SELECT * FROM pay_for_other " . $where);
+
                                             while ($row = mysql_fetch_array($result)) {
-                                                $initial += (float)$row['shipping_subtotal'];
+                                                $sum = (float) $row['exchange_rate'] * (float) $row['currency'] + (float) $row['surcharge'];
+                                                $initial += $sum;
                                                 $payment += (float)$row['pay'];
-                                                $debt += (float)($row['shipping_subtotal'] - $row['pay']);
+                                                $debt += (float)($sum - $row['pay']);
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $row['book_date']; ?></td>
-                                                    <td><?php echo formato($row['shipping_subtotal']); ?></td>
+                                                    <td align="center"><a
+                                                                href="edit_pay_for_other.php?id=<?php echo codificar($row['id']); ?>">
+                                                            <img src="img/edit.png" height="20" width="18"></a></td>
+                                                    <td><?php echo $row['id'] ?></td>
+                                                    <td><?php echo $row['client_id'] ?></td>
+                                                    <td><?php echo $row['date']; ?></td>
+                                                    <td><?php echo $row['content']; ?></td>
+                                                    <td><?php echo formato($sum) ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
-                                                    <td><?php echo formato($row['shipping_subtotal'] - $row['pay']) ?></td>
+                                                    <td><?php echo formato($sum - $row['pay']) ?></td>
+                                                    <td><?php echo $row['user'] ?></td>
                                                 </tr>
                                             <?php } ?>
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="1" style="text-align: right;" rowspan="1">
+                                                <td colspan="5" style="text-align: right;" rowspan="1">
                                                     <b><?php echo $L_['name_sales']; ?></b>
                                                 </td>
                                                 <td rowspan="1" colspan="1">
@@ -180,6 +191,7 @@ include("header.php");
                                                         <span id="display_sum_debt"><?php echo formato($debt); ?></span></b>
 
                                                 </td>
+                                                <td></td>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -196,7 +208,7 @@ include("header.php");
 <!-- / content -->
 
 <?php
-include("../footer.php");
+include("footer.php");
 ?>
 
 </div>
@@ -205,27 +217,27 @@ include("../footer.php");
         $("#contenido").load(pagina);
     }
 </script>
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script src="../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
-<script src="../js/ui-load.js"></script>
-<script src="../js/ui-jp.config.js"></script>
-<script src="../js/ui-jp.js"></script>
-<script src="../js/ui-nav.js"></script>
-<script src="../js/ui-toggle.js"></script>
-<script src="../js/delivery.js"></script>
-<script type="text/javascript" charset="utf8" src="../js/jquery.dataTables.js"></script>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="js/ui-load.js"></script>
+<script src="js/ui-jp.config.js"></script>
+<script src="js/ui-jp.js"></script>
+<script src="js/ui-nav.js"></script>
+<script src="js/ui-toggle.js"></script>
+<script src="js/delivery.js"></script>
+<script type="text/javascript" charset="utf8" src="js/jquery.dataTables.js"></script>
 <script>
     $(function () {
-        var table = $('#table').DataTable({order:[[0,"desc"]]});
+        var table = $('#table').DataTable();
         table.on('search.dt', function () {
             var data = table.rows({filter: 'applied'}).data();
             var sum = 0;
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][1].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][2].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][3].replaceAll(",", ""));
+                sum += parseFloat(data[i][5].replaceAll(",", ""));
+                sum_pay += parseFloat(data[i][6].replaceAll(",", ""));
+                sum_debt += parseFloat(data[i][7].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
             $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));

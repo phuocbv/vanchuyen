@@ -59,13 +59,19 @@ if (isset($_POST['clientID'])) {
     $surcharge = $_POST['surcharge'];
     $content = $_POST['content'];
     $user = $_SESSION['user_name'];
+    $role = $_SESSION['user_type'];
     $date = date_create($_POST['date']);
     $date = date_format($date, "Y/m/d");
 
-    $sqlAddCost = "INSERT INTO pay_for_other (client_id, date, content, exchange_rate, currency, surcharge, user)
-        VALUES ('$clientID', '$date' , '$content', '$rate', '$currency', '$surcharge','$user')";
+    $sqlAddCost = "INSERT INTO pay_for_other (client_id, date, content, exchange_rate, currency, surcharge, user, role)
+        VALUES ('$clientID', '$date' , '$content', '$rate', '$currency', '$surcharge','$user', '$role')";
     dbQuery($sqlAddCost);
-    header('Location: pay_for_other.php');
+    if ($_SESSION['user_type'] == 'Administrator') {
+        header('Location: pay_for_other.php');
+    } else if ($_SESSION['user_type'] == 'Employee') {
+        header('Location: pay_for_other_employee.php');
+    }
+
 }
 
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -274,7 +280,8 @@ include("header.php");
                 data: 'clientID=' + clientID,
                 success: function (json) {
                     var obj = JSON.parse(json);
-                    $('#infor_client').val(obj.identification + ' | ' + obj.nombre + ' | ' + obj.email);
+                    $('#infor_client').val(obj.identification + ' | ' + obj.nombre +
+                        ' | ' + obj.email + ' | ' + obj.telephone + ' | ' + obj.phone2);
                     $('#client_id').val(obj.identification);
                 }
             });

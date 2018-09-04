@@ -365,14 +365,31 @@ ob_end_flush();
                                         <span><?php echo $L_ADD_COST; ?></span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="cost.php">
-                                        <b class="label bg-success pull-right"></b>
-                                        <i class="fa fa-share-square-o icon text-danger-lter"></i>
-                                        <span>List Cost</span>
-                                    </a>
-                                </li>
+                                <?php if ($_SESSION['user_type'] == 'Administrator') {?>
+                                    <li>
+                                        <a href="cost.php">
+                                            <b class="label bg-success pull-right"></b>
+                                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                                            <span>List Cost</span>
+                                        </a>
+                                    </li>
+                                <?php  } else if ($_SESSION['user_type'] == 'Employee') {?>
+                                    <li>
+                                        <a href="cost_employee.php">
+                                            <b class="label bg-success pull-right"></b>
+                                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                                            <span>List Cost</span>
+                                        </a>
+                                    </li>
+                                <?php }?>
                                 <?php if ($_SESSION['user_type'] == 'Employee') { ?>
+                                    <li>
+                                        <a href="debt_employee.php">
+                                            <b class="label bg-success pull-right"></b>
+                                            <i class="fa fa-share-square-o icon text-danger-lter"></i>
+                                            <span>Debt</span>
+                                        </a>
+                                    </li>
                                     <li>
                                         <a href="add_pay_for_other.php">
                                             <b class="label bg-success pull-right"></b>
@@ -381,7 +398,7 @@ ob_end_flush();
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="pay_for_other.php">
+                                        <a href="pay_for_other_employee.php">
                                             <b class="label bg-success pull-right"></b>
                                             <i class="fa fa-share-square-o icon text-danger-lter"></i>
                                             <span>Pay Ror Other</span>

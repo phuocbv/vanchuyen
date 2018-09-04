@@ -86,6 +86,9 @@ if ($year != null && $year != '') {
     }
 }
 
+$sqlRevenue .= " ORDER BY book_date DESC";
+$sqlCost .= " ORDER BY date DESC";
+
 $listAccount = mysql_query($sqlRevenue);
 $listCost = mysql_query($sqlCost);
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -198,13 +201,13 @@ include("header.php");
                                     <table id="tableRevenue" class="table table-striped b-t b-b">
                                         <thead>
                                         <tr>
-                                            <td><strong>ID</strong></td>
+<!--                                            <td><strong>ID</strong></td>-->
+                                            <td><strong>
+                                                    <center><?php echo $L_['name_date']; ?></center>
+                                                </strong></td>
                                             <td><strong><?php echo $L_['name_client']; ?></strong></td>
                                             <td><strong>
                                                     <center><?php echo $L_['name_book_mode']; ?></center>
-                                                </strong></td>
-                                            <td><strong>
-                                                    <center><?php echo $L_['name_date']; ?></center>
                                                 </strong></td>
                                             <td><strong><?php echo $L_['name_value']; ?>
                                                 </strong></td>
@@ -231,16 +234,16 @@ include("header.php");
                                             }
                                             ?>
                                             <tr>
-                                                <td><?php echo $row['cid'] ?></td>
+<!--                                                <td>--><?php //echo $row['cid'] ?><!--</td>-->
+                                                <td>
+                                                    <center><?php echo $row['book_date']; ?></center>
+                                                </td>
                                                 <td><?php echo $row['ship_name']; ?></td>
                                                 <td>
                                                     <center><?php echo $book_mode; ?>&nbsp;&nbsp;<span
                                                                 class="label <?php echo $row['payment']; ?> label-large"><?php echo $row['payment']; ?></span>&nbsp;&nbsp;<span
                                                                 class="label <?php echo $row['paymode']; ?> label-large"><?php echo $row['paymode']; ?></span>
                                                     </center>
-                                                </td>
-                                                <td>
-                                                    <center><?php echo $row['book_date']; ?></center>
                                                 </td>
                                                 <td class="sum" value="<?php echo (int)$row['shipping_subtotal'] ?>">
                                                     <?php echo $s . ' ' . formato($row['shipping_subtotal']); ?>
@@ -253,7 +256,7 @@ include("header.php");
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td></td>
+<!--                                            <td></td>-->
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
@@ -272,10 +275,10 @@ include("header.php");
                                     <table id="tableCost" class="table table-striped b-t b-b">
                                         <thead>
                                         <tr>
-                                            <td><strong>ID</strong></td>
+<!--                                            <td><strong>ID</strong></td>-->
+                                            <td><strong>Date</strong></td>
                                             <td><strong>Cost Name</strong></td>
                                             <td><strong>Content</strong></td>
-                                            <td><strong>Date</strong></td>
                                             <td><strong>Money</strong></td>
                                             <td><strong>User</strong></td>
                                             <td><strong>Role</strong></td>
@@ -290,10 +293,10 @@ include("header.php");
                                                 $sumMoney += (float)$row['money'];
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $row['id'] ?></td>
+<!--                                                    <td>--><?php //echo $row['id'] ?><!--</td>-->
+                                                    <td><?php echo $row['date'] ?></td>
                                                     <td><?php echo $row['cost']; ?></td>
                                                     <td><?php echo $row['content'] ?></td>
-                                                    <td><?php echo $row['date'] ?></td>
                                                     <td class="sum" value="<?php echo (int)$row['money'] ?>">
                                                         <?php echo formato($row['money']); ?>
                                                     </td>
@@ -307,7 +310,6 @@ include("header.php");
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
@@ -380,22 +382,22 @@ include("footer.php");
     var year = $('#year');
     var day = $('#day');
     $(function () {
-        var tableRevenue = $('#tableRevenue').DataTable();
+        var tableRevenue = $('#tableRevenue').DataTable({order:[[0,"desc"]]});
         tableRevenue.on('search.dt', function () {
             var data = tableRevenue.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
+                sum += parseFloat(data[i][3].replaceAll(",", ""));
             }console.log(sum);
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
 
-        var tableCost = $('#tableCost').DataTable();
+        var tableCost = $('#tableCost').DataTable({order:[[0,"desc"]]});
         tableCost.on('search.dt', function () {
             var data = tableCost.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
+                sum += parseFloat(data[i][3].replaceAll(",", ""));
             }
             $('#display_sum_cost').html((sum).formatMoney(2, '.', ','));
         });

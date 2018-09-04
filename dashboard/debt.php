@@ -26,7 +26,7 @@ require_once('library.php');
 require_once('funciones.php');
 require 'requirelanguage.php';
 
-if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Employee') {
+if ($_SESSION['user_type'] == 'Administrator') {
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     } else {
@@ -60,7 +60,7 @@ if ($date != '') {
     $dateExactly = date_format($dateExactly, "Y/m/d");
     $where .= " WHERE book_date = '$dateExactly' ";
 }
-$where .= " ORDER BY book_date DESC";
+$where .= " ORDER BY book_date DESC, cid DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
 ob_end_flush();
@@ -230,9 +230,9 @@ include("footer.php");
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][5].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][6].replaceAll(",", ""));
+                sum += parseFloat(data[i][5].replaceAll(",", ""));
+                sum_pay += parseFloat(data[i][6].replaceAll(",", ""));
+                sum_debt += parseFloat(data[i][7].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
             $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));

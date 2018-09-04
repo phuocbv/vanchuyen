@@ -26,7 +26,7 @@ require_once('funciones.php');
 require_once('library.php');
 require 'requirelanguage.php';
 
-if ($_SESSION['user_type'] == 'Administrator') {
+if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Employee') {
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     } else {
@@ -138,16 +138,17 @@ ob_end_flush();
                                     <th>Date</th>
                                     <th>Content</th>
                                     <th>Money</th>
-                                    <th>User</th>
-                                    <th>Role</th>
+<!--                                    <th>User</th>-->
+<!--                                    <th>Role</th>-->
                                 </tr>
                                 </thead>
 
                                 <tbody>
                                 <tr>
                                     <?php
+                                    $sqlSearch .= " WHERE user='" . $_SESSION['user_name'] . "' AND role='Employee' ";
                                     if (isset($from) && isset($to)) {
-                                        $sqlSearch .= " WHERE date BETWEEN '$date_form' AND '$date_to' ";
+                                        $sqlSearch .= " AND date BETWEEN '$date_form' AND '$date_to' ";
                                     }
                                     $sqlSearch .= " ORDER BY date DESC, id DESC";
                                     $result3 = mysql_query($sqlSearch);
@@ -166,8 +167,8 @@ ob_end_flush();
                                     <td><?php echo $row['date']; ?></td>
                                     <td><?php echo $row['content']; ?></td>
                                     <td class="sum"><?php echo formato($row['money']); ?></td>
-                                    <td><?php echo $row['user']; ?></td>
-                                    <td><?php echo $row['role']; ?></td>
+<!--                                    <td>--><?php //echo $row['user']; ?><!--</td>-->
+<!--                                    <td>--><?php //echo $row['role']; ?><!--</td>-->
                                 </tr>
                                 <?php } ?>
                                 </tbody>
@@ -182,8 +183,8 @@ ob_end_flush();
                                 <th></th>
                                 <th align="right">Total</th>
                                 <th><span id="display_sum"><?php echo $_SESSION['ge_curr'] . ' ' . formato($sum_money   )?></span></th>
-                                <th></th>
-                                <th></th>
+<!--                                <th></th>-->
+<!--                                <th></th>-->
                                 </tfoot>
                             </table>
                         </div>

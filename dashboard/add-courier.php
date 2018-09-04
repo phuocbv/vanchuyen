@@ -765,12 +765,12 @@ include("header.php");
                                                                             <span class="error">
                                                                             <em><?php echo $L_['mandatory']; ?></em>
                                                                             </span><?php } ?></label>
-                                                                    <input type="email" class="form-control"
+                                                                    <input type="text" class="form-control"
                                                                            name="Shipperemail" id="idemail"
                                                                            placeholder="demo@emo.com"
                                                                            autocomplete=" off"
                                                                            onKeyUp="javascript:validateeMail('idemail')"
-                                                                           value="<?php echo $currentUser['email'] ?>"/>
+                                                                           value="<?php echo $companyInfor['bemail']?>"/>
                                                                     <strong><span id="mailOK"></span></strong>
                                                                     <p class="error"></p>
                                                                 </div>

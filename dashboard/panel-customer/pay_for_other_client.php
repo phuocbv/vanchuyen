@@ -61,6 +61,7 @@ if ($date != '') {
     $dateExactly = date_format($dateExactly, "Y/m/d");
     $where .= " AND date = '$dateExactly'";
 }
+$where .= " ORDER BY date DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
 ob_end_flush();
@@ -132,7 +133,6 @@ include("header.php");
                                         <table id="table" class="table table-striped b-t b-b">
                                             <thead>
                                             <tr>
-                                                <td><strong>ID</strong></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
                                                 <td><strong>Content</strong></td>
                                                 <td><strong>Sum</strong></td>
@@ -156,7 +156,6 @@ include("header.php");
                                                 $debt += (float)($sum - $row['pay']);
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $row['id'] ?></td>
                                                     <td><?php echo $row['date']; ?></td>
                                                     <td><?php echo $row['content']; ?></td>
                                                     <td><?php echo formato($sum) ?></td>
@@ -185,7 +184,6 @@ include("header.php");
                                                         <span id="display_sum_debt"><?php echo formato($debt); ?></span></b>
 
                                                 </td>
-                                                <td></td>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -205,12 +203,6 @@ include("header.php");
 include("../footer.php");
 ?>
 
-</div>
-<script type="text/javascript">
-    function cambiarcont(pagina) {
-        $("#contenido").load(pagina);
-    }
-</script>
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../js/ui-load.js"></script>

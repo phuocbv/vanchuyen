@@ -26,7 +26,7 @@ require_once('library.php');
 require_once('funciones.php');
 require 'requirelanguage.php';
 
-if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Employee') {
+if ($_SESSION['user_type'] == 'Administrator') {
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     } else {
@@ -60,7 +60,7 @@ if ($date != '') {
     $dateExactly = date_format($dateExactly, "Y/m/d");
     $where .= " WHERE date = '$dateExactly'";
 }
-$where .= " ORDER BY date DESC";
+$where .= " ORDER BY date DESC, id DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
 ob_end_flush();
