@@ -52,14 +52,18 @@ if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Empl
     header('Location: ../404');
 }
 
-$date = $_GET['date'] != '' ? $_GET['date'] : '';
+
 $where = " WHERE user='" . $_SESSION['user_name'] . "' AND office='Employee' ";
+$from = $_GET['from'];
+$to = $_GET['to'];
+$sqlSearch = "SELECT * FROM cost";
+$date_form = date_create($from);
+$date_form = date_format($date_form,"Y/m/d");
+$date_to = date_create($to);
+$date_to = date_format($date_to,"Y/m/d");
 
-
-if ($date != '') {
-    $dateExactly = date_create($date);
-    $dateExactly = date_format($dateExactly, "Y/m/d");
-    $where .= " AND book_date = '$dateExactly' ";
+if (isset($from) && isset($to)) {
+    $where .= " AND book_date BETWEEN '$date_form' AND '$date_to' ";
 }
 $where .= " ORDER BY book_date DESC, cid DESC";
 
@@ -115,10 +119,13 @@ include("header.php");
                                         <table border="0" align="center">
                                             <form method="get" class="form-inline">
                                                 <tr>
-                                                    <td><strong>Date&nbsp;&nbsp;</strong></td>
                                                     <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
-                                                                type="date" class="accounting" name="date"
-                                                                value="<?php echo $date ?>"></td>
+                                                                type="date" class="accounting" name="from"
+                                                                value="<?php echo date_format(date_create($from),"Y-m-d"); ?>"></td>
+                                                    <td><strong>&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;</strong></td>
+                                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
+                                                                type="date" class="accounting" name="to"
+                                                                value="<?php echo date_format(date_create($to),"Y-m-d"); ?>"></td>
                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit"
                                                                                         class="btn btn-lg btn-success">
                                                             <i class="icon-search"></i> <strong>Search</strong></button>
@@ -161,7 +168,7 @@ include("header.php");
                                                     <td><?php echo $row['cid'] ?></td>
                                                     <td><?php echo $row['client_id'] ?></td>
                                                     <td><?php echo $row['ship_name']; ?></td>
-                                                    <td><?php echo $row['book_date']; ?></td>
+                                                    <td><?php $book_date = date_create($row['book_date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date ?></td>
                                                     <td><?php echo formato($row['shipping_subtotal']); ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
                                                     <td><?php echo formato($row['shipping_subtotal'] - $row['pay']) ?></td>

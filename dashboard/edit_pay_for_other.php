@@ -60,6 +60,8 @@ if (isset($_POST['id'])) {
     $currency = $_POST['currency'];
     $surcharge = $_POST['surcharge'];
     $pay = $_POST['pay'];
+    $pay = str_replace(".", "", $pay);
+
     if ($pay == '') {
         $pay = 0;
     }
@@ -70,7 +72,12 @@ if (isset($_POST['id'])) {
     $sqlUpdatePayForOther = "UPDATE pay_for_other SET date = '$date', exchange_rate = '$rate', 
         currency = '$currency', surcharge = '$surcharge', content = '$content', pay = '$pay' WHERE id = '$id'";
     dbQuery($sqlUpdatePayForOther);
-    header('Location: pay_for_other.php');
+    if ($_SESSION['user_type'] == 'Administrator') {
+        header('Location: pay_for_other.php');
+    } else if ($_SESSION['user_type'] == 'Employee') {
+        header('Location: pay_for_other_employee.php');
+    }
+
 }
 
 $date = '';
@@ -211,7 +218,7 @@ include("header.php");
                                             <div class="row">
                                                 <div class="col-sm-6 form-group">
                                                     <label class="control-label">Pay</label>
-                                                    <input type="number" class="form-control" name="pay" value="<?php echo $payForOther['pay']?>"/>
+                                                    <input type="text" class="form-control" id="pay" name="pay" value="<?php echo $payForOther['pay']?>"/>
                                                 </div>
                                                 <div class="col-sm-6 form-group">
                                                     <label class="control-label">Content</label>
@@ -264,8 +271,10 @@ include("header.php");
 <script src="js/kendo.all.min.js"></script>
 <!-- auto complate -->
 <script src="js/jquery.auto-complete.min.js"></script>
+<script src="js/simple.money.format.js"></script>
 <script>
     $(document).ready(function () {
+        $('#pay').simpleMoneyFormat();
         var clientID =  $('#clientID');
 
         $("#datestimepicker").kendoDateTimePicker({

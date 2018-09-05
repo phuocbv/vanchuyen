@@ -258,7 +258,7 @@ if (isset($_POST['Shippername'])) {
         dbQuery($sql_1);
 
         $sql_2 = "INSERT INTO accounting (tracking,client_id,ship_name,email,locker,book_mode,comments,shipping_subtotal,status,office,user, book_date)
-				VALUES('$pre-$cons_no','$Receivercc_r','$Shippername','$Shipperemail','$Shipperlocker','$bookingmode','$Comments','$shipping_subtotal','$status','$officename','$user',curdate() )";
+				VALUES('$pre-$cons_no','$Receivercc_r','$Receivername','$Shipperemail','$Shipperlocker','$bookingmode','$Comments','$shipping_subtotal','$status','$officename','$user',curdate() )";
         //echo $sql;
         dbQuery($sql_2);
 

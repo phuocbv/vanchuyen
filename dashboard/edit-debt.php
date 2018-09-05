@@ -57,9 +57,14 @@ $accounting = null;
 if (isset($_POST['id'])) {
     $id = decodificar($_POST['id']);
     $debt = $_POST['debt'];
+    $debt = str_replace(".", "", $debt);
     $sqlUpdateDebt = "UPDATE accounting SET pay = '$debt' WHERE cid = '$id'";
     dbQuery($sqlUpdateDebt);
-    header('Location: debt.php');
+    if ($_SESSION['user_type'] == 'Administrator') {
+        header('Location: debt.php');
+    } else if ($_SESSION['user_type'] == 'Employee') {
+        header('Location: debt_employee.php');
+    }
 }
 
 if (isset($_GET['id'])) {
@@ -174,8 +179,8 @@ include("header.php");
                                                 <div class="row">
                                                     <div class="col-sm-12 form-group">
                                                         <label class="control-label">Pay</label>
-                                                        <input type="number" class="form-control" name="debt"
-                                                               required="required"
+                                                        <input type="text" class="form-control" name="debt"
+                                                               required="required" id="pay"
                                                                value="<?php echo($accounting['pay']) ?>"/>
                                                     </div>
                                                 </div>
@@ -225,3 +230,9 @@ include("header.php");
 <script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
 <!-- auto complate -->
 <script src="js/jquery.auto-complete.min.js"></script>
+<script src="js/simple.money.format.js"></script>
+<script>
+    $(function () {
+        $('#pay').simpleMoneyFormat();
+    });
+</script>

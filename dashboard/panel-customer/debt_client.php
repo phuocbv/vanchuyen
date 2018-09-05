@@ -56,14 +56,18 @@ while ($row = mysql_fetch_array($sqlClient)) {
     $dataClient = $row;
 }
 
-$date = $_GET['date'] != '' ? $_GET['date'] : '';
 $where = " WHERE client_id = '" . $dataClient['cc'] . "'";
+$from = $_GET['from'];
+$to = $_GET['to'];
+$date_form = date_create($from);
+$date_form = date_format($date_form,"Y/m/d");
+$date_to = date_create($to);
+$date_to = date_format($date_to,"Y/m/d");
 
-if ($date != '') {
-    $dateExactly = date_create($date);
-    $dateExactly = date_format($dateExactly, "Y/m/d");
-    $where .= " AND book_date = '$dateExactly'";
+if (isset($from) && isset($to)) {
+    $where .= " AND book_date BETWEEN '$date_form' AND '$date_to' ";
 }
+
 $where .= " ORDER BY book_date DESC";
 
 date_default_timezone_set($_SESSION['ge_timezone']);
@@ -118,10 +122,14 @@ include("header.php");
                                         <table border="0" align="center">
                                             <form method="get" class="form-inline">
                                                 <tr>
-                                                    <td><strong>Date&nbsp;&nbsp;</strong></td>
+                                                    <td><strong>From&nbsp;&nbsp;</strong></td>
                                                     <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
-                                                                type="date" class="accounting" name="date"
-                                                                value="<?php echo $date ?>"></td>
+                                                                type="date" class="accounting" name="from"
+                                                                value="<?php echo date_format(date_create($from),"Y-m-d"); ?>"></td>
+                                                    <td><strong>&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;</strong></td>
+                                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
+                                                                type="date" class="accounting" name="to"
+                                                                value="<?php echo date_format(date_create($to),"Y-m-d"); ?>"></td>
                                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit"
                                                                                         class="btn btn-lg btn-success">
                                                             <i class="icon-search"></i> <strong>Search</strong></button>
@@ -135,6 +143,7 @@ include("header.php");
                                         <table id="table" class="table table-striped b-t b-b">
                                             <thead>
                                             <tr>
+                                                <td></td>
                                                 <td><strong><?php echo $L_['name_date']; ?></strong></td>
                                                 <td><strong>Revenue</strong></td>
                                                 <td><strong>Payment</strong></td>
@@ -154,7 +163,8 @@ include("header.php");
                                                 $debt += (float)($row['shipping_subtotal'] - $row['pay']);
                                                 ?>
                                                 <tr>
-                                                    <td><?php echo $row['book_date']; ?></td>
+                                                    <td></td>
+                                                    <td><?php $book_date = date_create($row['book_date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
                                                     <td><?php echo formato($row['shipping_subtotal']); ?></td>
                                                     <td><?php echo formato($row['pay']) ?></td>
                                                     <td><?php echo formato($row['shipping_subtotal'] - $row['pay']) ?></td>
@@ -163,7 +173,7 @@ include("header.php");
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <td colspan="1" style="text-align: right;" rowspan="1">
+                                                <td colspan="2" style="text-align: right;" rowspan="1">
                                                     <b><?php echo $L_['name_sales']; ?></b>
                                                 </td>
                                                 <td rowspan="1" colspan="1">
@@ -223,9 +233,9 @@ include("../footer.php");
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][1].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][2].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][3].replaceAll(",", ""));
+                sum += parseFloat(data[i][2].replaceAll(",", ""));
+                sum_pay += parseFloat(data[i][3].replaceAll(",", ""));
+                sum_debt += parseFloat(data[i][4].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
             $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));

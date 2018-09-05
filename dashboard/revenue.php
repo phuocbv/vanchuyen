@@ -52,38 +52,21 @@ if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Empl
     header('Location: ../404');
 }
 
-$day = $_GET['day'];
-$month = $_GET['month'];
-$year = $_GET['year'];
+$from = $_GET['from'];
+$to = $_GET['to'];
+$date_form = date_create($from);
+$date_form = date_format($date_form,"Y/m/d");
+$date_to = date_create($to);
+$date_to = date_format($date_to,"Y/m/d");
+
+
 $sqlRevenue = "SELECT * FROM accounting ";
 $sqlCost = "SELECT * FROM cost  ";
 $dateFull = '';
 
-if ($year != null && $year != '') {
-    if ($month != null && $month != '') {
-        if ($day != null && $day != '') {
-            $dateExactly = date_create($year . '/' . ($month + 1) . '/' . $day);
-            $dateExactly = date_format($dateExactly, "Y/m/d");
-            $sqlRevenue .= "WHERE book_date = '$dateExactly'";
-            $sqlCost .= "WHERE date = '$dateExactly'";
-            $dateFull = $year . '/' . ($month + 1) . '/' .$day;
-        } else {
-            $date_form = date_create($year . '/' . ($month + 1) . '/01');
-            $date_form = date_format($date_form, "Y/m/d");
-            $date_to = date("Y/m/t", strtotime($year . '-' . ($month + 1) . '-01'));
-            $sqlRevenue .= "WHERE book_date BETWEEN '$date_form' AND '$date_to'";
-            $sqlCost .= "WHERE date BETWEEN '$date_form' AND '$date_to'";
-            $dateFull = $year . '/' . ($month + 1);
-        }
-    } else {
-        $date_form = date_create($year . '/01/01');
-        $date_form = date_format($date_form, "Y/m/d");
-        $date_to = date_create($year . '/12/31');
-        $date_to = date_format($date_to, "Y/m/d");
-        $sqlRevenue .= "WHERE book_date BETWEEN '$date_form' AND '$date_to'";
-        $sqlCost .= "WHERE date BETWEEN '$date_form' AND '$date_to'";
-        $dateFull = $year;
-    }
+if (isset($from) && isset($to)) {
+    $sqlRevenue .= " WHERE book_date BETWEEN '$date_form' AND '$date_to' ";
+    $sqlCost .= " WHERE date BETWEEN '$date_form' AND '$date_to' ";
 }
 
 $sqlRevenue .= " ORDER BY book_date DESC";
@@ -150,47 +133,17 @@ include("header.php");
                                     <table border="0" align="center">
                                         <form name="form1" action="" method="get" class="form-inline">
                                             <tr>
-                                                <td><strong>Chọn năm&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                <td>
-                                                    <select class="accounting" name="year" id="year">
-                                                        <option value="">Chọn năm</option>
-                                                        <?php
-                                                        $endYear = date("Y");
-                                                        for ($i = $endYear; $i >= (int)START_YEAR; $i--) {
-                                                            if ($i == $year) {
-                                                                echo '<option value="' . $i . '" selected>' . $i . '</option>';
-                                                            } else {
-                                                                echo '<option value="' . $i . '">' . $i . '</option>';
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;Chọn tháng&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                <td>
-                                                    <select class="accounting" name="month" id="month">
-                                                        <option value="">Chọn tháng</option>
-                                                        <?php
-                                                        for ($i = 0; $i < 12; $i++) {
-                                                            if ($i == $month && $month != '') {
-                                                                echo "<option value='$i' selected>Tháng " . ($i + 1) . "</option>";
-                                                            } else {
-                                                                echo "<option value='$i'>Tháng " . ($i + 1) . "</option>";
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;Chọn ngày&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                <td>
-                                                    <select class="accounting" name="day" id="day">
-                                                        <option value="">Chọn ngày</option>
-                                                    </select>
-                                                </td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                                <td>
-                                                    <button type="submit" class="btn btn-lg btn-success"><i
-                                                                class="icon-search"></i><strong>Search</strong></button>
+                                                <td><strong>From&nbsp;&nbsp;</strong></td>
+                                                <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
+                                                            type="date" class="accounting" name="from"
+                                                            value="<?php echo date_format(date_create($from),"Y-m-d"); ?>"></td>
+                                                <td><strong>&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;</strong></td>
+                                                <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
+                                                            type="date" class="accounting" name="to"
+                                                            value="<?php echo date_format(date_create($to),"Y-m-d"); ?>"></td>
+                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit"
+                                                                                    class="btn btn-lg btn-success">
+                                                        <i class="icon-search"></i> <strong>Search</strong></button>
                                                 </td>
                                             </tr>
                                         </form>
@@ -201,7 +154,7 @@ include("header.php");
                                     <table id="tableRevenue" class="table table-striped b-t b-b">
                                         <thead>
                                         <tr>
-<!--                                            <td><strong>ID</strong></td>-->
+                                            <td></td>
                                             <td><strong>
                                                     <center><?php echo $L_['name_date']; ?></center>
                                                 </strong></td>
@@ -212,7 +165,10 @@ include("header.php");
                                             <td><strong><?php echo $L_['name_value']; ?>
                                                 </strong></td>
                                             <td><strong>
-                                                    <center><?php echo $L_['name_employ']; ?></center>
+                                                    <center>User</center>
+                                                </strong></td>
+                                            <td><strong>
+                                                    <center>Role</center>
                                                 </strong></td>
                                         </tr>
                                         </thead>
@@ -234,9 +190,10 @@ include("header.php");
                                             }
                                             ?>
                                             <tr>
-<!--                                                <td>--><?php //echo $row['cid'] ?><!--</td>-->
+                                                <td></td>
                                                 <td>
-                                                    <center><?php echo $row['book_date']; ?></center>
+                                                    <center><?php $book_date = date_create($row['book_date']);
+                                                            $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></center>
                                                 </td>
                                                 <td><?php echo $row['ship_name']; ?></td>
                                                 <td>
@@ -249,6 +206,9 @@ include("header.php");
                                                     <?php echo $s . ' ' . formato($row['shipping_subtotal']); ?>
                                                 </td>
                                                 <td>
+                                                    <center><?php echo $row['user']; ?></center>
+                                                </td>
+                                                <td>
                                                     <center><?php echo $row['office']; ?></center>
                                                 </td>
                                             </tr>
@@ -256,7 +216,7 @@ include("header.php");
                                         </tbody>
                                         <tfoot>
                                         <tr>
-<!--                                            <td></td>-->
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
@@ -264,6 +224,7 @@ include("header.php");
                                                 <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span
                                                             id="display_sum"><?php echo formato($sumPrice) ?></span></b>
                                             </td>
+                                            <td></td>
                                             <td></td>
                                         </tr>
                                         </tfoot>
@@ -275,7 +236,7 @@ include("header.php");
                                     <table id="tableCost" class="table table-striped b-t b-b">
                                         <thead>
                                         <tr>
-<!--                                            <td><strong>ID</strong></td>-->
+                                            <td></td>
                                             <td><strong>Date</strong></td>
                                             <td><strong>Cost Name</strong></td>
                                             <td><strong>Content</strong></td>
@@ -293,8 +254,9 @@ include("header.php");
                                                 $sumMoney += (float)$row['money'];
                                                 ?>
                                                 <tr>
-<!--                                                    <td>--><?php //echo $row['id'] ?><!--</td>-->
-                                                    <td><?php echo $row['date'] ?></td>
+                                                    <td></td>
+                                                    <td><?php $book_date = date_create($row['date']);
+                                                        $book_date = date_format($book_date, "d-m-Y"); echo $book_date;?></td>
                                                     <td><?php echo $row['cost']; ?></td>
                                                     <td><?php echo $row['content'] ?></td>
                                                     <td class="sum" value="<?php echo (int)$row['money'] ?>">
@@ -310,6 +272,7 @@ include("header.php");
                                         </tbody>
                                         <tfoot>
                                         <tr>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
@@ -387,7 +350,7 @@ include("footer.php");
             var data = tableRevenue.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][3].replaceAll(",", ""));
+                sum += parseFloat(data[i][4].replaceAll(",", ""));
             }console.log(sum);
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
@@ -397,7 +360,7 @@ include("footer.php");
             var data = tableCost.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][3].replaceAll(",", ""));
+                sum += parseFloat(data[i][4].replaceAll(",", ""));
             }
             $('#display_sum_cost').html((sum).formatMoney(2, '.', ','));
         });

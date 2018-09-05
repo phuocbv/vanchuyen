@@ -62,7 +62,7 @@ if (isset($_POST['cost'])) {
     $role = $_SESSION['user_type'];
     $date = date_create( $_POST['date']);
     $date = date_format($date,"Y/m/d");
-
+    $money = str_replace(".","",$money);
     $sqlAddCost = "INSERT INTO cost (date, content, cost, money, user, role, create_date) VALUES ('$date' , '$content', '$cost', '$money', '$user', '$role', NOW())";
     dbQuery($sqlAddCost);
 }
@@ -159,7 +159,7 @@ include("header.php");
 
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">&nbspMoney<?php if ($v2==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-                                                        <input type="number" class="form-control" name="money" id="money" required="required"/>
+                                                        <input type="text" class="form-control" name="money" id="money" required="required"/>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -206,6 +206,7 @@ include("header.php");
 <script src="js/kendo.all.min.js"></script>
 <!-- auto complate -->
 <script src="js/jquery.auto-complete.min.js"></script>
+<script src="js/simple.money.format.js"></script>
 <script>
     $(document).ready(function () {
         // create DateTimePicker from input HTML element
@@ -213,5 +214,6 @@ include("header.php");
             value: new Date(),
             dateInput: true
         });
+        $("#money").simpleMoneyFormat();
     });
 </script>

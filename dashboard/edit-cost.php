@@ -64,7 +64,7 @@ if (isset($_POST['cost_id'])) {
     $role = $_SESSION['user_type'];
     $date = date_create($_POST['date']);
     $date = date_format($date,"Y/m/d");
-
+    $money = str_replace(".","",$money);
     $sqlUpdateCost = "UPDATE cost SET date = '$date', content = '$content', cost = '$cost_name', money = '$money' WHERE id = '$id'";
     dbQuery($sqlUpdateCost);
 }
@@ -175,7 +175,7 @@ include("header.php");
 
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label">&nbspMoney<?php if ($v2==true){?><span class="error"><em><?php echo $L_['mandatory']; ?></em></span><?php }?></label>
-                                                        <input type="number" class="form-control" name="money" id="money" required="required" value="<?php echo $cost['money']?>"/>
+                                                        <input type="text" class="form-control" name="money" id="money" required="required" value="<?php echo $cost['money']?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -222,6 +222,7 @@ include("header.php");
 <script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
 <!-- auto complate -->
 <script src="js/jquery.auto-complete.min.js"></script>
+<script src="js/simple.money.format.js"></script>
 <script>
     $(document).ready(function () {
         // create DateTimePicker from input HTML element
@@ -229,5 +230,6 @@ include("header.php");
             value: new Date('<?php echo date_format(date_create($cost['date']),FORMAT_DATE_1); ?>'),
             dateInput: true
         });
+        $('#money').simpleMoneyFormat();
     });
 </script>

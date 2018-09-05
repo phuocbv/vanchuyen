@@ -114,11 +114,16 @@ ob_end_flush();
                             ?>
                             <table border="0" align="center">
                                 <tr>
-                                    <td>From&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input type="date" class="gentxt1" name="from" id="from_date"/></td>
-                                    <td>&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input type="date"  class="gentxt1" name="to" id="to_date"/></td>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-success" type="submit">Search</button>
+                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
+                                                type="date" class="accounting" name="from"
+                                                value="<?php echo date_format(date_create($from),"Y-m-d"); ?>"></td>
+                                    <td><strong>&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;</strong></td>
+                                    <td><i class="icon-append fa fa-calendar"></i>&nbsp;&nbsp;<input
+                                                type="date" class="accounting" name="to"
+                                                value="<?php echo date_format(date_create($to),"Y-m-d"); ?>"></td>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit"
+                                                                        class="btn btn-lg btn-success">
+                                            <i class="icon-search"></i> <strong>Search</strong></button>
                                     </td>
                                 </tr>
                             </table>
@@ -164,7 +169,7 @@ ob_end_flush();
                                     <td align="center"><a href="edit-cost.php?id=<?php echo codificar($row['id']); ?>">
                                             <img src="img/edit.png" height="20" width="18"></a></td>
                                     <td><strong><?php echo $row['cost']; ?></strong></td>
-                                    <td><?php echo $row['date']; ?></td>
+                                    <td><?php $book_date = date_create($row['date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
                                     <td><?php echo $row['content']; ?></td>
                                     <td class="sum"><?php echo formato($row['money']); ?></td>
 <!--                                    <td>--><?php //echo $row['user']; ?><!--</td>-->
@@ -215,7 +220,7 @@ ob_end_flush();
             var data = table.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][5].replaceAll(",", ""));
+                sum += parseFloat(data[i][4].replaceAll(",", ""));
             }
             $('#display_sum').html((sum).formatMoney(2, '.', ','));
         });
