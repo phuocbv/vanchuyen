@@ -231,13 +231,13 @@ include("../footer.php");
             var sum_pay = 0;
             var sum_debt = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][3].replaceAll(",", ""));
-                sum_pay += parseFloat(data[i][4].replaceAll(",", ""));
-                sum_debt += parseFloat(data[i][5].replaceAll(",", ""));
+                sum += parseFloat(data[i][3].replace(/\./g, '').replace(",", "."));
+                sum_pay += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
+                sum_debt += parseFloat(data[i][5].replace(/\./g, '').replace(",", "."));
             }
-            $('#display_sum').html((sum).formatMoney(2, '.', ','));
-            $('#display_sum_pay').html((sum_pay).formatMoney(2, '.', ','));
-            $('#display_sum_debt').html((sum_debt).formatMoney(2, '.', ','));
+            $('#display_sum').html((sum).formatMoney(2, ',', '.'));
+            $('#display_sum_pay').html((sum_pay).formatMoney(2, ',', '.'));
+            $('#display_sum_debt').html((sum_debt).formatMoney(2, ',', '.'));
         });
     });
 

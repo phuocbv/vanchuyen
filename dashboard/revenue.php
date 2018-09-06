@@ -350,9 +350,9 @@ include("footer.php");
             var data = tableRevenue.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
+                sum += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
             }console.log(sum);
-            $('#display_sum').html((sum).formatMoney(2, '.', ','));
+            $('#display_sum').html((sum).formatMoney(2, ',', '.'));
         });
 
         var tableCost = $('#tableCost').DataTable({order:[[0,"desc"]]});
@@ -360,9 +360,9 @@ include("footer.php");
             var data = tableCost.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
+                sum += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
             }
-            $('#display_sum_cost').html((sum).formatMoney(2, '.', ','));
+            $('#display_sum_cost').html((sum).formatMoney(2, ',', '.'));
         });
 
         year.on('change', function () {

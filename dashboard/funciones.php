@@ -120,7 +120,7 @@ function mensajes($mensaje,$tipo){
 }
 
 function formato($valor){
-	return number_format($valor,2,'.',',');
+	return number_format($valor,2,',','.');
 }
 
 function countries($doc){

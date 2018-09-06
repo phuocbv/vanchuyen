@@ -171,9 +171,7 @@ ob_end_flush();
                                     <td><strong><?php echo $row['cost']; ?></strong></td>
                                     <td><?php $book_date = date_create($row['date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
                                     <td><?php echo $row['content']; ?></td>
-                                    <td class="sum"><?php echo formato($row['money']); ?></td>
-<!--                                    <td>--><?php //echo $row['user']; ?><!--</td>-->
-<!--                                    <td>--><?php //echo $row['role']; ?><!--</td>-->
+                                    <td class="sum"><?php if ($row['money'] != '') echo formato($row['money']); else  echo "" ?></td>
                                 </tr>
                                 <?php } ?>
                                 </tbody>
@@ -220,9 +218,9 @@ ob_end_flush();
             var data = table.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replaceAll(",", ""));
+                sum += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
             }
-            $('#display_sum').html((sum).formatMoney(2, '.', ','));
+            $('#display_sum').html((sum).formatMoney(2, ',', '.'));
         });
     });
 

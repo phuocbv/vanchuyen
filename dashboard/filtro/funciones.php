@@ -112,7 +112,7 @@ function mensajes($mensaje,$user){
 }
 
 function formato($valor){
-	return number_format($valor,2, '.', ',');
+	return number_format($valor,2, ',', '.');
 }
 
 function city($doc){
