@@ -915,30 +915,27 @@ include("header.php");
                                                             <input type="hidden" class="form-control" id="pesoreal"
                                                                    name="pesoreal" value="0">
 
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr']; ?>
-                                                                        &nbsp;<?php echo $PrimerKilo; ?>
-                                                                        &nbsp;<?php echo $_SESSION['ge_measure']; ?>
-                                                                        <strong></label>
-                                                                <input type="number" class="form-control" id="sum1" name="variable" value="0"/>
+                                                            <div class="col-sm-2 form-group">
+                                                                <label class="text-primary"><strong>VND 1 Kg</strong></label>
+                                                                <input type="text" class="form-control sum1" id="sum1" name="variable" value="0"/>
+                                                            </div>
+                                                            <div class="col-sm-2 form-group">
+                                                                <label class="text-primary"><strong>Weight (Kg)</strong></label>
+                                                                <input type="text" class="form-control sum4" id="sum4" name="Weight" value="0"/>
+                                                            </div>
+                                                            <div class="col-sm-2 form-group">
+                                                                <label class="text-primary"><strong>Phụ phí</strong></label>
+                                                                <input type="text" class="form-control sum7" value="0" id="sum7" name="Totaldeclarado"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $PesoKg; ?>
-                                                                        &nbsp;(<?php echo $_SESSION['ge_measure']; ?>
-                                                                        )<strong></label>
-                                                                <input type="number" class="form-control" id="sum4" name="Weight"
-                                                                       value="0"/>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong>Phụ
-                                                                        phí<strong></label>
-                                                                <input type="number" class="form-control" value="0" id="sum7" name="Totaldeclarado"/>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong>Subtotal
-                                                                        1<strong></label>
+                                                                <label class="text-primary"><strong>Subtotal 1</strong></label>
                                                                 <input type="text" name="" value="0" disabled id="sum8"
-                                                                       class="form-control">
+                                                                       class="form-control sum8">
+                                                            </div>
+                                                            <div class="col-sm-3 form-group" style="padding-top: 25px">
+                                                                <label class="text-primary"></label>
+                                                                <button class="btn btn-success" type="button">Add
+                                                                </button>
                                                             </div>
                                                         </div>
 
@@ -946,52 +943,42 @@ include("header.php");
 
                                                         <div class="row">
                                                             <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $Altura; ?>
-                                                                        <strong></label>
-                                                                <input type="number" class="form-control" id="volume1"
-                                                                       name="altura" value="0"/>
+                                                                <label class="text-primary"><strong>Height</strong></label>
+                                                                <input type="text" class="form-control volume1" id="volume1" name="altura" value="0"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $Ancho; ?>
-                                                                        <strong></label>
-                                                                <input type="number" class="form-control" id="volume2"
-                                                                       name="ancho" value="0"/>
+                                                                <label class="text-primary"><strong>Width</strong></label>
+                                                                <input type="text" class="form-control volume2" id="volume2" name="ancho" value="0"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $Longitud; ?>
-                                                                        <strong></label>
-                                                                <input type="number" class="form-control" id="volume3"
-                                                                       name="longitud" value="0"/>
+                                                                <label class="text-primary"><strong>Length</strong></label>
+                                                                <input type="number" class="form-control volume3" id="volume3" name="longitud" value="0"/>
                                                             </div>
                                                         </div>
 
                                                         <!-- m3-->
                                                         <div class="row">
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $_SESSION['ge_curr'] . ' ' . $PrimerKilo . ' m3'; ?>
-                                                                        <strong></label>
-                                                                <input type="number" class="form-control" value="0" id="volume4" name="Totalfreight"/>
+                                                            <div class="col-sm-2 form-group">
+                                                                <label class="text-primary"><strong>VND 1 m3</strong></label>
+                                                                <input type="text" class="form-control volume4" value="0" id="volume4" name="Totalfreight"/>
+                                                            </div>
+                                                            <div class="col-sm-2 form-group">
+                                                                <label class="text-primary"><strong>Total (m3)</strong></label>
+                                                                <input type="text" class="form-control totalpeso" name="totalpeso" id="totalpeso" value="0" disabled/>
+                                                            </div>
+                                                            <div class="col-sm-2 form-group">
+                                                                <label class="text-primary"><strong>Phụ phí</strong></label>
+                                                                <input type="text" class="form-control volume5" value="0" id="volume5" name="kiloadicional"/>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong><?php echo $TotalPesoVolumetrico; ?>
-                                                                        <strong></label>
-                                                                <input type="text" class="form-control" name="totalpeso"
-                                                                       id="totalpeso" value="0" disabled/>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong>Phụ phí<strong></label>
-                                                                <input type="number" class="form-control" value="0" id="volume5" name="kiloadicional"/>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="text-primary"><strong>Subtotal
-                                                                        2</strong></label>
-                                                                <input type="text" class="form-control" value="0" disabled id="sum9"/>
+                                                                <label class="text-primary"><strong>Subtotal 2</strong></label>
+                                                                <input type="text" class="form-control sum9" value="0" disabled id="sum9"/>
                                                             </div>
                                                         </div>
 
                                                         <!-- tong -->
                                                         <div class="row">
-                                                            <div class="col-sm-9 form-group" align="right">
+                                                            <div class="col-sm-6 form-group" align="right">
                                                                 <label class="text-primary"><strong>Subtotal Shipping</strong></label>
                                                             </div>
                                                             <div class="col-sm-3 form-group">

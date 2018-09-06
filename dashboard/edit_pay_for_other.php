@@ -56,9 +56,9 @@ $user = null;
 
 if (isset($_POST['id'])) {
     $id = decodificar($_POST['id']);
-    $rate = $_POST['rate'];
-    $currency = $_POST['currency'];
-    $surcharge = $_POST['surcharge'];
+    $rate = str_replace(".", "", $_POST['rate']);
+    $currency = str_replace(".", "", $_POST['currency']);
+    $surcharge = str_replace(".", "", $_POST['surcharge']);
     $pay = $_POST['pay'];
     $pay = str_replace(".", "", $pay);
 
@@ -203,16 +203,16 @@ include("header.php");
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Rate</label>
-                                                    <input type="number" class="form-control" name="rate" required="required" value="<?php echo $payForOther['exchange_rate']?>"/>
+                                                    <input type="text" class="form-control" id="rate" name="rate" required="required" value="<?php echo $payForOther['exchange_rate']?>"/>
                                                 </div>
 
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Currency</label>
-                                                    <input type="number" class="form-control" name="currency" required="required" value="<?php echo $payForOther['currency']?>"/>
+                                                    <input type="text" class="form-control" id="currency" name="currency" required="required" value="<?php echo $payForOther['currency']?>"/>
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Surcharge</label>
-                                                    <input type="number" class="form-control" name="surcharge" required="required" value="<?php echo $payForOther['surcharge']?>"/>
+                                                    <input type="text" class="form-control" id="surcharge" name="surcharge" required="required" value="<?php echo $payForOther['surcharge']?>"/>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -275,6 +275,10 @@ include("header.php");
 <script>
     $(document).ready(function () {
         $('#pay').simpleMoneyFormat();
+        $('#surcharge').simpleMoneyFormat();
+        $('#rate').simpleMoneyFormat();
+        $('#currency').simpleMoneyFormat();
+
         var clientID =  $('#clientID');
 
         $("#datestimepicker").kendoDateTimePicker({

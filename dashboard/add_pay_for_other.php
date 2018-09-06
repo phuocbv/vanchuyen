@@ -54,9 +54,9 @@ if ($_SESSION['user_type'] == 'Administrator' or $_SESSION['user_type'] == 'Empl
 
 if (isset($_POST['clientID'])) {
     $clientID = $_POST['clientID'];
-    $rate = $_POST['rate'];
-    $currency = $_POST['currency'];
-    $surcharge = $_POST['surcharge'];
+    $rate = str_replace(".", "", $_POST['rate']);
+    $currency = str_replace(".", "", $_POST['currency']);
+    $surcharge = str_replace(".", "", $_POST['surcharge']);
     $content = $_POST['content'];
     $user = $_SESSION['user_name'];
     $role = $_SESSION['user_type'];
@@ -171,16 +171,16 @@ include("header.php");
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Rate</label>
-                                                    <input type="number" class="form-control" name="rate" required="required"/>
+                                                    <input type="text" class="form-control" id="rate" name="rate" required="required"/>
                                                 </div>
 
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Currency</label>
-                                                    <input type="number" class="form-control" name="currency" required="required"/>
+                                                    <input type="text" class="form-control" name="currency" id="currency" required="required"/>
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     <label class="control-label">Surcharge</label>
-                                                    <input type="number" class="form-control" name="surcharge" required="required"/>
+                                                    <input type="text" class="form-control" name="surcharge" id="surcharge" required="required"/>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -235,14 +235,18 @@ include("header.php");
 <script src="js/kendo.all.min.js"></script>
 <!-- auto complate -->
 <script src="js/jquery.auto-complete.min.js"></script>
+<script src="js/simple.money.format.js"></script>
 <script>
     $(document).ready(function () {
-        var clientID =  $('#clientID');
 
+        var clientID =  $('#clientID');
         $("#datestimepicker").kendoDateTimePicker({
             value: new Date(),
             dateInput: true
         });
+        $('#rate').simpleMoneyFormat();
+        $('#surcharge').simpleMoneyFormat();
+        $('#currency').simpleMoneyFormat();
         var ajaxListClient = $.ajax({
             type: 'POST',
             url: 'ajaxpais.php',

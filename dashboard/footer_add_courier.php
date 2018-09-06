@@ -24,6 +24,7 @@
 	<script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"></script>
     <!-- auto complate -->
     <script src="js/jquery.auto-complete.min.js"></script>
+    <script src="js/simple.money.format.js"></script>
 	<script>
 		$(document).ready(function () {
 			// create DateTimePicker from input HTML element
@@ -31,6 +32,16 @@
 				value: new Date(),
 				dateInput: true
 			});
+			$('.sum1').simpleMoneyFormat();
+			$('.sum4').simpleMoneyFormat();
+			$('.sum7').simpleMoneyFormat();
+//            $('.sum8').simpleMoneyFormat();
+//            $('.volume1').simpleMoneyFormat();
+//            $('.volume2').simpleMoneyFormat();
+//            $('.volume3').simpleMoneyFormat();
+
+            $('.volume4').simpleMoneyFormat();
+            $('.volume5').simpleMoneyFormat();
 		});
 	</script>
 	
@@ -356,6 +367,8 @@
         sumWeight.html(count + ' kg');
         qnty.val(0);
 
+
+        //phan tinh subtotal shipping
         var sum1 = $('#sum1');//VND 1kg
         var sum4 = $('#sum4');//weight kg
         var sum7 = $('#sum7');//phu phi
