@@ -123,6 +123,10 @@ function formato($valor){
 	return number_format($valor,2,',','.');
 }
 
+function formatMoney($value, $decimal = 2, $point = ',', $sep = '.'){
+    return number_format($value,$decimal,$point,$sep);
+}
+
 function countries($doc){
 	$sql=mysql_query("SELECT country_name FROM countries WHERE 	country_id='$doc' ");
 	if($row=mysql_fetch_array($sql)){

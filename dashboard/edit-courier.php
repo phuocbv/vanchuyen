@@ -76,6 +76,20 @@ if ($count > 0) {
             array_push($listTracking, $row);
         }
 
+        $sqlGetSubtotalOne = "SELECT * FROM subtotal_one WHERE tracking='" . $data['tracking'] . "' AND cons_no ='" . $data['cons_no'] . "'";
+        $listSubtotalOneQuery = dbQuery($sqlGetSubtotalOne);
+        $listSubtotalOne = array();
+        while ($row = mysql_fetch_array($listSubtotalOneQuery)) {
+            array_push($listSubtotalOne, $row);
+        }
+
+        $sqlGetSubtotalTwo = "SELECT * FROM subtotal_two WHERE tracking='" . $data['tracking'] . "' AND cons_no ='" . $data['cons_no'] . "'";
+        $listSubtotalTwoQuery = dbQuery($sqlGetSubtotalTwo);
+        $listSubtotalTwo = array();
+        while ($row = mysql_fetch_array($listSubtotalTwoQuery)) {
+            array_push($listSubtotalTwo, $row);
+        }
+
         extract($data);
         ob_end_flush();
         ?>
@@ -246,7 +260,7 @@ if ($count > 0) {
 
                                     <div class="col-sm-3 form-group">
                                         <label><?php echo $CantidadPaquetes; ?></label>
-                                        <input type="text" class="form-control" name="Qnty"
+                                        <input type="text" class="form-control" name="Qnty" id="qnty"
                                                value="<?php echo $qty; ?>"/>
                                     </div>
                                     <div class="col-sm-4 form-group">
@@ -268,6 +282,19 @@ if ($count > 0) {
                                     </div>
                                 </div>
 
+                                <!--default value-->
+                                <input type="hidden" class="form-control" name="Totaldeclarate" value="0"/>
+                                <input type="hidden" class="form-control" name="pesoreal" value="0">
+                                <input type="hidden" class="form-control" name="variable" value="0">
+                                <input type="hidden" class="form-control" name="Weight" value="0">
+                                <input type="hidden" class="form-control" name="Totaldeclarado" value="0">
+                                <input type="hidden" class="form-control" name="altura" value="0">
+                                <input type="hidden" class="form-control" name="ancho" value="0">
+                                <input type="hidden" class="form-control" name="longitud" value="0">
+                                <input type="hidden" class="form-control" name="Totalfreight" value="0">
+                                <input type="hidden" class="form-control" name="kiloadicional" value="0">
+                                <!--default value-->
+
                                 <!-- List Tracking -->
                                 <div class="row">
                                     <div class="col-sm-3 form-group">
@@ -278,10 +305,10 @@ if ($count > 0) {
                                     </div>
                                 </div>
 
-                                <div class="tracking">
+                                <div class="tracking " id="tracking">
                                     <?php
                                     $sum = 0;
-                                    foreach ($listTracking as $tracking) {
+                                    foreach ($listTracking as $key => $tracking) {
                                         $sum += $tracking['weight'];
                                         ?>
                                         <div class="row">
@@ -290,99 +317,265 @@ if ($count > 0) {
                                                        value="<?php echo $tracking['tracking']; ?>"/>
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                <input type="number" class="form-control weight" name="weight[]"
+                                                <input type="text" class="form-control weight" name="weight[]"
                                                        value="<?php echo $tracking['weight']; ?>"/>
                                             </div>
+                                            <?php if ($key == 0) { ?>
+                                                <div class="col-sm-6 form-group">
+                                                    <button class="btn btn-success"
+                                                            id="btn_add_tracking_number" type="button">Add
+                                                    </button>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div class="col-sm-6 form-group">
+                                                    <button class="btn btn-danger delTrackingNumber" type="button">Del
+                                                    </button>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     <?php } ?>
+                                    <div id="add_show_tracking">
+
+                                    </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-3 form-group" align="right">
-                                        <label class="control-label"><?php echo $L_SUM; ?></label>
+                                        <label class="control-label"><?php echo $L_SUM . '(kg)'; ?></label>
                                     </div>
                                     <div class="col-sm-3 form-group">
-                                        <label class="control-label" id="sum_weight"><?php echo $sum . ' kg'; ?></label>
+                                        <input type="text" class="form-control weight" disabled id="sumWeight"
+                                               value="<?php echo $sum ?>"/>
                                     </div>
                                 </div>
                                 <!-- List Tracking -->
 
                                 <!-- Payment Mode -->
-                                <input type="hidden" id="sum2" name="Totaldeclarate" class="form-control"
-                                       value="<?php echo $declarate; ?>"/>
-                                <input type="hidden" class="form-control" name="pesoreal"
-                                       value="<?php echo $pesoreal; ?>"/>
 
-                                <div class="row">
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success"><?php echo $_SESSION['ge_curr']; ?> 1 Kg</label>
-                                        <input type="number" id="sum1" class="form-control" name="variable"
-                                               value="<?php echo $variable; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success"><?php echo $PesoKg; ?></label>
-                                        <input type="number" id="sum4" class="form-control" name="Weight"
-                                               value="<?php echo $weight; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success">Phụ phí</label>
-                                        <input type="number" id="sum7" name="Totaldeclarado" class="form-control"
-                                               value="<?php echo $declarado; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success">Subtotal 1</label>
-                                        <input type="text" name="" value="<?php echo $variable * $weight + $declarado?>" disabled id="sum8"
-                                               class="form-control">
+                                <!-- List subtotal one -->
+                                <div id="caculator_list_caculator_1">
+                                    <?php $sum = 0 ?>
+                                    <?php foreach ($listSubtotalOne as $key => $value) { ?>
+                                        <?php if ($key == 0) { ?>
+                                            <div class="row del_subtotal_1">
+                                                <div class="col-sm-2 form-group">
+                                                    <label class="text-success">VND 1 Kg</label>
+                                                    <input type="text" class="form-control sum1" name="sum1[]"
+                                                           value="<?php echo $value['sum_1'] ?>"/>
+                                                </div>
+                                                <div class="col-sm-2 form-group">
+                                                    <label class="text-success">Weight (Kg)</label>
+                                                    <input type="text" class="form-control sum4" name="sum4[]"
+                                                           value="<?php echo $value['sum_4'] ?>"/>
+                                                </div>
+                                                <div class="col-sm-2 form-group">
+                                                    <label class="text-success">Phụ phí</label>
+                                                    <input type="text" class="form-control sum7"
+                                                           value="<?php echo $value['sum_7'] ?>" name="sum7[]"/>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label class="text-success">Subtotal 1</label>
+                                                    <input type="text" name=""
+                                                           value="<?php $sum += $value['sum_1'] * $value['sum_4'] + $value['sum_7'];
+                                                           echo formatMoney($value['sum_1'] * $value['sum_4'] + $value['sum_7'], 0) ?>"
+                                                           disabled
+                                                           class="form-control sum8">
+                                                </div>
+                                                <div class="col-sm-3 form-group" style="padding-top: 25px">
+                                                    <label class="text-success"></label>
+                                                    <button class="btn btn-success" type="button" id="add_subtotal_1">
+                                                        Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="row del_subtotal_1">
+                                                <div class="col-sm-2 form-group">
+                                                    <input type="text" class="form-control sum1" name="sum1[]"
+                                                           value="<?php echo $value['sum_1'] ?>"/>
+                                                </div>
+                                                <div class="col-sm-2 form-group">
+                                                    <input type="text" class="form-control sum4" name="sum4[]"
+                                                           value="<?php echo $value['sum_4'] ?>"/>
+                                                </div>
+                                                <div class="col-sm-2 form-group">
+                                                    <input type="text" class="form-control sum7"
+                                                           value="<?php echo $value['sum_7'] ?>" name="sum7[]"/>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <input type="text" name=""
+                                                           value="<?php $sum += $value['sum_1'] * $value['sum_4'] + $value['sum_7'];
+                                                           echo formatMoney($value['sum_1'] * $value['sum_4'] + $value['sum_7'], 0) ?>"
+                                                           disabled
+                                                           class="form-control sum8">
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <button class="btn btn-danger btn_del_subtotal_1" type="button">
+                                                        Del
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    <?php } ?>
+
+                                    <div id="list_subtotal_1">
+
                                     </div>
                                 </div>
+                                <!-- List subtotal one -->
 
-                                <div class="row">
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-danger"><?php echo $Altura; ?></label>
-                                        <input type="number" id="volume1" class="form-control" name="altura"
-                                               value="<?php echo $altura; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-danger"><?php echo $Ancho; ?></label>
-                                        <input type="number" id="volume2" class="form-control" name="ancho"
-                                               value="<?php echo $ancho; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label for="ccv"
-                                               class="text-danger"><?php echo $Longitud; ?></strong></i></label>
-                                        <input type="number" id="volume3" class="form-control"
-                                               name="longitud" value="<?php echo $longitud; ?>"/>
-                                    </div>
-                                </div>
-                                <?php $totalpeso = $altura * $ancho * $longitud;?>
-                                <div class="row">
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success"><?php echo $_SESSION['ge_curr']; ?> 1 m3</label>
-                                        <input type="number" id="volume4" class="form-control" name="Totalfreight"
-                                               value="<?php echo $freight; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success"><?php echo $TotalPesoVolumetrico; ?></i></label>
-                                        <input type="text" class="form-control" name="totalpeso" id="totalpeso"
-                                               value="<?php echo $totalpeso; ?>" disabled/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success">Phụ phí</label>
-                                        <input type="number" id="volume5" class="form-control" name="kiloadicional"
-                                               value="<?php echo $kiloadicional; ?>"/>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-success">Subtotal 2</label>
-                                        <input type="text" class="form-control" value="<?php echo $freight * $totalpeso + $kiloadicional?>" disabled id="sum9"/>
+                                <!-- List subtotal two -->
+                                <div id="caculator_list_caculator_2">
+                                    <?php foreach ($listSubtotalTwo as $key => $value) { ?>
+                                        <?php if ($key == 0) { ?>
+                                            <div class="show_subtotal_2">
+                                                <div class="row">
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Height</label>
+                                                        <input type="text" class="form-control volume1" name="volume1[]"
+                                                               value="<?php echo $value['volume_1'] ?>"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Width</label>
+                                                        <input type="text" class="form-control volume2" name="volume2[]"
+                                                               value="<?php echo $value['volume_2'] ?>"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Length</label>
+                                                        <input type="text" class="form-control volume3" name="volume3[]"
+                                                               value="<?php echo $value['volume_3'] ?>"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group" style="padding-top: 25px">
+                                                        <label class="text-primary"></label>
+                                                        <button class="btn btn-success" type="button"
+                                                                id="add_subtotal_2">Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                $subtotal2 = str_replace(",", ".", $value['volume_1']) *
+                                                    str_replace(",", ".", $value['volume_2']) *
+                                                    str_replace(",", ".", $value['volume_3']) * $value['volume_4'] + $value['volume_5'];
+                                                $sum += $subtotal2;
+                                                ?>
+                                                <!-- m3-->
+                                                <div class="row">
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">VND 1 m3</label>
+                                                        <input type="text" class="form-control volume4"
+                                                               value="<?php echo $value['volume_4'] ?>"
+                                                               name="volume4[]"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Total (m3)</label>
+                                                        <input type="text" class="form-control totalpeso"
+                                                               name="totalpeso"
+                                                               value="<?php echo str_replace(".", ",",str_replace(",", ".", $value['volume_1']) *
+                                                                   str_replace(",", ".",$value['volume_2']) *
+                                                                   str_replace(",", ".", $value['volume_3'])) ?>"
+                                                               disabled/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Phụ phí</label>
+                                                        <input type="text" class="form-control volume5"
+                                                               value="<?php echo $value['volume_5'] ?>"
+                                                               name="volume5[]"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Subtotal 2</label>
+                                                        <input type="text" class="form-control sum9"
+                                                               value="<?php echo formatMoney($subtotal2, 0) ?>"
+                                                               disabled/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="show_subtotal_2">
+                                                <div class="row">
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Height</label>
+                                                        <input type="text" class="form-control volume1" name="volume1[]"
+                                                               value="<?php echo $value['volume_1'] ?>"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Width</label>
+                                                        <input type="text" class="form-control volume2" name="volume2[]"
+                                                               value="<?php echo $value['volume_2'] ?>"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Length</label>
+                                                        <input type="text" class="form-control volume3" name="volume3[]"
+                                                               value="<?php echo $value['volume_3'] ?>"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group" style="padding-top: 25px">
+                                                        <label class="text-primary"></label>
+                                                        <button class="btn btn-danger btn_del_subtotal_2" type="button">
+                                                            Del
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                $subtotal2 = str_replace(",", ".", $value['volume_1']) *
+                                                    str_replace(",", ".", $value['volume_2']) *
+                                                    str_replace(",", ".", $value['volume_3']) * $value['volume_4'] + $value['volume_5'];
+                                                $sum += $subtotal2;
+                                                ?>
+                                                <!-- m3-->
+                                                <div class="row">
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">VND 1 m3</label>
+                                                        <input type="text" class="form-control volume4"
+                                                               value="<?php echo $value['volume_4'] ?>"
+                                                               name="volume4[]"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Total (m3)</label>
+                                                        <input type="text" class="form-control totalpeso"
+                                                               name="totalpeso"
+                                                               value="<?php echo str_replace(".", ",", str_replace(",", ".", $value['volume_1']) *
+                                                                   str_replace(",", ".", $value['volume_2']) *
+                                                                   str_replace(",", ".", $value['volume_3'])) ?>"
+                                                               disabled/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Phụ phí</label>
+                                                        <input type="text" class="form-control volume5"
+                                                               value="<?php echo $value['volume_5'] ?>"
+                                                               name="volume5[]"/>
+                                                    </div>
+                                                    <div class="col-sm-3 form-group">
+                                                        <label class="text-primary">Subtotal 2</label>
+                                                        <input type="text" class="form-control sum9"
+                                                               value="<?php echo formatMoney($subtotal2, 0) ?>" disabled
+                                                               id="sum9"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    <?php } ?>
+
+                                    <div id="list_subtotal_2">
+
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-9 form-group" align="right">
-                                        <label class="text-success"><strong>Subtotal Shipping</strong></label>
+                                        <label class="text-primary"><strong>Subtotal Shipping</strong></label>
                                     </div>
                                     <div class="col-sm-3 form-group">
-                                        <input type="text" class="form-control" value="<?php echo $shipping_subtotal; ?>" disabled id="resultado"/>
-                                        <input type="hidden" class="form-control" value="<?php echo $shipping_subtotal; ?>" name="shipping_subtotal" id="shipping_subtotal"/>
+                                        <input type="text" class="form-control"
+                                               value="<?php echo formatMoney($sum, 0) ?>" disabled id="resultado"/>
+                                        <input type="hidden" class="form-control" value="<?php echo $sum ?>"
+                                               name="shipping_subtotal" id="shipping_subtotal"/>
+                                    </div>
+                                </div>
+                                <!-- List subtotal one -->
+                                <div class="row">
+                                    <div class="col-sm-12 form-group">
+                                        <button class="btn btn-success" id="caculator" type="button"
+                                                style="width: 100%">Tính toán kết
+                                            quả
+                                        </button>
                                     </div>
                                 </div>
 
@@ -604,6 +797,7 @@ if ($count > 0) {
     <script src="assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 
     <script src="assets/pages/jquery.form-pickers.init.js"></script>
+    <script src="js/simple.money.format.js"></script>
 
     <script>
         var sum1 = $('#sum1');//VND 1kg
@@ -623,8 +817,19 @@ if ($count > 0) {
         $(document).ready(function () {
 //            $('.custom-select').fancySelect(); // Custom select
             $('[data-toggle="tooltip"]').tooltip() // Tooltip
+            $('.weight').simpleMoneyFormat();
+            $('.sum1').simpleMoneyFormat();
+            $('.sum4').simpleMoneyFormat();
+            $('.sum7').simpleMoneyFormat();
+//            $('.volume1').simpleMoneyFormat();
+//            $('.volume2').simpleMoneyFormat();
+//            $('.volume3').simpleMoneyFormat();
+            $('.volume4').simpleMoneyFormat();
+            $('.volume5').simpleMoneyFormat();
+
             var tracking = $('.tracking');
             var sumWeight = $('#sum_weight');
+            var addShowTrackingNumber = $('#add_show_tracking');
 //keyup blur
             tracking.on('click', '.weight', function () {
                 console.log('ok');
@@ -640,163 +845,149 @@ if ($count > 0) {
                 });
                 sumWeight.html(count + ' kg');
             });
-
-            sum1.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() === "" || sum4.val() === "") {
-                    if (sum7.val() !== "")  {
-                        sum = parseFloat(sum7.val());
-                    }
-                } else {
-                    sum = parseFloat(current.val()) * parseFloat(sum4.val());
-                    if (sum7.val() !== "") {
-                        sum += parseFloat(sum7.val());
-                    }
-                }
-                sum8.val(sum);
-                subtotal_shipping.val((sum + parseFloat(sum9.val())));
-                total.val(sum + parseFloat(sum9.val()));
+            tracking.on('click', '.delTrackingNumber', function () {
+                $(this).closest('.row').remove();
+            });
+            tracking.on('click', '#btn_add_tracking_number', function () {
+                addShowTrackingNumber.append('<div class="row">\n' +
+                    '                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                <input type="text" class="form-control" name="tracking[]"\n' +
+                    '                                                       value=""/>\n' +
+                    '                                            </div>\n' +
+                    '                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                <input type="text" class="form-control weight" name="weight[]"\n' +
+                    '                                                       value=""/>\n' +
+                    '                                            </div>\n' +
+                    '                                                <div class="col-sm-6 form-group">\n' +
+                    '                                                    <button class="btn btn-danger delTrackingNumber" type="button">Del\n' +
+                    '                                                    </button>\n' +
+                    '                                                </div>\n');
+                addShowTrackingNumber.find('.weight').simpleMoneyFormat();
             });
 
-            sum4.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() === "" || sum1.val() === "") {
-                    if (sum7.val() !== "")  {
-                        sum = parseFloat(sum7.val());
-                    }
-                } else {
-                    sum = parseFloat(current.val()) * parseFloat(sum1.val());
-                    if (sum7.val() !== "") {
-                        sum += parseFloat(sum7.val());
-                    }
-                }
-                sum8.val(sum);
-                subtotal_shipping.val((sum + parseFloat(sum9.val())));
-                total.val(sum + parseFloat(sum9.val()));
+            $('#add_subtotal_2').on('click', function () {
+                $('#list_subtotal_2').append('<div class="show_subtotal_2"><div class="row">\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">Height</label>\n' +
+                    '                                                                <input type="text" class="form-control volume1" name="volume1[]" value="0"/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">Width</label>\n' +
+                    '                                                                <input type="text" class="form-control volume2" name="volume2[]" value="0"/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">Length</label>\n' +
+                    '                                                                <input type="text" class="form-control volume3" name="volume3[]" value="0"/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                            <div class="col-sm-3 form-group" style="padding-top: 25px">\n' +
+                    '                                                                <label class="text-primary"></label>\n' +
+                    '                                                                <button class="btn btn-danger btn_del_subtotal_2" type="button">Del\n' +
+                    '                                                                </button>\n' +
+                    '                                                            </div>\n' +
+                    '                                                        </div>\n' +
+                    '\n' +
+                    '                                                        <!-- m3-->\n' +
+                    '                                                        <div class="row">\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">VND 1 m3</label>\n' +
+                    '                                                                <input type="text" class="form-control volume4" value="0" name="volume4[]"/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">Total (m3)</label>\n' +
+                    '                                                                <input type="text" class="form-control totalpeso" name="totalpeso" value="0" disabled/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">Phụ phí</label>\n' +
+                    '                                                                <input type="text" class="form-control volume5" value="0" name="volume5[]"/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                                <label class="text-primary">Subtotal 2</label>\n' +
+                    '                                                                <input type="text" class="form-control sum9" value="0" disabled id="sum9"/>\n' +
+                    '                                                            </div>\n' +
+                    '                                                        </div></div>');
+                $('#list_subtotal_2').find('.volume4').simpleMoneyFormat();
+                $('#list_subtotal_2').find('.volume5').simpleMoneyFormat();
             });
 
-            sum7.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (sum4.val() === "" || sum1.val() === "") {
-                    if (current.val() !== "")  {
-                        sum = parseFloat(current.val());
-                    }
-                } else {
-                    sum = parseFloat(sum4.val()) * parseFloat(sum1.val());
+
+            $('#caculator_list_caculator_2').on('click', '.btn_del_subtotal_2', function () {
+                $(this).closest('.show_subtotal_2').remove();
+            });
+            $('#add_subtotal_1').on('click', function () {
+                $('#list_subtotal_1').append('<div class="row del_subtotal_1"><div class="col-sm-2 form-group">\n' +
+                    '<input type="text" class="form-control sum1" name="sum1[]" value="0"/>' +
+                    '</div>\n' +
+                    '<div class="col-sm-2 form-group">\n' +
+                    '<input type="text" class="form-control sum4" name="sum4[]" value="0"/>\n' +
+                    '</div>\n' +
+                    '<div class="col-sm-2 form-group">\n' +
+                    '<input type="text" class="form-control sum7" value="0" name="sum7[]"/>\n' +
+                    '</div>\n' +
+                    '<div class="col-sm-3 form-group">\n' +
+                    '<input type="text" name="" value="0" disabled class="form-control sum8">\n' +
+                    '</div>\n' +
+                    '<div class="col-sm-3 form-group">\n' +
+                    '<button class="btn btn-danger btn_del_subtotal_1" type="button">Del\n' +
+                    '</button>\n' +
+                    '</div></div>')
+                $('#list_subtotal_1').find('.sum1').simpleMoneyFormat();
+                $('#list_subtotal_1').find('.sum4').simpleMoneyFormat();
+                $('#list_subtotal_1').find('.sum7').simpleMoneyFormat();
+            });
+            $('#caculator_list_caculator_1').on('click', '.btn_del_subtotal_1', function () {
+                $(this).closest('.del_subtotal_1').remove();
+            });
+
+            $('#caculator').on('click', function () {
+                var tong = 0;
+                var count = 0;
+                var trackingNumber = 0;
+                $('#tracking').find('.weight').each(function () {
+                    var current = $(this);
+                    count++;
                     if (current.val() !== "") {
-                        sum += parseFloat(current.val());
+                        trackingNumber += parseFloat(current.val().replace(/\./g, ''));
                     }
-                }
-                sum8.val(sum);
-                subtotal_shipping.val((sum + parseFloat(sum9.val())));
-                total.val((sum + parseFloat(sum9.val())));
-            });
-
-            volume1.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() !== "" && volume2.val() !== "" && volume3.val() !== "") {
-                    sum = parseInt(current.val()) * parseInt(volume2.val()) * parseInt(volume3.val());
-                }
-                var sum_1 = 0;
-                if (volume4.val() === "") {
-                    if (volume5.val() !== "") {
-                        sum_1 = parseFloat(volume5.val());
-                    }
-                } else {
-                    sum_1 += sum * parseFloat(volume4.val());
-                    if (volume5.val() !== "") {
-                        sum_1 += parseFloat(volume5.val());
-                    }
-                }
-
-                totalpeso.val(sum);
-                sum9.val(sum_1);
-                subtotal_shipping.val((sum_1 + parseFloat(sum8.val())));
-                total.val((sum_1 + parseFloat(sum8.val())));
-            });
-
-            volume2.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() !== "" && volume1.val() !== "" && volume3.val() !== "") {
-                    sum = parseInt(current.val()) * parseInt(volume1.val()) * parseInt(volume3.val());
-                }
-                var sum_1 = 0;
-                if (volume4.val() === "") {
-                    if (volume5.val() !== "") {
-                        sum_1 = parseFloat(volume5.val());
-                    }
-                } else {
-                    sum_1 += sum * parseFloat(volume4.val());
-                    if (volume5.val() !== "") {
-                        sum_1 += parseFloat(volume5.val());
-                    }
-                }
-                totalpeso.val(sum);
-                sum9.val(sum_1);
-                subtotal_shipping.val((sum_1 + parseFloat(sum8.val())));
-                total.val((sum_1 + parseFloat(sum8.val())));
-            });
-
-            volume3.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() !== "" && volume2.val() !== "" && volume1.val() !== "") {
-                    sum = parseInt(current.val()) * parseInt(volume2.val()) * parseInt(volume1.val());
-                }
-                var sum_1 = 0;
-                if (volume4.val() === "") {
-                    if (volume5.val() !== "") {
-                        sum_1 = parseFloat(volume5.val());
-                    }
-                } else {
-                    sum_1 += sum * parseFloat(volume4.val());
-                    if (volume5.val() !== "") {
-                        sum_1 += parseFloat(volume5.val());
-                    }
-                }
-                totalpeso.val(sum);
-                sum9.val(sum_1);
-                subtotal_shipping.val((sum_1 + parseFloat(sum8.val())));
-                total.val((sum_1 + parseFloat(sum8.val())));
-            });
-
-            volume4.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() === "") {
-                    if (volume5.val() !== "") {
-                        sum = parseFloat(volume5.val());
-                    }
-                } else {
-                    sum = parseFloat(current.val()) * parseInt(totalpeso.val());
-                    if (volume5.val() !== "") {
-                        sum += parseFloat(volume5.val());
-                    }
-                }
-                sum9.val(sum);
-                subtotal_shipping.val((sum + parseFloat(sum8.val())));
-                total.val((sum + parseFloat(sum8.val())));
-            });
-
-            volume5.on('keyup blur', function () {
-                var current = $(this);
-                var sum = 0;
-                if (current.val() !== "") {
-                    sum += parseFloat(current.val());
-                }
-                if (volume4.val() !== "") {
-                    sum +=  parseFloat(volume4.val()) * parseInt(totalpeso.val());
-                }
-                sum9.val(sum);
-                subtotal_shipping.val((sum + parseFloat(sum8.val())));
-                total.val((sum + parseFloat(sum8.val())));
+                });
+                $('#caculator_list_caculator_1').find('.del_subtotal_1').each(function () {
+                    var current = $(this);
+                    var subtotal_1 = parseFloat(current.find('.sum1').val().replace(/\./g, ''))
+                        * parseFloat(current.find('.sum4').val().replace(/\./g, ''))
+                        + parseFloat(current.find('.sum7').val().replace(/\./g, ''));
+                    current.find('.sum8').val(subtotal_1.formatMoney(0, ',', '.'));
+                    tong += subtotal_1;
+                    count++;
+                });
+                $('#caculator_list_caculator_2').find('.show_subtotal_2').each(function () {
+                    var current = $(this);
+                    var the_tich = parseFloat(current.find('.volume1').val().replace(',', '.'))
+                        * parseFloat(current.find('.volume2').val().replace(',', '.'))
+                        * parseFloat(current.find('.volume3').val().replace(',', '.'));
+                    current.find('.totalpeso').val(the_tich.toFixed(2).replace('.', ','));
+                    var subtotal_2 = parseFloat(current.find('.volume4').val().replace(/\./g, ''))
+                        * parseFloat(current.find('.totalpeso').val().replace(',', '.'))
+                        + parseFloat(current.find('.volume5').val().replace(/\./g, ''));
+                    current.find('.sum9').val(subtotal_2.formatMoney(0, ',', '.'));
+                    tong += subtotal_2;
+                    count++;
+                });
+                $('#sumWeight').val(trackingNumber.formatMoney(0, ',', '.'));
+                $('#qnty').val(count);
+                subtotal_shipping.val(tong.formatMoney(0, ',', '.'));
+                total.val(tong);
             });
         });
+        Number.prototype.formatMoney = function (c, d, t) {
+            var n = this,
+                c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
     </script>
     <script language="javascript" type="text/javascript">
         function suma() {
@@ -820,6 +1011,8 @@ if ($count > 0) {
             totalpeso = parseInt(volume1.value * volume2.value * volume3.value / 6000);
             input.value = totalpeso;
         }
+
+
     </script>
 </body>
     </html>
