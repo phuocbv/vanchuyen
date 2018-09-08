@@ -200,8 +200,14 @@ if (isset($_POST['Shippername'])) {
         $status_delivered = $_POST['status_delivered'];
         $payment = $_POST['payment'];
         $paymode = $_POST['paymode'];
+
+        //tracking kg
         $trackingNumbers = $_POST['tracking_number'];
         $weights = $_POST['weight'];
+
+        //tracking m3
+        $trackingM3 = $_POST['m3'];
+        $trackingNumberM3 = $_POST['tracking_number_m3'];
 
         //subtotal one
         $listSum1 = $_POST['sum1'];
@@ -273,14 +279,23 @@ if (isset($_POST['Shippername'])) {
         //echo $sql;
         dbQuery($sql_2);
 
-        //insert tracking number
-        $sqlInsertTracking = "INSERT INTO tracking_number (tracking, cons_no, weight, update_date) VALUES ";
+        //insert tracking number kg
+        $sqlInsertTracking = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
 
         foreach ($trackingNumbers as $key => $trackingNumber) {
-            $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . str_replace(".", "", $weights[$key]) . ", NOW())";
+            $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . str_replace(".", "", $weights[$key]) . ", 'kg',  NOW())";
         }
 
         dbQuery($sqlInsertTracking . implode(",", $query_values));
+
+        //insert tracking number m3
+        $sqlInsertTrackingM3 = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
+
+        foreach ($trackingNumberM3 as $key => $item) {
+            $query_values_m3[] = "('" . $item . "', " . $cons_no . ", " . str_replace(".", "", $trackingM3[$key]) . ", 'm3',  NOW())";
+        }
+
+        dbQuery($sqlInsertTrackingM3 . implode(",", $query_values_m3));
 
         //insert subtotal_one
         //INSERT INTO `vc`.`subtotal_one`(`tracking`, `cons_no`, `sum_1`, `sum_4`, `sum_7`) VALUES ('1', '1', '1', '1', '1')
@@ -873,7 +888,7 @@ include("header.php");
                                                             <div class="row tracking">
                                                                 <div class="col-sm-6 form-group" align="right">
                                                                     <button class="btn btn-success"
-                                                                            id="btn_add_tracking_number" type="button">Add
+                                                                            id="btn_add_tracking_number" type="button">Add(kg)
                                                                     </button>
                                                                 </div>
                                                                 <div class="col-sm-3 form-group">
@@ -896,6 +911,36 @@ include("header.php");
                                                                      align="right"><?php echo $L_SUM; ?></div>
                                                                 <div class="col-sm-3 form-group">
                                                                     <input type="text" class="form-control" id="sum_weight" disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="list_tracking_m3">
+                                                            <div class="row tracking_m3">
+                                                                <div class="col-sm-6 form-group" align="right">
+                                                                    <button class="btn btn-success"
+                                                                            id="btn_add_tracking_m3" type="button">Add(m3)
+                                                                    </button>
+                                                                </div>
+                                                                <div class="col-sm-3 form-group">
+                                                                    <input type="text" class="form-control"
+                                                                           name="tracking_number_m3[]"
+                                                                           placeholder="tracking m3"
+                                                                           required="required">
+                                                                </div>
+                                                                <div class="col-sm-3 form-group">
+                                                                    <input type="text" class="form-control input_m3"
+                                                                           name="m3[]"
+                                                                           placeholder="m3"
+                                                                           required="required">
+                                                                </div>
+                                                            </div>
+                                                            <div class="add_tracking_number_m3 tracking"></div>
+                                                            <div class="row sum_m3">
+                                                                <div class="col-sm-9 form-group"
+                                                                     align="right">Tổng</div>
+                                                                <div class="col-sm-3 form-group">
+                                                                    <input type="text" class="form-control" id="sum_m3" disabled>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1041,15 +1086,18 @@ include("header.php");
                                                         </div>
                                                         <!-- tong -->
                                                         <div class="row">
-                                                            <div class="col-sm-3 form-group">
-                                                                <button class="btn btn-success" id="caculator" type="button" style="width: 100%">Tính toán kết quả</button>
-                                                            </div>
-                                                            <div class="col-sm-6     form-group" align="right">
+                                                            <div class="col-sm-3 form-group"></div>
+                                                            <div class="col-sm-6 form-group" align="right">
                                                                 <label class="text-primary"><strong>Subtotal Shipping</strong></label>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <input type="text" class="form-control" value="0" disabled id="resultado"/>
                                                                 <input type="hidden" class="form-control" value="0" name="shipping_subtotal" id="shipping_subtotal"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12 form-group">
+                                                                <button class="btn btn-success" id="caculator" type="button" style="width: 100%">Tính toán kết quả</button>
                                                             </div>
                                                         </div>
                                                     </fieldset>

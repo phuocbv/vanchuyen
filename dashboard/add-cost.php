@@ -147,7 +147,7 @@ include("header.php");
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label"><i class="fa fa-calendar icon text-default-lter"></i>Date<span class="required-field">*</span></label>
                                                         <div class="demo-section k-content">
-                                                            <input type="date" class="form-control" name="date" id="datestimepicker" title="datestimepicker" required>
+                                                            <input type="date" class="form-control" name="date" value="<?php echo date('Y-m-d')?>" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -210,10 +210,10 @@ include("header.php");
 <script>
     $(document).ready(function () {
         // create DateTimePicker from input HTML element
-        $("#datestimepicker").kendoDateTimePicker({
-            value: new Date(),
-            dateInput: true
-        });
+//        $("#datestimepicker").kendoDateTimePicker({
+//            value: new Date(),
+//            dateInput: true
+//        });
         $("#money").simpleMoneyFormat();
     });
 </script>

@@ -309,13 +309,15 @@
         });
 
         var addTrackingNumber = $('.add_tracking_number');
+        var addTrackingM3 = $('.add_tracking_number_m3');
         var tracking = $('.tracking');
         var qnty = $('.qnty');
         var sumWeight = $('#sum_weight');
+        $('#list_tracking_m3').find('.input_m3').simpleMoneyFormat();
 
         $('#btn_add_tracking_number').on('click', function () {
             addTrackingNumber.append('<div class="row tracking_number"><div class="col-sm-6 form-group" align="right">' +
-                '<button class="btn btn-danger delTrackingNumber" type="button">Del</button></div>\n' +
+                '<button class="btn btn-danger delTrackingNumber" type="button">Del(kg)</button></div>\n' +
                 '<div class="col-sm-3 form-group"><input type="text" class="form-control" name="tracking_number[]" placeholder="Tracking number" required="required"></div>\n' +
                 '<div class="col-sm-3 form-group"><input type="text" class="form-control input_weight" name="weight[]" placeholder="Weight(kg)" required="required"></div></div>')
             addTrackingNumber.find('.input_weight').simpleMoneyFormat();
@@ -325,33 +327,31 @@
             $(this).parents('.tracking_number').remove();
         });
 
-//        tracking.on('keyup blur', '.input_weight', function () {
-//            var inputWeight = $('.tracking input.input_weight');
-//            var count = 0;
-//            var i = 0;
-//            inputWeight.each(function () {
-//                var weight = $(this).val().replace(/\./g, '');
-//                if (weight !== "NaN") {
-//                    i++;
-//                    count += parseInt(weight) > 0 ? parseInt(weight) : 0;
-//                }
-//            });
-//            sumWeight.html(count.formatMoney(0, ',', '.') + ' kg');
-//            qnty.val(i);
-//        });
+        $('#btn_add_tracking_m3').on('click', function () {
+            addTrackingM3.append('<div class="row tracking_m3">\n' +
+                '                                                                <div class="col-sm-6 form-group" align="right">\n' +
+                '                                                                    <button class="btn btn-danger btn_del_tracking_m3" type="button">Del(m3)\n' +
+                '                                                                    </button>\n' +
+                '                                                                </div>\n' +
+                '                                                                <div class="col-sm-3 form-group">\n' +
+                '                                                                    <input type="text" class="form-control"\n' +
+                '                                                                           name="tracking_number_m3[]"\n' +
+                '                                                                           placeholder="tracking m3"\n' +
+                '                                                                           required="required">\n' +
+                '                                                                </div>\n' +
+                '                                                                <div class="col-sm-3 form-group">\n' +
+                '                                                                    <input type="text" class="form-control input_m3"\n' +
+                '                                                                           name="m3[]"\n' +
+                '                                                                           placeholder="m3"\n' +
+                '                                                                           required="required">\n' +
+                '                                                                </div>\n' +
+                '                                                            </div>')
+            addTrackingM3.find('.input_m3').simpleMoneyFormat();
+        });
 
-//        var inputWeight = $('.tracking input.input_weight');
-//        var count = 0;
-//        var i = 0;
-//        inputWeight.each(function () {
-//            var weight = $(this).val().replace(/\./g, '');
-//            if (weight !== "NaN") {
-//                i++;
-//                count += parseInt(weight) > 0 ? parseInt(weight) : 0;
-//            }
-//        });
-//        sumWeight.html(count.formatMoney(0, ',', '.') + ' kg');
-//        qnty.val(0);
+        $('#list_tracking_m3').on('click', '.btn_del_tracking_m3', function () {
+            $(this).closest('.tracking_m3').remove();
+        });
 
 
         //phan tinh subtotal shipping
@@ -373,10 +373,16 @@
             var tong = 0;
             var count = 0;
             var trackingNumber = 0;
+            var trackingM3 = 0;
             $('#list_tracking').find('.input_weight').each(function () {
                 var current = $(this);
                 count++;
                 trackingNumber += parseFloat(current.val().replace(/\./g, ''));
+            });
+            $('#list_tracking_m3').find('.input_m3').each(function () {
+                var current = $(this);
+                trackingM3 += parseFloat(current.val().replace(/\./g, ''));
+                count++;
             });
             $('#caculator_list_caculator_1').find('.del_subtotal_1').each(function () {
                 var current = $(this);
@@ -385,7 +391,6 @@
                     + parseFloat(current.find('.sum7').val().replace(/\./g, ''));
                 current.find('.sum8').val(subtotal_1.formatMoney(0, ',', '.'));
                 tong += subtotal_1;
-                count++;
             });
             $('#caculator_list_caculator_2').find('.show_subtotal_2').each(function () {
                 var current = $(this);
@@ -398,9 +403,9 @@
                     + parseFloat(current.find('.volume5').val().replace(/\./g, ''));
                 current.find('.sum9').val(subtotal_2.formatMoney(0, ',', '.'));
                 tong += subtotal_2;
-                count++;
             });
             sumWeight.val(trackingNumber.formatMoney(0, ',', '.'));
+            $('#sum_m3').val(trackingM3.formatMoney(0, ',', '.'));
             subtotal_shipping.val(tong.formatMoney(0, ',', '.'));
             total.val(tong);
             qnty.val(count);

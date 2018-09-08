@@ -198,7 +198,7 @@ include("header.php");
                                                                 class="required-field">*</span></label>
                                                     <div class="demo-section k-content">
                                                         <input type="date" class="form-control" name="date"
-                                                               id="datestimepicker" title="datestimepicker" required>
+                                                               value="<?php echo $date?>" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3 form-group">

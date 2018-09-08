@@ -79,6 +79,10 @@ $ruta_imagen = $_POST['ruta_imagen'];
 $trackingNumbers = $_POST['tracking'];
 $weights = $_POST['weight'];
 
+//tracking m3
+$trackingM3 = $_POST['m3'];
+$trackingNumberM3 = $_POST['tracking_number_m3'];
+
 //subtotal one
 $listSum1 = $_POST['sum1'];
 $listSum4 = $_POST['sum4'];
@@ -137,13 +141,23 @@ $pre_cons_no = $courier['tracking'];
 $cons_no = $courier['cons_no'];
 
 //insert tracking number
-$sqlInsertTracking = "INSERT INTO tracking_number (tracking, cons_no, weight, update_date) VALUES ";
+$sqlInsertTrackingKg = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
 
 foreach ($trackingNumbers as $key => $trackingNumber) {
-    $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . str_replace(".", "", $weights[$key]) . ", NOW())";
+    $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . str_replace(".", "", $weights[$key]) . ", 'kg', NOW())";
 }
 
-dbQuery($sqlInsertTracking . implode(",", $query_values));
+dbQuery($sqlInsertTrackingKg . implode(",", $query_values));
+
+
+//insert tracking number m3
+$sqlInsertTrackingM3 = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
+
+foreach ($trackingNumberM3 as $key => $item) {
+    $query_values_m3[] = "('" . $item . "', " . $cons_no . ", " . str_replace(".", "", $trackingM3[$key]) . ", 'm3',  NOW())";
+}
+
+dbQuery($sqlInsertTrackingM3 . implode(",", $query_values_m3));
 
 //insert subtotal_one
 $sqlInsertSubtotalOne = "INSERT INTO subtotal_one(tracking, cons_no, sum_1, sum_4, sum_7) VALUES ";

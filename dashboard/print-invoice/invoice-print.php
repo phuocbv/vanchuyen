@@ -39,11 +39,18 @@ while ($row = dbFetchAssoc($result)) {
     $dataCourier = $row;
 }
 
-$sqlTrackingNumber = "SELECT * FROM tracking_number where cons_no='" . $dataCourier['cons_no'] . "'";
+$sqlTrackingNumber = "SELECT * FROM tracking_number where cons_no='" . $dataCourier['cons_no'] . "' AND type='kg'";
 $result = dbQuery($sqlTrackingNumber);
 $dataTrackingNumbers = array();
 while ($row = dbFetchAssoc($result)) {
     array_push($dataTrackingNumbers, $row);
+}
+
+$sqlTrackingM3 = "SELECT * FROM tracking_number where cons_no='" . $dataCourier['cons_no'] . "' AND type='m3'";
+$result = dbQuery($sqlTrackingM3);
+$dataTrackingM3 = array();
+while ($row = dbFetchAssoc($result)) {
+    array_push($dataTrackingM3, $row);
 }
 
 ?>
@@ -202,14 +209,14 @@ while ($row = dbFetchAssoc($result)) {
         </div><!-- /.row -->
         <div class="row">
             <!-- accepted payments column -->
-            <div class="col-xs-6">
+            <div class="col-xs-3">
                 <!-- List Tracking -->
-                <p class="lead">Trucking Number</p>
+<!--                <p class="lead">Tracking Weight</p>-->
                 <div class="table-responsive" style="font-size: 10px">
                     <table class="table">
                         <thead>
-                        <th><?php echo $L_TRACKING; ?></th>
-                        <th><?php echo $L_WEIGHT; ?></th>
+                        <th>Tracking</th>
+                        <th>Weight</th>
                         </thead>
                         <tbody>
                         <?php
@@ -225,7 +232,36 @@ while ($row = dbFetchAssoc($result)) {
                         </tbody>
                         <tfoot>
                         <td><?php echo $L_SUM; ?></td>
-                        <td><?php echo $sum . ' kg'; ?></td>
+                        <td><?php echo $sum . ' (kg)'; ?></td>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- List Tracking -->
+            </div><!-- /.col -->
+            <div class="col-xs-3">
+                <!-- List Tracking -->
+<!--                <p class="lead">Tracking Weight</p>-->
+                <div class="table-responsive" style="font-size: 10px">
+                    <table class="table">
+                        <thead>
+                        <th>Tracking</th>
+                        <th>m3</th>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $sum = 0;
+                        foreach ($dataTrackingM3 as $tracking) {
+                            $sum += $tracking['weight'];
+                            ?>
+                            <tr>
+                                <td style="width:50%"><?php echo $tracking['tracking']; ?></td>
+                                <td><?php echo $tracking['weight']; ?></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                        <tfoot>
+                        <td><?php echo $L_SUM; ?></td>
+                        <td><?php echo $sum . ' (m3)'; ?></td>
                         </tfoot>
                     </table>
                 </div>

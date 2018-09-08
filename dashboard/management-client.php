@@ -300,7 +300,7 @@ include("header.php");
                                                     <label for="officer_name"
                                                            class="col-sm-2 control-label"><?php echo $CEDULA; ?></label>
                                                     <div class="col-sm-10">
-                                                        <input type="number" class="form-control officer_name"
+                                                        <input type="text" class="form-control officer_name"
                                                                parsley-trigger="change" required name="cc"
                                                                placeholder="<?php echo $numbercedula; ?>">
                                                     </div>

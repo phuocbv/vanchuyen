@@ -163,7 +163,8 @@ include("header.php");
                                                     <div class="col-sm-6 form-group">
                                                         <label  class="control-label"><i class="fa fa-calendar icon text-default-lter"></i>Date<span class="required-field">*</span></label>
                                                         <div class="demo-section k-content">
-                                                            <input type="date" class="form-control" name="date" id="datestimepicker" title="datestimepicker" required value="<?php echo $cost['date']?>">
+                                                            <input type="date" class="form-control" name="date"
+                                                                   required value="<?php echo date_format(date_create($cost['date']),"Y-m-d")?>">
                                                         </div>
                                                     </div>
                                                 </div>

@@ -68,12 +68,20 @@ if ($count > 0) {
 
     while ($data = dbFetchAssoc($result)) {
         //get list tracking
-        $sqGetListTracking = "SELECT * FROM tracking_number WHERE cons_no ='" . $data['cons_no'] . "'";
-        $listTrackingQuery = dbQuery($sqGetListTracking);
-        $listTracking = array();
+        $sqGetListTrackingKg = "SELECT * FROM tracking_number WHERE cons_no ='" . $data['cons_no'] . "' AND type='kg'";
+        $listTrackingQuerykg = dbQuery($sqGetListTrackingKg);
+        $listTrackingKg = array();
 
-        while ($row = mysql_fetch_array($listTrackingQuery)) {
-            array_push($listTracking, $row);
+        while ($row = mysql_fetch_array($listTrackingQuerykg)) {
+            array_push($listTrackingKg, $row);
+        }
+
+        $sqGetListTrackingM3 = "SELECT * FROM tracking_number WHERE cons_no ='" . $data['cons_no'] . "' AND type='m3'";
+        $listTrackingQueryM3 = dbQuery($sqGetListTrackingM3);
+        $listTrackingM3 = array();
+
+        while ($row = mysql_fetch_array($listTrackingQueryM3)) {
+            array_push($listTrackingM3, $row);
         }
 
         $sqlGetSubtotalOne = "SELECT * FROM subtotal_one WHERE tracking='" . $data['tracking'] . "' AND cons_no ='" . $data['cons_no'] . "'";
@@ -308,7 +316,7 @@ if ($count > 0) {
                                 <div class="tracking " id="tracking">
                                     <?php
                                     $sum = 0;
-                                    foreach ($listTracking as $key => $tracking) {
+                                    foreach ($listTrackingKg as $key => $tracking) {
                                         $sum += $tracking['weight'];
                                         ?>
                                         <div class="row">
@@ -323,12 +331,12 @@ if ($count > 0) {
                                             <?php if ($key == 0) { ?>
                                                 <div class="col-sm-6 form-group">
                                                     <button class="btn btn-success"
-                                                            id="btn_add_tracking_number" type="button">Add
+                                                            id="btn_add_tracking_number" type="button">Add(kg)
                                                     </button>
                                                 </div>
                                             <?php } else { ?>
                                                 <div class="col-sm-6 form-group">
-                                                    <button class="btn btn-danger delTrackingNumber" type="button">Del
+                                                    <button class="btn btn-danger delTrackingNumber" type="button">Del(kg)
                                                     </button>
                                                 </div>
                                             <?php } ?>
@@ -345,6 +353,50 @@ if ($count > 0) {
                                     </div>
                                     <div class="col-sm-3 form-group">
                                         <input type="text" class="form-control weight" disabled id="sumWeight"
+                                               value="<?php echo $sum ?>"/>
+                                    </div>
+                                </div>
+
+                                <div class="list_tracking_m3 " id="list_tracking_m3">
+                                    <?php
+                                    $sum = 0;
+                                    foreach ($listTrackingM3 as $key => $tracking) {
+                                        $sum += $tracking['weight'];
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-sm-3 form-group">
+                                                <input type="text" class="form-control" name="tracking_number_m3[]"
+                                                       value="<?php echo $tracking['tracking']; ?>"/>
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                <input type="text" class="form-control input_m3" name="m3[]"
+                                                       value="<?php echo $tracking['weight']; ?>"/>
+                                            </div>
+                                            <?php if ($key == 0) { ?>
+                                                <div class="col-sm-6 form-group">
+                                                    <button class="btn btn-success"
+                                                            id="btn_add_tracking_m3" type="button">Add(m3)
+                                                    </button>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div class="col-sm-6 form-group">
+                                                    <button class="btn btn-danger delTrackingNumberM3" type="button">Del(m3)
+                                                    </button>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                    <?php } ?>
+                                    <div id="add_tracking_number_m3">
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-3 form-group" align="right">
+                                        <label class="control-label">Tổng(m3)</label>
+                                    </div>
+                                    <div class="col-sm-3 form-group">
+                                        <input type="text" class="form-control weight" disabled id="sum_m3"
                                                value="<?php echo $sum ?>"/>
                                     </div>
                                 </div>
@@ -859,10 +911,30 @@ if ($count > 0) {
                     '                                                       value=""/>\n' +
                     '                                            </div>\n' +
                     '                                                <div class="col-sm-6 form-group">\n' +
-                    '                                                    <button class="btn btn-danger delTrackingNumber" type="button">Del\n' +
+                    '                                                    <button class="btn btn-danger delTrackingNumber" type="button">Del(kg)\n' +
                     '                                                    </button>\n' +
                     '                                                </div>\n');
                 addShowTrackingNumber.find('.weight').simpleMoneyFormat();
+            });
+
+            $('#btn_add_tracking_m3').on('click', function () {
+                $('#add_tracking_number_m3').append('<div class="row">\n' +
+                    '                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                <input type="text" class="form-control" name="tracking_number_m3[]"/>\n'+
+                    '                                            </div>\n' +
+                    '                                            <div class="col-sm-3 form-group">\n' +
+                    '                                                <input type="text" class="form-control input_m3" name="m3[]">\n' +
+                    '                                            </div>\n' +
+                    '                                                <div class="col-sm-6 form-group">\n' +
+                    '                                                    <button class="btn btn-danger delTrackingNumberM3" type="button">Del(m3)\n' +
+                    '                                                    </button>\n' +
+                    '                                                </div>\n' +
+                    '                                        </div>');
+                $('#list_tracking_m3').find('.input_m3').simpleMoneyFormat();
+            });
+
+            $('#list_tracking_m3').on('click', '.delTrackingNumberM3', function () {
+                $(this).closest('.row').remove();
             });
 
             $('#add_subtotal_2').on('click', function () {
@@ -942,11 +1014,19 @@ if ($count > 0) {
                 var tong = 0;
                 var count = 0;
                 var trackingNumber = 0;
+                var trackingM3 = 0;
                 $('#tracking').find('.weight').each(function () {
                     var current = $(this);
-                    count++;
                     if (current.val() !== "") {
+                        count++;
                         trackingNumber += parseFloat(current.val().replace(/\./g, ''));
+                    }
+                });
+                $('#list_tracking_m3').find('.input_m3').each(function () {
+                    var current = $(this);
+                    if (current.val() !== "") {
+                        count++;
+                        trackingM3 += parseFloat(current.val().replace(/\./g, ''));
                     }
                 });
                 $('#caculator_list_caculator_1').find('.del_subtotal_1').each(function () {
@@ -956,7 +1036,6 @@ if ($count > 0) {
                         + parseFloat(current.find('.sum7').val().replace(/\./g, ''));
                     current.find('.sum8').val(subtotal_1.formatMoney(0, ',', '.'));
                     tong += subtotal_1;
-                    count++;
                 });
                 $('#caculator_list_caculator_2').find('.show_subtotal_2').each(function () {
                     var current = $(this);
@@ -969,9 +1048,9 @@ if ($count > 0) {
                         + parseFloat(current.find('.volume5').val().replace(/\./g, ''));
                     current.find('.sum9').val(subtotal_2.formatMoney(0, ',', '.'));
                     tong += subtotal_2;
-                    count++;
                 });
                 $('#sumWeight').val(trackingNumber.formatMoney(0, ',', '.'));
+                $('#sum_m3').val(trackingM3.formatMoney(0, ',', '.'));
                 $('#qnty').val(count);
                 subtotal_shipping.val(tong.formatMoney(0, ',', '.'));
                 total.val(tong);
