@@ -201,7 +201,7 @@ while ($row = dbFetchAssoc($result)) {
                         </td>
                         <td><?php echo $dataCourier['altura'] * $dataCourier['ancho'] * $dataCourier['longitud']?></td>
                         <td><?php echo $comments; ?></td>
-                        <td><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $shipping_subtotal; ?></td>
+                        <td><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo formatMoney($shipping_subtotal, 0); ?></td>
                     </tr>
                     </tbody>
                 </table>
@@ -273,11 +273,11 @@ while ($row = dbFetchAssoc($result)) {
                     <table class="table">
                         <tr>
                             <th style="width:50%"><?php echo $subtotal; ?>:</th>
-                            <td><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $shipping_subtotal; ?></td>
+                            <td><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo formatMoney($shipping_subtotal, 0); ?></td>
                         </tr>
                         <tr>
                             <th><?php echo $total; ?>:</th>
-                            <td><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo $shipping_subtotal; ?></td>
+                            <td><?php echo $_SESSION['ge_curr']; ?>&nbsp;<?php echo formatMoney($shipping_subtotal, 0); ?></td>
                         </tr>
                     </table>
                 </div>

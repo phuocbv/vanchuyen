@@ -144,7 +144,7 @@ $cons_no = $courier['cons_no'];
 $sqlInsertTrackingKg = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
 
 foreach ($trackingNumbers as $key => $trackingNumber) {
-    $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . str_replace(".", "", $weights[$key]) . ", 'kg', NOW())";
+    $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", '" . str_replace(".", "", $weights[$key]) . "', 'kg', NOW())";
 }
 
 dbQuery($sqlInsertTrackingKg . implode(",", $query_values));
@@ -154,7 +154,7 @@ dbQuery($sqlInsertTrackingKg . implode(",", $query_values));
 $sqlInsertTrackingM3 = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
 
 foreach ($trackingNumberM3 as $key => $item) {
-    $query_values_m3[] = "('" . $item . "', " . $cons_no . ", " . str_replace(".", "", $trackingM3[$key]) . ", 'm3',  NOW())";
+    $query_values_m3[] = "('" . $item . "', " . $cons_no . ", '" . str_replace(".", "", $trackingM3[$key]) . "', 'm3',  NOW())";
 }
 
 dbQuery($sqlInsertTrackingM3 . implode(",", $query_values_m3));

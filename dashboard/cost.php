@@ -169,7 +169,7 @@ ob_end_flush();
                                     <td align="center"><a href="edit-cost.php?id=<?php echo codificar($row['id']); ?>">
                                             <img src="img/edit.png" height="20" width="18"></a></td>
                                     <td><strong><?php echo $row['cost']; ?></strong></td>
-                                    <td><?php $book_date = date_create($row['date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
+                                    <td style="width: 200px"><?php $book_date = date_create($row['date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
                                     <td><?php echo $row['content']; ?></td>
                                     <td class="sum"><?php if ($row['money'] != '') echo formatMoney($row['money'], 0); else  echo "" ?></td>
                                     <td><?php echo $row['user']; ?></td>

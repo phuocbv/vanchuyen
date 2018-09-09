@@ -158,6 +158,7 @@ include("header.php");
                                             <td><strong>
                                                     <center><?php echo $L_['name_date']; ?></center>
                                                 </strong></td>
+                                            <td><strong>Client ID</strong></td>
                                             <td><strong><?php echo $L_['name_client']; ?></strong></td>
                                             <td><strong>
                                                     <center><?php echo $L_['name_book_mode']; ?></center>
@@ -195,6 +196,7 @@ include("header.php");
                                                     <center><?php $book_date = date_create($row['book_date']);
                                                             $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></center>
                                                 </td>
+                                                <td><?php echo $row['client_id']; ?></td>
                                                 <td><?php echo $row['ship_name']; ?></td>
                                                 <td>
                                                     <center><?php echo $book_mode; ?>&nbsp;&nbsp;<span
@@ -203,7 +205,7 @@ include("header.php");
                                                     </center>
                                                 </td>
                                                 <td class="sum" value="<?php echo (int)$row['shipping_subtotal'] ?>">
-                                                    <?php echo $s . ' ' . formatMoney($row['shipping_subtotal']); ?>
+                                                    <?php echo $s . ' ' . formatMoney($row['shipping_subtotal'], 0); ?>
                                                 </td>
                                                 <td>
                                                     <center><?php echo $row['user']; ?></center>
@@ -219,10 +221,11 @@ include("header.php");
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                             <td align="right"><b><?php echo $L_['name_sales']; ?></b></td>
                                             <td>
                                                 <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;<span
-                                                            id="display_sum"><?php echo formato($sumPrice) ?></span></b>
+                                                            id="display_sum"><?php echo formatMoney($sumPrice, 0) ?></span></b>
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -303,9 +306,9 @@ include("header.php");
                                         <tbody>
                                         <tr>
                                             <td><?php echo $dateFull?></td>
-                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formato($sumPrice) ?></b></td>
-                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formato($sumMoney) ?></b></td>
-                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formato($sumPrice - $sumMoney)?></b></td>
+                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formatMoney($sumPrice, 0) ?></b></td>
+                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formatMoney($sumMoney, 0) ?></b></td>
+                                            <td><b><?php echo $_SESSION['ge_curr'] . ' ' . formatMoney($sumPrice - $sumMoney, 0)?></b></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -350,9 +353,9 @@ include("footer.php");
             var data = tableRevenue.rows({filter: 'applied'}).data();
             var sum = 0;
             for (var i = 0; i < data.length; i++) {
-                sum += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
+                sum += parseFloat(data[i][5].replace(/\./g, '').replace(",", "."));
             }console.log(sum);
-            $('#display_sum').html((sum).formatMoney(2, ',', '.'));
+            $('#display_sum').html((sum).formatMoney(0, ',', '.'));
         });
 
         var tableCost = $('#tableCost').DataTable({order:[[0,"desc"]]});
@@ -362,7 +365,7 @@ include("footer.php");
             for (var i = 0; i < data.length; i++) {
                 sum += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
             }
-            $('#display_sum_cost').html((sum).formatMoney(2, ',', '.'));
+            $('#display_sum_cost').html((sum).formatMoney(0, ',', '.'));
         });
 
         year.on('change', function () {

@@ -318,8 +318,8 @@
         $('#btn_add_tracking_number').on('click', function () {
             addTrackingNumber.append('<div class="row tracking_number"><div class="col-sm-6 form-group" align="right">' +
                 '<button class="btn btn-danger delTrackingNumber" type="button">Del(kg)</button></div>\n' +
-                '<div class="col-sm-3 form-group"><input type="text" class="form-control" name="tracking_number[]" placeholder="Tracking number" required="required"></div>\n' +
-                '<div class="col-sm-3 form-group"><input type="text" class="form-control input_weight" name="weight[]" placeholder="Weight(kg)" required="required"></div></div>')
+                '<div class="col-sm-3 form-group"><input type="text" class="form-control" name="tracking_number[]" placeholder="Tracking number"></div>\n' +
+                '<div class="col-sm-3 form-group"><input type="text" class="form-control input_weight" name="weight[]" placeholder="Weight(kg)"></div></div>')
             addTrackingNumber.find('.input_weight').simpleMoneyFormat();
         });
 
@@ -336,14 +336,12 @@
                 '                                                                <div class="col-sm-3 form-group">\n' +
                 '                                                                    <input type="text" class="form-control"\n' +
                 '                                                                           name="tracking_number_m3[]"\n' +
-                '                                                                           placeholder="tracking m3"\n' +
-                '                                                                           required="required">\n' +
+                '                                                                           placeholder="tracking m3">\n' +
                 '                                                                </div>\n' +
                 '                                                                <div class="col-sm-3 form-group">\n' +
                 '                                                                    <input type="text" class="form-control input_m3"\n' +
                 '                                                                           name="m3[]"\n' +
-                '                                                                           placeholder="m3"\n' +
-                '                                                                           required="required">\n' +
+                '                                                                           placeholder="m3">\n' +
                 '                                                                </div>\n' +
                 '                                                            </div>')
             addTrackingM3.find('.input_m3').simpleMoneyFormat();
@@ -376,13 +374,17 @@
             var trackingM3 = 0;
             $('#list_tracking').find('.input_weight').each(function () {
                 var current = $(this);
-                count++;
-                trackingNumber += parseFloat(current.val().replace(/\./g, ''));
+                if (current.val() !== "") {
+                    count++;
+                    trackingNumber += parseFloat(current.val().replace(/\./g, ''));
+                }
             });
             $('#list_tracking_m3').find('.input_m3').each(function () {
                 var current = $(this);
-                trackingM3 += parseFloat(current.val().replace(/\./g, ''));
-                count++;
+                if (current.val() !== "") {
+                    count++;
+                    trackingM3 += parseFloat(current.val().replace(/\./g, ''));
+                }
             });
             $('#caculator_list_caculator_1').find('.del_subtotal_1').each(function () {
                 var current = $(this);

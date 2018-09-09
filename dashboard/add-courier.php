@@ -280,25 +280,27 @@ if (isset($_POST['Shippername'])) {
         dbQuery($sql_2);
 
         //insert tracking number kg
-        $sqlInsertTracking = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
+        if (count($trackingNumbers) > 0) {
+            $sqlInsertTracking = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
 
-        foreach ($trackingNumbers as $key => $trackingNumber) {
-            $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", " . str_replace(".", "", $weights[$key]) . ", 'kg',  NOW())";
+            foreach ($trackingNumbers as $key => $trackingNumber) {
+                $query_values[] = "('" . $trackingNumber . "', " . $cons_no . ", '" . str_replace(".", "", $weights[$key]) . "', 'kg',  NOW())";
+            }
+            dbQuery($sqlInsertTracking . implode(",", $query_values));
         }
-
-        dbQuery($sqlInsertTracking . implode(",", $query_values));
 
         //insert tracking number m3
-        $sqlInsertTrackingM3 = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
+        if (count($trackingNumberM3) > 0) {
+            $sqlInsertTrackingM3 = "INSERT INTO tracking_number (tracking, cons_no, weight, type, update_date) VALUES ";
 
-        foreach ($trackingNumberM3 as $key => $item) {
-            $query_values_m3[] = "('" . $item . "', " . $cons_no . ", " . str_replace(".", "", $trackingM3[$key]) . ", 'm3',  NOW())";
+            foreach ($trackingNumberM3 as $key => $item) {
+                $query_values_m3[] = "('" . $item . "', " . $cons_no . ", '" . str_replace(".", "", $trackingM3[$key]) . "', 'm3',  NOW())";
+            }
+
+            dbQuery($sqlInsertTrackingM3 . implode(",", $query_values_m3));
         }
 
-        dbQuery($sqlInsertTrackingM3 . implode(",", $query_values_m3));
-
         //insert subtotal_one
-        //INSERT INTO `vc`.`subtotal_one`(`tracking`, `cons_no`, `sum_1`, `sum_4`, `sum_7`) VALUES ('1', '1', '1', '1', '1')
         $sqlInsertSubtotalOne = "INSERT INTO subtotal_one(tracking, cons_no, sum_1, sum_4, sum_7) VALUES ";
         foreach ($listSum1 as $key => $item) {
             $value_subtotal_one[] = "('$pre-$cons_no', '$cons_no', '" .
@@ -894,14 +896,12 @@ include("header.php");
                                                                 <div class="col-sm-3 form-group">
                                                                     <input type="text" class="form-control"
                                                                            name="tracking_number[]"
-                                                                           placeholder="<?php echo $L_TRACKING ?>"
-                                                                           required="required">
+                                                                           placeholder="<?php echo $L_TRACKING ?>">
                                                                 </div>
                                                                 <div class="col-sm-3 form-group">
                                                                     <input type="text" class="form-control input_weight"
                                                                            name="weight[]"
-                                                                           placeholder="<?php echo $L_WEIGHT ?>"
-                                                                           required="required">
+                                                                           placeholder="<?php echo $L_WEIGHT ?>">
                                                                 </div>
                                                             </div>
 
@@ -925,14 +925,12 @@ include("header.php");
                                                                 <div class="col-sm-3 form-group">
                                                                     <input type="text" class="form-control"
                                                                            name="tracking_number_m3[]"
-                                                                           placeholder="tracking m3"
-                                                                           required="required">
+                                                                           placeholder="tracking m3">
                                                                 </div>
                                                                 <div class="col-sm-3 form-group">
                                                                     <input type="text" class="form-control input_m3"
                                                                            name="m3[]"
-                                                                           placeholder="m3"
-                                                                           required="required">
+                                                                           placeholder="m3">
                                                                 </div>
                                                             </div>
                                                             <div class="add_tracking_number_m3 tracking"></div>

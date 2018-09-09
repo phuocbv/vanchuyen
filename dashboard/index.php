@@ -229,7 +229,7 @@ ob_end_flush();
                                         </td>
                                         <td><font color="#000"><?php echo $row['tracking']; ?></font></td>
                                         <td>
-                                            <strong><?php echo $_SESSION['ge_curr']; ?><?php echo $s . formato($row['shipping_subtotal']); ?></strong>
+                                            <strong><?php echo $_SESSION['ge_curr']; ?><?php echo $s . ' ' . formatMoney($row['shipping_subtotal'], 0); ?></strong>
                                         </td>
                                         <td align="center"><span
                                                     class="label <?php echo $row['payment']; ?> label-large"><?php echo $row['payment']; ?></span>&nbsp;<span

@@ -252,7 +252,7 @@ include("header.php");
                                                         <td><?php echo $row['cc']; ?></td>
                                                         <td><?php echo $row['locker']; ?></td>
                                                         <td><?php echo $row['company']; ?></td>
-                                                        <td><?php echo $row['phone']; ?></td>
+                                                        <td><?php echo phone_number_format($row['phone']); ?></td>
                                                         <td><?php echo $row['telefono']; ?></td>
                                                         <td><?php echo $row['address']; ?></td>
                                                         <td><?php echo $row['country']; ?></td>
@@ -1606,15 +1606,13 @@ include("header.php");
         </div>
     </div>
     <!-- / main -->
+    <?php
+    include("footer.php");
+    ?>
 </div>
-</div>
-</div>
+
 <!-- / content -->
 
-<!-- footer -->
-<?php
-include("footer.php");
-?>
 <!-- / footer -->
 
 </div>

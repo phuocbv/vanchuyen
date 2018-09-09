@@ -403,7 +403,126 @@ if ($count > 0) {
                                 <!-- List Tracking -->
 
                                 <!-- Payment Mode -->
+                            </fieldset>
 
+
+                            <!-- START Receiver info  -->
+                            <fieldset class="col-md-6">
+                                <legend><strong><?php echo $DatosDestinatario; ?></strong></legend>
+                                <div class="row">
+                                    <!-- Name -->
+                                    <div class="col-sm-12 form-group">
+                                        <label class="control-label"><?php echo $NOMBREDESTINATARIO; ?><span
+                                                    class="required-field">*</span></label>
+                                        <input type="text" class="form-control" name="Receivername"
+                                               value="<?php echo $rev_name; ?>">
+
+                                    </div>
+                                    <div class="col-sm-3 form-group">
+                                        <label class="control-label"><?php echo $DIRECCION; ?><span
+                                                    class="required-field">*</span></label>
+                                        <input type="text" name="Receiveraddress" class="form-control" required
+                                               value="<?php echo $r_add; ?>">
+                                    </div>
+
+                                    <div class="col-sm-3 form-group">
+                                        <label class="control-label"><i class="fa fa-phone icon text-default-lter"></i>&nbsp;<?php echo $TELEFONO; ?>
+                                        </label>
+                                        <input type="text" class="form-control" name="Receiverphone" required
+                                               value="<?php echo $r_phone; ?>">
+                                    </div>
+
+                                    <div class="col-sm-3 form-group">
+                                        <label class="control-label"><i class="fa fa-phone icon text-default-lter"></i>&nbsp;<?php echo $TELEFONO2; ?>
+                                        </label>
+                                        <input type="tel" class="form-control" name="telefono1" id="telefono1"
+                                               autocomplete="off" required value="<?php echo $telefono1; ?>">
+                                    </div>
+
+                                    <div class="col-sm-3 form-group">
+                                        <label class="control-label"><?php echo $CEDULA; ?></i></label>
+                                        <input type="text" name="Receivercc_r" id="Receivercc_r" class="form-control"
+                                               value="<?php echo $cc_r; ?>" autocomplete="off" required>
+                                    </div>
+                                    <div class="col-sm-3 form-group">
+                                        <label class="text-info"><i
+                                                    class="fa fa-angle-double-right icon text-default-lter"></i>&nbsp;<strong><?php echo $PAISDESTINO; ?></strong></label>
+                                        <input name="paisdestino" class="form-control"
+                                               value="<?php echo $paisdestino; ?>">
+                                    </div>
+                                    <div class="col-sm-3 form-group">
+                                        <label class="text-info"><strong><?php echo $L_STATE; ?></strong></label>
+                                        <input type="text" class="form-control" name="state1"
+                                               value="<?php echo $state1; ?>">
+                                    </div>
+                                    <div class="col-sm-3 form-group">
+                                        <label class="text-info"><strong><?php echo $CIUDAD; ?></strong></label>
+                                        <input type="text" class="form-control" name="city1"
+                                               value="<?php echo $city1; ?>">
+                                    </div>
+                                    <div class="col-sm-3 form-group">
+                                        <label class="text-info"><strong><?php echo $CODIGO; ?></strong></label>
+                                        <input name="iso1" class="form-control" value="<?php echo $iso1; ?>">
+                                    </div>
+                                    <div class="col-sm-12 form-group">
+                                        <label class="control-label"><?php echo $EMAIL; ?><font
+                                                    color="#FF6100"><?php echo $notaemail; ?></font></i></label>
+                                        <input type="text" name="Receiveremail" id="Receiveremail" class="form-control"
+                                               value="<?php echo $email; ?>" required readonly="true">
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <!-- Name -->
+                                    <div class="col-sm-12 form-group">
+                                        <label for="name-card"
+                                               class="text-success"><strong><?php echo $NUMEROENVIO; ?></strong></label>
+                                        <input type="text" class="form-control"
+                                               value="<?php echo $letra; ?>-<?php echo $cons_no; ?>" id="ConsignmentNo"
+                                               readonly="true"/>
+                                    </div>
+
+                                    <!-- Status and Pickup Date -->
+                                    <div class="col-sm-12 form-group">
+                                        <label for="dtp_input1" class="control-label"><i
+                                                    class="fa fa-calendar icon text-default-lter"></i>&nbsp;<?php echo $FECHARECOLECCIONENVIO; ?></i>
+                                        </label>
+                                        <div>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="Packupdate"
+                                                       value="<?php echo $pick_date; ?>" id="datepicker-autoclose"
+                                                       readonly="true">
+                                                <span class="input-group-addon bg-custom b-0"><i
+                                                            class="glyphicon glyphicon-calendar"></i></span>
+                                            </div><!-- input-group -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-5 form-group">
+                                        <label for="month" class="control-label"><i
+                                                    class="fa fa-sort-amount-asc icon text-default-lter"></i>&nbsp;<?php echo $estado; ?>
+                                        </label>
+                                        <input class="form-control" name="status" id="status"
+                                               value="<?php echo $status; ?>" readonly="true">
+                                    </div>
+                                    <div class="col-sm-7 form-group">
+                                        <label for="dtp_input1" class="control-label"><i
+                                                    class="fa fa-calendar icon text-default-lter"></i>&nbsp;<?php echo $FechadeEntrega; ?></i>
+                                        </label>
+                                        <div>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="Schedule"
+                                                       value="<?php echo $schedule; ?>" id="datepicker">
+                                                <span class="input-group-addon bg-custom b-0"><i
+                                                            class="glyphicon glyphicon-calendar"></i></span>
+                                            </div><!-- input-group -->
+                                        </div>
+
+                            </fieldset>
+
+                            <fieldset class="col-md-12">
                                 <!-- List subtotal one -->
                                 <div id="caculator_list_caculator_1">
                                     <?php $sum = 0 ?>
@@ -643,122 +762,6 @@ if ($count > 0) {
                                                value="<?php echo $comments; ?>">
                                     </div>
                                 </div>
-                            </fieldset>
-
-
-                            <!-- START Receiver info  -->
-                            <fieldset class="col-md-6">
-                                <legend><strong><?php echo $DatosDestinatario; ?></strong></legend>
-                                <div class="row">
-                                    <!-- Name -->
-                                    <div class="col-sm-12 form-group">
-                                        <label class="control-label"><?php echo $NOMBREDESTINATARIO; ?><span
-                                                    class="required-field">*</span></label>
-                                        <input type="text" class="form-control" name="Receivername"
-                                               value="<?php echo $rev_name; ?>">
-
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="control-label"><?php echo $DIRECCION; ?><span
-                                                    class="required-field">*</span></label>
-                                        <input type="text" name="Receiveraddress" class="form-control" required
-                                               value="<?php echo $r_add; ?>">
-                                    </div>
-
-                                    <div class="col-sm-3 form-group">
-                                        <label class="control-label"><i class="fa fa-phone icon text-default-lter"></i>&nbsp;<?php echo $TELEFONO; ?>
-                                        </label>
-                                        <input type="text" class="form-control" name="Receiverphone" required
-                                               value="<?php echo $r_phone; ?>">
-                                    </div>
-
-                                    <div class="col-sm-3 form-group">
-                                        <label class="control-label"><i class="fa fa-phone icon text-default-lter"></i>&nbsp;<?php echo $TELEFONO2; ?>
-                                        </label>
-                                        <input type="tel" class="form-control" name="telefono1" id="telefono1"
-                                               autocomplete="off" required value="<?php echo $telefono1; ?>">
-                                    </div>
-
-                                    <div class="col-sm-3 form-group">
-                                        <label class="control-label"><?php echo $CEDULA; ?></i></label>
-                                        <input type="text" name="Receivercc_r" id="Receivercc_r" class="form-control"
-                                               value="<?php echo $cc_r; ?>" autocomplete="off" required>
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-info"><i
-                                                    class="fa fa-angle-double-right icon text-default-lter"></i>&nbsp;<strong><?php echo $PAISDESTINO; ?></strong></label>
-                                        <input name="paisdestino" class="form-control"
-                                               value="<?php echo $paisdestino; ?>">
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-info"><strong><?php echo $L_STATE; ?></strong></label>
-                                        <input type="text" class="form-control" name="state1"
-                                               value="<?php echo $state1; ?>">
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-info"><strong><?php echo $CIUDAD; ?></strong></label>
-                                        <input type="text" class="form-control" name="city1"
-                                               value="<?php echo $city1; ?>">
-                                    </div>
-                                    <div class="col-sm-3 form-group">
-                                        <label class="text-info"><strong><?php echo $CODIGO; ?></strong></label>
-                                        <input name="iso1" class="form-control" value="<?php echo $iso1; ?>">
-                                    </div>
-                                    <div class="col-sm-12 form-group">
-                                        <label class="control-label"><?php echo $EMAIL; ?><font
-                                                    color="#FF6100"><?php echo $notaemail; ?></font></i></label>
-                                        <input type="text" name="Receiveremail" id="Receiveremail" class="form-control"
-                                               value="<?php echo $email; ?>" required readonly="true">
-                                    </div>
-                                </div>
-                                <br>
-                                <br>
-                                <div class="row">
-                                    <!-- Name -->
-                                    <div class="col-sm-12 form-group">
-                                        <label for="name-card"
-                                               class="text-success"><strong><?php echo $NUMEROENVIO; ?></strong></label>
-                                        <input type="text" class="form-control"
-                                               value="<?php echo $letra; ?>-<?php echo $cons_no; ?>" id="ConsignmentNo"
-                                               readonly="true"/>
-                                    </div>
-
-                                    <!-- Status and Pickup Date -->
-                                    <div class="col-sm-12 form-group">
-                                        <label for="dtp_input1" class="control-label"><i
-                                                    class="fa fa-calendar icon text-default-lter"></i>&nbsp;<?php echo $FECHARECOLECCIONENVIO; ?></i>
-                                        </label>
-                                        <div>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="Packupdate"
-                                                       value="<?php echo $pick_date; ?>" id="datepicker-autoclose"
-                                                       readonly="true">
-                                                <span class="input-group-addon bg-custom b-0"><i
-                                                            class="glyphicon glyphicon-calendar"></i></span>
-                                            </div><!-- input-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-5 form-group">
-                                        <label for="month" class="control-label"><i
-                                                    class="fa fa-sort-amount-asc icon text-default-lter"></i>&nbsp;<?php echo $estado; ?>
-                                        </label>
-                                        <input class="form-control" name="status" id="status"
-                                               value="<?php echo $status; ?>" readonly="true">
-                                    </div>
-                                    <div class="col-sm-7 form-group">
-                                        <label for="dtp_input1" class="control-label"><i
-                                                    class="fa fa-calendar icon text-default-lter"></i>&nbsp;<?php echo $FechadeEntrega; ?></i>
-                                        </label>
-                                        <div>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="Schedule"
-                                                       value="<?php echo $schedule; ?>" id="datepicker">
-                                                <span class="input-group-addon bg-custom b-0"><i
-                                                            class="glyphicon glyphicon-calendar"></i></span>
-                                            </div><!-- input-group -->
-                                        </div>
 
                             </fieldset>
                             <div class="col-sm-12 form-group">
