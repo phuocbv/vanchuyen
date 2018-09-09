@@ -173,9 +173,9 @@ include("header.php");
                                                     <td><?php echo $row['client_id'] ?></td>
                                                     <td><?php $book_date = date_create($row['date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
                                                     <td><?php echo $row['content']; ?></td>
-                                                    <td><?php echo formato($sum) ?></td>
-                                                    <td><?php echo formato($row['pay']) ?></td>
-                                                    <td><?php echo formato($sum - $row['pay']) ?></td>
+                                                    <td><?php echo formatMoney($sum, 0) ?></td>
+                                                    <td><?php echo formatMoney($row['pay'], 0) ?></td>
+                                                    <td><?php echo formatMoney($sum - $row['pay'], 0) ?></td>
                                                     <td><?php echo $row['user'] ?></td>
                                                 </tr>
                                             <?php } ?>
@@ -187,16 +187,16 @@ include("header.php");
                                                 </td>
                                                 <td rowspan="1" colspan="1">
                                                     <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;
-                                                        <span id="display_sum"><?php echo formato($initial); ?></span></b>
+                                                        <span id="display_sum"><?php echo formatMoney($initial, 0); ?></span></b>
                                                 </td>
                                                 <td>
                                                     <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;
-                                                        <span id="display_sum_pay"><?php echo formato($payment); ?></span></b>
+                                                        <span id="display_sum_pay"><?php echo formatMoney($payment, 0); ?></span></b>
 
                                                 </td>
                                                 <td>
                                                     <b><?php echo $_SESSION['ge_curr']; ?>&nbsp;
-                                                        <span id="display_sum_debt"><?php echo formato($debt); ?></span></b>
+                                                        <span id="display_sum_debt"><?php echo formatMoney($debt, 0); ?></span></b>
 
                                                 </td>
                                                 <td></td>
@@ -247,9 +247,9 @@ include("footer.php");
                 sum_pay += parseFloat(data[i][6].replace(/\./g, '').replace(",", "."));
                 sum_debt += parseFloat(data[i][7].replace(/\./g, '').replace(",", "."));
             }
-            $('#display_sum').html((sum).formatMoney(2, ',', '.'));
-            $('#display_sum_pay').html((sum_pay).formatMoney(2, ',', '.'));
-            $('#display_sum_debt').html((sum_debt).formatMoney(2, ',', '.'));
+            $('#display_sum').html((sum).formatMoney(0, ',', '.'));
+            $('#display_sum_pay').html((sum_pay).formatMoney(0, ',', '.'));
+            $('#display_sum_debt').html((sum_debt).formatMoney(0, ',', '.'));
         });
     });
 

@@ -203,7 +203,7 @@ include("header.php");
                                                     </center>
                                                 </td>
                                                 <td class="sum" value="<?php echo (int)$row['shipping_subtotal'] ?>">
-                                                    <?php echo $s . ' ' . formato($row['shipping_subtotal']); ?>
+                                                    <?php echo $s . ' ' . formatMoney($row['shipping_subtotal']); ?>
                                                 </td>
                                                 <td>
                                                     <center><?php echo $row['user']; ?></center>
@@ -260,7 +260,7 @@ include("header.php");
                                                     <td><?php echo $row['cost']; ?></td>
                                                     <td><?php echo $row['content'] ?></td>
                                                     <td class="sum" value="<?php echo (int)$row['money'] ?>">
-                                                        <?php echo formato($row['money']); ?>
+                                                        <?php echo formatMoney($row['money'], 0); ?>
                                                     </td>
                                                     <td><?php echo $row['user'] ?></td>
                                                     <td><?php echo $row['role'] ?></td>
@@ -279,7 +279,7 @@ include("header.php");
                                             <td>
                                                 <b>
                                                     <?php echo $_SESSION['ge_curr']; ?>&nbsp;
-                                                    <span id="display_sum_cost"><?php echo formato($sumMoney) ?></span>
+                                                    <span id="display_sum_cost"><?php echo formatMoney($sumMoney, 0) ?></span>
                                                 </b>
                                             </td>
                                             <td></td>

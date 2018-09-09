@@ -171,7 +171,7 @@ ob_end_flush();
                                     <td><strong><?php echo $row['cost']; ?></strong></td>
                                     <td><?php $book_date = date_create($row['date']); $book_date = date_format($book_date, "d-m-Y"); echo $book_date; ?></td>
                                     <td><?php echo $row['content']; ?></td>
-                                    <td class="sum"><?php if ($row['money'] != '') echo formato($row['money']); else  echo "" ?></td>
+                                    <td class="sum"><?php if ($row['money'] != '') echo formatMoney($row['money'], 0); else  echo "" ?></td>
                                 </tr>
                                 <?php } ?>
                                 </tbody>
@@ -185,7 +185,7 @@ ob_end_flush();
                                 <th></th>
                                 <th></th>
                                 <th align="right">Total</th>
-                                <th><span id="display_sum"><?php echo $_SESSION['ge_curr'] . ' ' . formato($sum_money   )?></span></th>
+                                <th><span id="display_sum"><?php echo $_SESSION['ge_curr'] . ' ' . formatMoney($sum_money, 0)?></span></th>
 <!--                                <th></th>-->
 <!--                                <th></th>-->
                                 </tfoot>
@@ -220,7 +220,7 @@ ob_end_flush();
             for (var i = 0; i < data.length; i++) {
                 sum += parseFloat(data[i][4].replace(/\./g, '').replace(",", "."));
             }
-            $('#display_sum').html((sum).formatMoney(2, ',', '.'));
+            $('#display_sum').html((sum).formatMoney(0, ',', '.'));
         });
     });
 
