@@ -944,162 +944,6 @@ include("header.php");
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                        <div class="row">
-                                                            <div class="col-sm-5 form-group">
-                                                                <label class="control-label"><i
-                                                                            class="fa fa-database icon text-default-lter"></i>&nbsp;<strong><?php echo $Pagos; ?></strong></label>
-                                                                <select class="form-control" name="bookingmode">
-                                                                    <option selected="selected"
-                                                                            value="Effective"><?php echo $Effective; ?></option>
-                                                                    <option value="Debit_card"><?php echo $Debitcard; ?></option>
-                                                                    <option value="Credit_card"><?php echo $Creditcard; ?></option>
-                                                                    <option value="Transfer"><?php echo $Transfer; ?></option>
-                                                                    <option value="Online"><?php echo $Payonline; ?></option>
-                                                                    <option value="Paypal"><?php echo $L_['type_paypal']; ?></option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="col-sm-4 form-group">
-                                                                <label class="control-label"><?php echo $TipodeProducto; ?></label>
-                                                                <select type="text" class="form-control"
-                                                                        name="Shiptype">
-                                                                    <?php
-                                                                    $sql = "SELECT name FROM type_shipments  GROUP BY name";
-                                                                    $query = $db->query($sql);
-                                                                    if ($query->num_rows > 0) {
-                                                                        while ($row = $query->fetch_array()) {
-                                                                            echo '<option data-value="' . $row['name'] . '">' . utf8_encode($row['name']) . '</option>';
-                                                                        }
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <label class="control-label"><i
-                                                                            class="fa fa-plane icon text-default-lter"></i>&nbsp;<?php echo $MododelServicio; ?>
-                                                                </label>
-                                                                <select class="form-control" name="Mode">
-                                                                    <?php
-                                                                    $sql = "SELECT name FROM mode_bookings  GROUP BY name";
-                                                                    $query = $db->query($sql);
-                                                                    if ($query->num_rows > 0) {
-                                                                        while ($row = $query->fetch_array()) {
-                                                                            echo '<option data-value="' . $row['name'] . '">' . utf8_encode($row['name']) . '</option>';
-                                                                        }
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Payment Mode -->
-                                                        <div id="caculator_list_caculator_1">
-                                                            <div class="row del_subtotal_1">
-                                                                <input type="hidden" class="form-control" name="Totaldeclarate" value="0"/>
-                                                                <input type="hidden" class="form-control" name="pesoreal" value="0">
-                                                                <input type="hidden" class="form-control" name="variable" value="0">
-                                                                <input type="hidden" class="form-control" name="Weight" value="0">
-                                                                <input type="hidden" class="form-control" name="Totaldeclarado" value="0">
-                                                                <input type="hidden" class="form-control" name="altura" value="0">
-                                                                <input type="hidden" class="form-control" name="ancho" value="0">
-                                                                <input type="hidden" class="form-control" name="longitud" value="0">
-                                                                <input type="hidden" class="form-control" name="Totalfreight" value="0">
-                                                                <input type="hidden" class="form-control" name="kiloadicional" value="0">
-
-                                                                <div class="col-sm-2 form-group">
-                                                                    <label class="text-primary"><strong>VND 1 Kg</strong></label>
-                                                                    <input type="text" class="form-control sum1" id="sum1" name="sum1[]" value="0"/>
-                                                                </div>
-                                                                <div class="col-sm-2 form-group">
-                                                                    <label class="text-primary"><strong>Weight (Kg)</strong></label>
-                                                                    <input type="text" class="form-control sum4" id="sum4" name="sum4[]" value="0"/>
-                                                                </div>
-                                                                <div class="col-sm-2 form-group">
-                                                                    <label class="text-primary"><strong>Phụ phí</strong></label>
-                                                                    <input type="text" class="form-control sum7" value="0" id="sum7" name="sum7[]"/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Subtotal 1</strong></label>
-                                                                    <input type="text" name="" value="0" disabled id="sum8"
-                                                                           class="form-control sum8">
-                                                                </div>
-                                                                <div class="col-sm-3 form-group" style="padding-top: 25px">
-                                                                    <label class="text-primary"></label>
-                                                                    <button class="btn btn-success" type="button" id="add_subtotal_1">Add
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <div id="list_subtotal_1">
-
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Peso Volumetrico -->
-                                                        <div id="caculator_list_caculator_2">
-                                                            <div class="show_subtotal_2">
-                                                            <div class="row">
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Height</strong></label>
-                                                                    <input type="text" class="form-control volume1" id="volume1" name="volume1[]" value="0"/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Width</strong></label>
-                                                                    <input type="text" class="form-control volume2" id="volume2" name="volume2[]" value="0"/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Length</strong></label>
-                                                                    <input type="text" class="form-control volume3" id="volume3" name="volume3[]" value="0"/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group" style="padding-top: 25px">
-                                                                    <label class="text-primary"></label>
-                                                                    <button class="btn btn-success" type="button" id="add_subtotal_2">Add
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- m3-->
-                                                            <div class="row">
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>VND 1 m3</strong></label>
-                                                                    <input type="text" class="form-control volume4" value="0" id="volume4" name="volume4[]"/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Total (m3)</strong></label>
-                                                                    <input type="text" class="form-control totalpeso" name="totalpeso" id="totalpeso" value="0" disabled/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Phụ phí</strong></label>
-                                                                    <input type="text" class="form-control volume5" value="0" id="volume5" name="volume5[]"/>
-                                                                </div>
-                                                                <div class="col-sm-3 form-group">
-                                                                    <label class="text-primary"><strong>Subtotal 2</strong></label>
-                                                                    <input type="text" class="form-control sum9" value="0" disabled id="sum9"/>
-                                                                </div>
-                                                            </div>
-                                                            </div>
-
-                                                            <div id="list_subtotal_2">
-
-                                                            </div>
-                                                        </div>
-                                                        <!-- tong -->
-                                                        <div class="row">
-                                                            <div class="col-sm-3 form-group"></div>
-                                                            <div class="col-sm-6 form-group" align="right">
-                                                                <label class="text-primary"><strong>Subtotal Shipping</strong></label>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <input type="text" class="form-control" value="0" disabled id="resultado"/>
-                                                                <input type="hidden" class="form-control" value="0" name="shipping_subtotal" id="shipping_subtotal"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-sm-12 form-group">
-                                                                <button class="btn btn-success" id="caculator" type="button" style="width: 100%">Tính toán kết quả</button>
-                                                            </div>
-                                                        </div>
                                                     </fieldset>
 
                                                     <!-- START Receiver info  -->
@@ -1313,6 +1157,166 @@ include("header.php");
                                                                                title="datestimepicker">
                                                                     </div><!-- input-group -->
                                                                 </div>
+                                                    </fieldset>
+
+                                                    <fieldset class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <div class="col-sm-5 form-group">
+                                                                    <label class="control-label"><i
+                                                                                class="fa fa-database icon text-default-lter"></i>&nbsp;<strong><?php echo $Pagos; ?></strong></label>
+                                                                    <select class="form-control" name="bookingmode">
+                                                                        <option selected="selected"
+                                                                                value="Effective"><?php echo $Effective; ?></option>
+                                                                        <option value="Debit_card"><?php echo $Debitcard; ?></option>
+                                                                        <option value="Credit_card"><?php echo $Creditcard; ?></option>
+                                                                        <option value="Transfer"><?php echo $Transfer; ?></option>
+                                                                        <option value="Online"><?php echo $Payonline; ?></option>
+                                                                        <option value="Paypal"><?php echo $L_['type_paypal']; ?></option>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="col-sm-4 form-group">
+                                                                    <label class="control-label"><?php echo $TipodeProducto; ?></label>
+                                                                    <select type="text" class="form-control"
+                                                                            name="Shiptype">
+                                                                        <?php
+                                                                        $sql = "SELECT name FROM type_shipments  GROUP BY name";
+                                                                        $query = $db->query($sql);
+                                                                        if ($query->num_rows > 0) {
+                                                                            while ($row = $query->fetch_array()) {
+                                                                                echo '<option data-value="' . $row['name'] . '">' . utf8_encode($row['name']) . '</option>';
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-sm-3 form-group">
+                                                                    <label class="control-label"><i
+                                                                                class="fa fa-plane icon text-default-lter"></i>&nbsp;<?php echo $MododelServicio; ?>
+                                                                    </label>
+                                                                    <select class="form-control" name="Mode">
+                                                                        <?php
+                                                                        $sql = "SELECT name FROM mode_bookings  GROUP BY name";
+                                                                        $query = $db->query($sql);
+                                                                        if ($query->num_rows > 0) {
+                                                                            while ($row = $query->fetch_array()) {
+                                                                                echo '<option data-value="' . $row['name'] . '">' . utf8_encode($row['name']) . '</option>';
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Payment Mode -->
+                                                            <div id="caculator_list_caculator_1">
+                                                                <div class="row del_subtotal_1">
+                                                                    <input type="hidden" class="form-control" name="Totaldeclarate" value="0"/>
+                                                                    <input type="hidden" class="form-control" name="pesoreal" value="0">
+                                                                    <input type="hidden" class="form-control" name="variable" value="0">
+                                                                    <input type="hidden" class="form-control" name="Weight" value="0">
+                                                                    <input type="hidden" class="form-control" name="Totaldeclarado" value="0">
+                                                                    <input type="hidden" class="form-control" name="altura" value="0">
+                                                                    <input type="hidden" class="form-control" name="ancho" value="0">
+                                                                    <input type="hidden" class="form-control" name="longitud" value="0">
+                                                                    <input type="hidden" class="form-control" name="Totalfreight" value="0">
+                                                                    <input type="hidden" class="form-control" name="kiloadicional" value="0">
+
+                                                                    <div class="col-sm-2 form-group">
+                                                                        <label class="text-primary"><strong>VND 1 Kg</strong></label>
+                                                                        <input type="text" class="form-control sum1" id="sum1" name="sum1[]" value="0"/>
+                                                                    </div>
+                                                                    <div class="col-sm-2 form-group">
+                                                                        <label class="text-primary"><strong>Weight (Kg)</strong></label>
+                                                                        <input type="text" class="form-control sum4" id="sum4" name="sum4[]" value="0"/>
+                                                                    </div>
+                                                                    <div class="col-sm-2 form-group">
+                                                                        <label class="text-primary"><strong>Phụ phí</strong></label>
+                                                                        <input type="text" class="form-control sum7" value="0" id="sum7" name="sum7[]"/>
+                                                                    </div>
+                                                                    <div class="col-sm-3 form-group">
+                                                                        <label class="text-primary"><strong>Subtotal 1</strong></label>
+                                                                        <input type="text" name="" value="0" disabled id="sum8"
+                                                                               class="form-control sum8">
+                                                                    </div>
+                                                                    <div class="col-sm-3 form-group" style="padding-top: 25px">
+                                                                        <label class="text-primary"></label>
+                                                                        <button class="btn btn-success" type="button" id="add_subtotal_1">Add
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div id="list_subtotal_1">
+
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Peso Volumetrico -->
+                                                            <div id="caculator_list_caculator_2">
+                                                                <div class="show_subtotal_2">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>Height</strong></label>
+                                                                            <input type="text" class="form-control volume1" id="volume1" name="volume1[]" value="0"/>
+                                                                        </div>
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>Width</strong></label>
+                                                                            <input type="text" class="form-control volume2" id="volume2" name="volume2[]" value="0"/>
+                                                                        </div>
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>Length</strong></label>
+                                                                            <input type="text" class="form-control volume3" id="volume3" name="volume3[]" value="0"/>
+                                                                        </div>
+                                                                        <div class="col-sm-3 form-group" style="padding-top: 25px">
+                                                                            <label class="text-primary"></label>
+                                                                            <button class="btn btn-success" type="button" id="add_subtotal_2">Add
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- m3-->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>VND 1 m3</strong></label>
+                                                                            <input type="text" class="form-control volume4" value="0" id="volume4" name="volume4[]"/>
+                                                                        </div>
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>Total (m3)</strong></label>
+                                                                            <input type="text" class="form-control totalpeso" name="totalpeso" id="totalpeso" value="0" disabled/>
+                                                                        </div>
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>Phụ phí</strong></label>
+                                                                            <input type="text" class="form-control volume5" value="0" id="volume5" name="volume5[]"/>
+                                                                        </div>
+                                                                        <div class="col-sm-3 form-group">
+                                                                            <label class="text-primary"><strong>Subtotal 2</strong></label>
+                                                                            <input type="text" class="form-control sum9" value="0" disabled id="sum9"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div id="list_subtotal_2">
+
+                                                                </div>
+                                                            </div>
+                                                            <!-- tong -->
+                                                            <div class="row">
+                                                                <div class="col-sm-3 form-group"></div>
+                                                                <div class="col-sm-6 form-group" align="right">
+                                                                    <label class="text-primary"><strong>Subtotal Shipping</strong></label>
+                                                                </div>
+                                                                <div class="col-sm-3 form-group">
+                                                                    <input type="text" class="form-control" value="0" disabled id="resultado"/>
+                                                                    <input type="hidden" class="form-control" value="0" name="shipping_subtotal" id="shipping_subtotal"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 form-group">
+                                                                    <button class="btn btn-success" id="caculator" type="button" style="width: 100%">Tính toán kết quả</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </fieldset>
                                                     <div class="col-md-6 text-left">
                                                         </br></br>
